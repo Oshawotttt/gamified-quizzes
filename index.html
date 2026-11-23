@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CS205 Practice Quiz</title>
+<meta name="description" content="One question at a time from the CS205 question bank.">
+<meta name="theme-color" content="#2f5fd0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CS205 Quiz">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="css/app.css">
+<script type="module" src="js/app.js"></script>
+</head>
+<body>
+<header class="top">
+  <div class="top-row">
+    <h1>CS205 Practice</h1>
+    <button type="button" id="btnStats" aria-expanded="false" aria-controls="stats">Stats</button>
+  </div>
+  <div class="counts" id="counts" aria-live="polite"></div>
+</header>
+
+<main id="main">
+  <section id="quiz" class="card" aria-live="polite"><p class="muted">Loading questions…</p></section>
+
+  <section id="stats" class="card" hidden>
+    <h2>Progress</h2>
+    <p class="muted">Progress is saved in this browser on this device and loads automatically. Export is only a backup.</p>
+    <div class="scroll"><table class="stat-table" id="statTable"></table></div>
+    <p id="lastExport"></p>
+    <div class="actions">
+      <button type="button" id="btnExport" class="primary">Export progress</button>
+      <button type="button" id="btnImport">Import progress</button>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+      <button type="button" id="btnReset" class="danger">Reset progress</button>
+    </div>
+    <p class="msg" id="statsMsg" role="status"></p>
+    <div class="actions"><button type="button" id="btnBack">Back to quiz</button></div>
+  </section>
+</main>
+
+<noscript><p class="card">This quiz needs JavaScript.</p></noscript>
+</body>
+</html>
