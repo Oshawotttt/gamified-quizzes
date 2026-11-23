@@ -69,7 +69,9 @@ export function planImport(bank, importJson, { imageExists, bankImageExists, tod
   const errors = validateImportFile(importJson, imageExists);
   if (errors.length) return fail(errors);
 
-  const known = new Map(bank.questions.map((q) => [stemKey(q.stem), q.id]));
+  // Bank stems carry id-prefixed image paths; strip the prefix so a re-imported
+  // question with an image still matches its earlier copy.
+  const known = new Map(bank.questions.map((q) => [stemKey(q.stem.replaceAll(`images/${q.id}-`, "images/")), q.id]));
   const added = [];
   const skipped = [];
   const imageCopies = [];

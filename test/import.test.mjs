@@ -72,6 +72,16 @@ test("a stem equal to an existing stem except for case and whitespace is skipped
   assert.equal(r.newBank.nextId, 3);
 });
 
+test("re-importing a question with an image skips it as a duplicate", () => {
+  const imp = { version: 1, title: "Quiz", questions: [choice("Which animal? ![p](images/cat.png)")] };
+  const opts = { imageExists: (p) => p === "images/cat.png", today: "2026-11-24" };
+  const first = planImport(bankWith(5), imp, opts);
+  const again = planImport(first.newBank, imp, opts);
+  assert.deepEqual(again.errors, []);
+  assert.deepEqual(again.added, []);
+  assert.equal(again.skipped[0]?.duplicateOf, "q0005");
+});
+
 test("image paths are rewritten to id-prefixed bank paths and listed as copies", () => {
   const q = choice("Which animal?");
   q.options[0].text = "![p](images/cat.png)";
