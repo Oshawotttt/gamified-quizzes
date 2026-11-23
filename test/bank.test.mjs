@@ -1,5 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import { mkdtempSync, writeFileSync, mkdirSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { validateBank } from "../js/bank.js";
 
 const IMAGES = new Set(["images/q0002-diagram.png", "images/q0003-chip.jpg"]);
@@ -116,3 +121,34 @@ for (const [name, mutate, pattern] of broken) {
     assert.ok(errors.some((e) => pattern.test(e)), `no error matches ${pattern}:\n${errors.join("\n")}`);
   });
 }
+
+const repo = fileURLToPath(new URL("..", import.meta.url));
+const script = join(repo, "scripts", "validate-bank.mjs");
+
+test("validate-bank script exits 0 on the committed bank", () => {
+  const r = spawnSync(process.execPath, [script], { cwd: repo, encoding: "utf8" });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+});
+
+test("validate-bank script checks real image files and exits 1 on errors", () => {
+  const dir = mkdtempSync(join(tmpdir(), "bank-"));
+  mkdirSync(join(dir, "images"));
+  writeFileSync(join(dir, "images", "q0002-diagram.png"), "");
+  const bank = validBank();
+  writeFileSync(join(dir, "bank.json"), JSON.stringify(bank));
+  const r = spawnSync(process.execPath, [script, join(dir, "bank.json")], { encoding: "utf8" });
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /questions\[2\]\.options\[0\]\.text.*images\/q0003-chip\.jpg.*not found/);
+  assert.doesNotMatch(r.stderr, /q0002-diagram/);
+
+  writeFileSync(join(dir, "images", "q0003-chip.jpg"), "");
+  const ok = spawnSync(process.execPath, [script, join(dir, "bank.json")], { encoding: "utf8" });
+  assert.equal(ok.status, 0, ok.stdout + ok.stderr);
+});
+
+test("validate-bank script exits 1 on a file that is not JSON", () => {
+  const dir = mkdtempSync(join(tmpdir(), "bank-"));
+  writeFileSync(join(dir, "bank.json"), "{ nope");
+  const r = spawnSync(process.execPath, [script, join(dir, "bank.json")], { encoding: "utf8" });
+  assert.equal(r.status, 1);
+});
