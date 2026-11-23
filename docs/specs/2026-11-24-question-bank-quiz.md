@@ -273,14 +273,20 @@ If exclusion empties the candidate set, the exclusion is dropped for that pick.
   - The attempt is recorded at Submit with `guessed: false`; pressing "Next (I guessed)" sets it to `true`. Doc delta: `docs/CONTRACTS.md`.
   - Corrupt or wrong-version stored JSON: the store starts empty and keeps the raw text under `gamified-quizzes.progress.corrupt`. Doc delta: `docs/CONTRACTS.md`.
 - **Acceptance criteria:**
-  - [ ] `test/progress.test.mjs`: `record`, then a new store on the same storage returns the same attempts.
-  - [ ] `test/progress.test.mjs`: `setGuessed(i, true)` persists.
-  - [ ] `test/progress.test.mjs`: `importJson` with invalid JSON or a wrong shape throws and leaves attempts unchanged; `exportJson` text round-trips through `importJson`; `exportJson(now)` sets `lastExportAt()` to `now`.
-  - [ ] `test/progress.test.mjs`: corrupt stored text gives an empty store and the raw text under the corrupt key.
-  - [ ] `test/progress.test.mjs`: `questionStatus` returns each of `unseen`, `wrong`, `partial`, `guessed`, `right`, `shown` per I4, using only the latest attempt; a guessed wrong attempt is `wrong`.
-  - [ ] `test/progress.test.mjs`: `bankStats` counts match, and attempts for unknown qids are ignored.
-  - [ ] `node --test` exits 0.
+  - [x] `test/progress.test.mjs`: `record`, then a new store on the same storage returns the same attempts.
+  - [x] `test/progress.test.mjs`: `setGuessed(i, true)` persists.
+  - [x] `test/progress.test.mjs`: `importJson` with invalid JSON or a wrong shape throws and leaves attempts unchanged; `exportJson` text round-trips through `importJson`; `exportJson(now)` sets `lastExportAt()` to `now`.
+  - [x] `test/progress.test.mjs`: corrupt stored text gives an empty store and the raw text under the corrupt key.
+  - [x] `test/progress.test.mjs`: `questionStatus` returns each of `unseen`, `wrong`, `partial`, `guessed`, `right`, `shown` per I4, using only the latest attempt; a guessed wrong attempt is `wrong`.
+  - [x] `test/progress.test.mjs`: `bankStats` counts match, and attempts for unknown qids are ignored.
+  - [x] `node --test` exits 0.
 - **Doc deltas:** `docs/CONTRACTS.md`: I4, storage key, status rules. `docs/ARCHITECTURE.md`: progress lives only in this browser on this device and loads automatically; clearing site data deletes it; iOS Safari deletes storage of sites unused for 7 days unless the page is on the Home Screen; export/import is a rare backup; no cross-device sync.
+  - `docs/CONTRACTS.md`: "latest attempt" means the last one in `attempts` array order (the list is append-only), not the largest `at`, so clock changes on the phone cannot reorder history.
+  - `docs/CONTRACTS.md`: `importJson` replaces the whole store (attempts and `lastExportAt`) with the file's contents; it does not merge, so importing an export restores exactly that snapshot.
+  - `docs/CONTRACTS.md`: `record` checks the attempt shape and throws on a bad one; `setGuessed` throws on an index with no attempt.
+  - `docs/CONTRACTS.md`: `exportJson(now)` accepts a `Date` or an ISO string and stores the ISO string; the exported text is 2-space indented JSON of the whole store.
+  - `docs/CONTRACTS.md`: `reset()` removes the progress key; the corrupt-copy key is left alone.
+  - `docs/CONTRACTS.md`: `statusMap(questionIds, attempts)` (status per id, one pass) is exported for selection and the page, so status rules live in one place.
 
 ### S5 — Question selection
 
