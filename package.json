@@ -1,0 +1,10 @@
+{
+  "name": "gamified-quizzes",
+  "private": true,
+  "type": "module",
+  "description": "One-question-at-a-time practice quiz over a single question bank, served as static files on GitHub Pages.",
+  "scripts": {
+    "test": "node --test",
+    "validate": "node scripts/validate-bank.mjs"
+  }
+}
