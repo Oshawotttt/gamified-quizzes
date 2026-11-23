@@ -185,11 +185,18 @@ If exclusion empties the candidate set, the exclusion is dropped for that pick.
   - "add quiz assigns" (user): `add-quiz.mjs` assigns the question `id` (`q0001`, ...) when appending. Doc delta: `docs/CONTRACTS.md`.
   - Question `id` is permanent and never reused; progress is keyed on it. Doc delta: `docs/CONTRACTS.md`.
 - **Acceptance criteria:**
-  - [ ] `node scripts/validate-bank.mjs` exits 0 on the committed bank.
-  - [ ] `test/bank.test.mjs`: `validateBank` returns no errors for a bank with one question of each type, including one with an image in a stem and one in an option.
-  - [ ] `test/bank.test.mjs`: `validateBank` returns an error for each of: missing `id`, bad `id` pattern, duplicate `id`, `nextId` not greater than every id, unknown `type`, `options` on `written`, `answer` key not in `options`, `single` with 2 answer keys, `multi` with 0 answer keys, `written` without `modelAnswer`, option keys with a gap, option without `explanation`, `shuffle` on `written`, image path whose file is missing, image file name with a space, missing `quiz`, missing `addedAt`.
-  - [ ] `node --test` exits 0.
+  - [x] `node scripts/validate-bank.mjs` exits 0 on the committed bank.
+  - [x] `test/bank.test.mjs`: `validateBank` returns no errors for a bank with one question of each type, including one with an image in a stem and one in an option.
+  - [x] `test/bank.test.mjs`: `validateBank` returns an error for each of: missing `id`, bad `id` pattern, duplicate `id`, `nextId` not greater than every id, unknown `type`, `options` on `written`, `answer` key not in `options`, `single` with 2 answer keys, `multi` with 0 answer keys, `written` without `modelAnswer`, option keys with a gap, option without `explanation`, `shuffle` on `written`, image path whose file is missing, image file name with a space, missing `quiz`, missing `addedAt`.
+  - [x] `node --test` exits 0.
 - **Doc deltas:** `docs/CONTRACTS.md` (new): I1 in full. `docs/ARCHITECTURE.md` (new): static site on GitHub Pages, no build step, no server or DB, folders `bank/`, `js/`, `scripts/`, `test/`. `docs/adr/0001-json-question-bank.md` (new). `README.md`: generation out of scope; `node scripts/validate-bank.mjs`.
+  - `docs/CONTRACTS.md`: unknown question and option fields are errors, so a typo such as `explaination` fails validation instead of being silently ignored.
+  - `docs/CONTRACTS.md`: image paths must be exactly `images/<file>` (no sub-folders, no `..`); all images live flat in `bank/images/`, so the page resolves them with one base path.
+  - `docs/CONTRACTS.md`: `addedAt` accepts `YYYY-MM-DD` or a full ISO-8601 date-time; `add-quiz.mjs` writes the date form.
+  - `docs/CONTRACTS.md`: `answer` with duplicate keys is an error; empty-string `stem`, option `text`, option `explanation`, `quiz` and `modelAnswer` count as missing.
+  - `docs/CONTRACTS.md`: the rule that explanations must not refer to options by letter is not checked by the validator (it cannot tell a letter reference from ordinary text); it is a rule for the generator.
+  - `README.md`: `node scripts/validate-bank.mjs [bank file]` takes an optional bank path (default `bank/bank.json`), so tests and the import script can validate a temp copy.
+  - No doc: `validateQuestion(q, { path, imageExists, mode })` takes `mode: "bank" | "import"` so S2 reuses it for import questions (where `id`, `quiz`, `addedAt` are forbidden); recorded in the code's doc comment.
 
 ### S2 — Import script
 
