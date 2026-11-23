@@ -117,7 +117,7 @@ export function statusMap(questionIds, attempts) {
 }
 
 export function bankStats(questionIds, attempts) {
-  const stats = { total: questionIds.length, unseen: 0, wrong: 0, partial: 0, guessed: 0, right: 0, shown: 0 };
+  const stats = { total: questionIds.length, ...Object.fromEntries(STATUSES.map((s) => [s, 0])) };
   for (const status of statusMap(questionIds, attempts).values()) stats[status]++;
   return stats;
 }
