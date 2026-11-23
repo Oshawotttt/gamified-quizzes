@@ -4,6 +4,8 @@ import { createProgressStore, bankStats } from "./progress.js";
 import { pickNext } from "./select.js";
 import { createSession } from "./session.js";
 import { renderMarkdown, escapeHtml } from "./markdown.js";
+import { optionKey } from "./bank.js";
+import { questionPoints } from "./marking.js";
 
 const BANK_URL = "bank/bank.json";
 const IMAGE_BASE = "bank";
@@ -17,9 +19,10 @@ const MARK_LABELS = {
 
 const $ = (sel) => document.querySelector(sel);
 const md = (text) => `<div class="md">${renderMarkdown(text, { base: IMAGE_BASE })}</div>`;
-const letter = (i) => String.fromCharCode(97 + i);
 const words = (s) => (s.trim().match(/\S+/g) || []).length;
 const fmt = (n) => n.toFixed(2);
+const wordLimit = (q) => q.wordLimit ?? 250;
+const inputKind = (q) => (q.type === "multi" ? "checkbox" : "radio");
 
 /** localStorage, or an in-memory stand-in when the browser blocks it (e.g. private mode). */
 function pageStorage() {
@@ -53,11 +56,11 @@ function renderCounts() {
 function typeTag(q) {
   if (q.type === "multi") return '<span class="tag multi">Select all that apply</span>';
   if (q.type === "single") return '<span class="tag">Choose one</span>';
-  return `<span class="tag">Written · about ${q.wordLimit ?? 250} words</span>`;
+  return `<span class="tag">Written · about ${wordLimit(q)} words</span>`;
 }
 
 function header(q) {
-  const pts = q.points ?? 1;
+  const pts = questionPoints(q);
   return `<div class="meta">${typeTag(q)}<span>${pts} ${pts === 1 ? "pt" : "pts"}</span><span>${escapeHtml(q.id)}</span></div>${md(q.stem)}`;
 }
 
@@ -69,9 +72,8 @@ function renderQuestion(view) {
   if (q.type === "written") {
     body = `<textarea id="answer" placeholder="Type your answer…" aria-label="Your answer"></textarea><div class="wc" id="wc"></div>`;
   } else {
-    const kind = q.type === "multi" ? "checkbox" : "radio";
     body = `<div class="opts">${view.shownOptions
-      .map((key, i) => `<label class="opt"><input type="${kind}" name="opt" value="${escapeHtml(key)}"><span class="l">${letter(i)}.</span><span class="body">${md(byKey.get(key).text)}</span></label>`)
+      .map((key, i) => `<label class="opt"><input type="${inputKind(q)}" name="opt" value="${escapeHtml(key)}"><span class="l">${optionKey(i)}.</span><span class="body">${md(byKey.get(key).text)}</span></label>`)
       .join("")}</div>`;
   }
   root.innerHTML = `${header(q)}${body}<div class="actions"><button type="button" class="primary" id="btnSubmit" disabled>Submit</button></div>`;
@@ -80,7 +82,7 @@ function renderQuestion(view) {
   let response;
   if (q.type === "written") {
     const ta = $("#answer");
-    const limit = q.wordLimit ?? 250;
+    const limit = wordLimit(q);
     const update = () => {
       const n = words(ta.value);
       $("#wc").textContent = `${n} / ${limit} words${n > limit ? " (over the guide)" : ""}`;
@@ -124,14 +126,13 @@ function renderFeedback(view) {
       `<div class="compare"><div><h3>Your answer</h3><div class="yours">${escapeHtml(view.response.text)}</div></div>` +
       `<div><h3>Model answer</h3>${md(q.modelAnswer)}</div></div>`;
   } else {
-    const kind = q.type === "multi" ? "checkbox" : "radio";
     const ticked = new Set(view.response.selected);
     body =
       `<div class="opts locked">${view.shownOptions
         .map((key, i) => {
           const o = byKey.get(key);
           const state = r.options[key];
-          return `<div class="opt ${state}"><input type="${kind}" disabled ${ticked.has(key) ? "checked" : ""} aria-hidden="true"><span class="l">${letter(i)}.</span><span class="body">${md(o.text)}<span class="mark ${state}">${MARK_LABELS[state]}</span><div class="why">${md(o.explanation)}</div></span></div>`;
+          return `<div class="opt ${state}"><input type="${inputKind(q)}" disabled ${ticked.has(key) ? "checked" : ""} aria-hidden="true"><span class="l">${optionKey(i)}.</span><span class="body">${md(o.text)}<span class="mark ${state}">${MARK_LABELS[state]}</span><div class="why">${md(o.explanation)}</div></span></div>`;
         })
         .join("")}</div>` +
       `<div class="result ${r.outcome}">Score <strong>${fmt(r.score)} / ${fmt(r.max)}</strong> · ${r.outcome}</div>`;
