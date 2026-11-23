@@ -213,14 +213,21 @@ If exclusion empties the candidate set, the exclusion is dropped for that pick.
   - "add quiz assigns" (user): ids `q0001`, `q0002`, ... from the `nextId` counter in `bank/bank.json`, never reused. A question whose stem matches an existing stem (whitespace collapsed, case ignored) is skipped and reported. Images are copied to `bank/images/<id>-<file name>` (user: "okay to 2-4"). Doc delta: `docs/CONTRACTS.md`.
   - The import file is not deleted or moved by the script. Doc delta: `docs/CONTRACTS.md`.
 - **Acceptance criteria:**
-  - [ ] `test/import.test.mjs`: importing 3 valid questions into a bank with `nextId` 5 gives ids `q0005`-`q0007`, `nextId` 8, `quiz` = import title, `addedAt` = the `today` passed in.
-  - [ ] `test/import.test.mjs`: one invalid question (including one that carries an `id`, and one option without `explanation`) gives errors naming its index and field, and `newBank` is null.
-  - [ ] `test/import.test.mjs`: a question whose stem equals an existing stem except for case and whitespace is in `skipped`, not `added`.
-  - [ ] `test/import.test.mjs`: `![p](images/cat.png)` in an option becomes `![p](images/q0005-cat.png)` and `imageCopies` lists the source and target.
-  - [ ] `test/import.test.mjs`: running the script with `--dry-run` against a temp folder leaves `bank.json` byte-identical and exits 0; running it on an invalid file exits 1.
-  - [ ] `node scripts/validate-bank.mjs` exits 0 after the sample import is committed; `bank/bank.json` holds 6 questions.
-  - [ ] `node --test` exits 0.
+  - [x] `test/import.test.mjs`: importing 3 valid questions into a bank with `nextId` 5 gives ids `q0005`-`q0007`, `nextId` 8, `quiz` = import title, `addedAt` = the `today` passed in.
+  - [x] `test/import.test.mjs`: one invalid question (including one that carries an `id`, and one option without `explanation`) gives errors naming its index and field, and `newBank` is null.
+  - [x] `test/import.test.mjs`: a question whose stem equals an existing stem except for case and whitespace is in `skipped`, not `added`.
+  - [x] `test/import.test.mjs`: `![p](images/cat.png)` in an option becomes `![p](images/q0005-cat.png)` and `imageCopies` lists the source and target.
+  - [x] `test/import.test.mjs`: running the script with `--dry-run` against a temp folder leaves `bank.json` byte-identical and exits 0; running it on an invalid file exits 1.
+  - [x] `node scripts/validate-bank.mjs` exits 0 after the sample import is committed; `bank/bank.json` holds 6 questions.
+  - [x] `node --test` exits 0.
 - **Doc deltas:** `docs/CONTRACTS.md`: I2. `README.md`: how to add a quiz (write the import file, `node scripts/add-quiz.mjs <file> --dry-run`, then without `--dry-run`, commit `bank/`); quizzer skill changes are out of scope.
+  - `docs/CONTRACTS.md`: an import file needs `version: 1`, a non-empty `title` and at least one question; an empty `questions` list is an error.
+  - `docs/CONTRACTS.md`: duplicate stems are also detected inside one import file (the second copy is skipped), and a bank stem is compared with its `images/<id>-` prefix removed, so re-importing a question with an image is still skipped.
+  - `docs/CONTRACTS.md`: `addedAt` is the local date (`YYYY-MM-DD`) on the machine running the script.
+  - `docs/CONTRACTS.md`: errors from the bank check after planning are prefixed `bank after import:`; with no new questions (all duplicates) the script exits 0 and writes nothing.
+  - `docs/CONTRACTS.md`: `bank.json` is written as 2-space indented JSON with a trailing newline, so diffs stay readable.
+  - `README.md`: the sample import lives in `examples/sample-import/` and was added as `q0001`-`q0006`; its image is an SVG (`five-state-model.svg`, a five-state process diagram drawn for the sample), and its true/false and image questions were written for the sample (sources given in the file).
+  - No doc: `add-quiz.mjs` takes the bank from `bank/` beside its own `scripts/` folder, so tests copy `js/`, `scripts/` and `bank/` to a temp folder instead of passing a bank path.
 
 ### S3 — Marking
 
