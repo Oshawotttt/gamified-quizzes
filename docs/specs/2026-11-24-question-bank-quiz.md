@@ -245,12 +245,15 @@ If exclusion empties the candidate set, the exclusion is dropped for that pick.
   - `outcome`: `right` when `score == max`, `wrong` when `score == 0`, else `partial`. Doc delta: `docs/CONTRACTS.md`.
   - Written: "just flash the model answer if cannot" (user): no score, outcome `shown`; status `shown` counts like `right` in selection (user: "okay to 2-4"). Doc delta: `docs/CONTRACTS.md`.
 - **Acceptance criteria:**
-  - [ ] `test/marking.test.mjs`, multi, options `a`-`e`, answer `b,c,e`, points 2 (within 1e-9): `b,c,e` gives 2 `right`; `b,c` gives 1.2 `partial`; `b,c,a` gives 0.4 `partial`; `a,b,c,d,e` gives 0.4 `partial` with `allOrNothing` 0; `a,d` gives 0 `wrong`.
-  - [ ] `test/marking.test.mjs`, single, 4 options, points 2: right key gives 2 `right`; any wrong key gives 0 `wrong`.
-  - [ ] `test/marking.test.mjs`: per-option states for `b,c,a` on answer `b,c,e` are a `wrong-ticked`, b `correct-ticked`, c `correct-ticked`, d `wrong-unticked`, e `correct-missed`.
-  - [ ] `test/marking.test.mjs`: written gives `{ score: null, max: points, outcome: "shown" }`.
-  - [ ] `node --test` exits 0.
+  - [x] `test/marking.test.mjs`, multi, options `a`-`e`, answer `b,c,e`, points 2 (within 1e-9): `b,c,e` gives 2 `right`; `b,c` gives 1.2 `partial`; `b,c,a` gives 0.4 `partial`; `a,b,c,d,e` gives 0.4 `partial` with `allOrNothing` 0; `a,d` gives 0 `wrong`.
+  - [x] `test/marking.test.mjs`, single, 4 options, points 2: right key gives 2 `right`; any wrong key gives 0 `wrong`.
+  - [x] `test/marking.test.mjs`: per-option states for `b,c,a` on answer `b,c,e` are a `wrong-ticked`, b `correct-ticked`, c `correct-ticked`, d `wrong-unticked`, e `correct-missed`.
+  - [x] `test/marking.test.mjs`: written gives `{ score: null, max: points, outcome: "shown" }`.
+  - [x] `node --test` exits 0.
 - **Doc deltas:** `docs/CONTRACTS.md`: I3 and the marking rules above.
+  - `docs/CONTRACTS.md`: `outcome` compares `score` with `max` and 0 within 1e-9, so floating-point results such as `0.4 * 5` still count as `right`.
+  - `docs/CONTRACTS.md`: selected keys that are not option keys are ignored by the score (they are neither a correct nor a wrong choice) but make `allOrNothing` 0.
+  - No doc: `questionPoints(question)` (default 1) is exported from `js/marking.js` so the page and the session use one default.
 
 ### S4 — Progress store
 
