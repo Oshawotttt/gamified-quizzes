@@ -1,5 +1,190 @@
 {
   "version": 1,
-  "nextId": 1,
-  "questions": []
+  "nextId": 7,
+  "questions": [
+    {
+      "id": "q0001",
+      "type": "single",
+      "stem": "The CPU starts a DMA operation to read a 64KB block from disk into main memory. Which statement is TRUE while the transfer is in progress?",
+      "points": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "The CPU is interrupted once for every word the DMA module moves, so that it can update the memory buffer pointer each time.",
+          "explanation": "Wrong. An interrupt per word describes interrupt-driven I/O. DMA moves the whole block without the CPU and raises one interrupt at the end."
+        },
+        {
+          "key": "b",
+          "text": "The CPU must keep polling the DMA module's status register to find out when the transfer is complete.",
+          "explanation": "Wrong. Checking a status register repeatedly is polling (programmed I/O). With DMA, the module tells the CPU it is done with an interrupt."
+        },
+        {
+          "key": "c",
+          "text": "The CPU can keep executing other instructions, but may run slower when it needs the system bus.",
+          "explanation": "Correct. The CPU is involved only at the start and end of the transfer. In between it keeps running, but it is slowed down when it and the DMA module both need the bus."
+        },
+        {
+          "key": "d",
+          "text": "Because the DMA module moves the data itself, no interrupt is raised at any point of the transfer.",
+          "explanation": "Wrong. DMA raises one interrupt when the whole transfer is done, so the CPU knows the block is in memory."
+        }
+      ],
+      "answer": [
+        "c"
+      ],
+      "explanation": "DMA moves the whole block without the CPU; the CPU is involved only at the start and end, and runs slower when it needs the bus during the transfer.",
+      "source": "from course: Week 02 - Interrupts.pptx slides 33, 37",
+      "quiz": "Sample quiz (from CS205 Finals Practice Quiz 2 (Short))",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0002",
+      "type": "single",
+      "stem": "A process is in the Blocked/Suspend state: it is waiting for an I/O event, and its image has been swapped out to disk. The I/O event now occurs, but main memory is still full. Which state does the process move to?",
+      "points": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Ready/Suspend",
+          "explanation": "Correct. The event changes Blocked into Ready, but the process image is still on disk, so it stays suspended: Ready/Suspend."
+        },
+        {
+          "key": "b",
+          "text": "Ready",
+          "explanation": "Wrong. Ready needs the process to be in main memory. It moves to Ready only when it is swapped back in, and memory is still full."
+        },
+        {
+          "key": "c",
+          "text": "Running",
+          "explanation": "Wrong. A process on disk cannot be dispatched. It must first be swapped in and become Ready."
+        },
+        {
+          "key": "d",
+          "text": "Blocked",
+          "explanation": "Wrong. Blocked means waiting for an event in main memory. The event has occurred and the process is not in memory."
+        }
+      ],
+      "answer": [
+        "a"
+      ],
+      "explanation": "Suspension says *where* the process is; Ready/Blocked says *whether it can run*. The event makes it able to run, but it is still on disk.",
+      "source": "from course: Week 03 -Process.pptx slides 25-27; prof's main points",
+      "quiz": "Sample quiz (from CS205 Finals Practice Quiz 2 (Short))",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0003",
+      "type": "multi",
+      "stem": "A process uses pure user-level threads (many-to-one model). It has 4 threads and runs on a 4-core machine. One of its threads calls a blocking `read()`. Which statements are TRUE?",
+      "points": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "The other three threads keep running on the other three cores while the read is in progress.",
+          "explanation": "False. With pure user-level threads only one thread of the process can run at a time, and a blocking call blocks them all. Running threads on several cores needs kernel-level threads."
+        },
+        {
+          "key": "b",
+          "text": "The kernel schedules the process as one entity and does not know that the process has 4 threads.",
+          "explanation": "True. The kernel is not aware of user-level threads; it sees and schedules only the process."
+        },
+        {
+          "key": "c",
+          "text": "The whole process is blocked until the read completes, unless a technique such as jacketing is used.",
+          "explanation": "True. The kernel blocks the whole process on the system call. Jacketing turns the blocking call into a non-blocking check so another thread can run."
+        },
+        {
+          "key": "d",
+          "text": "Creating each of these threads required the kernel to create a matching kernel thread.",
+          "explanation": "False. A kernel thread per user thread is the one-to-one model. In the many-to-one model the thread library creates threads without the kernel."
+        },
+        {
+          "key": "e",
+          "text": "Switching between these threads can be done by the thread library, without switching to kernel mode.",
+          "explanation": "True. The library does the scheduling in user space, so a thread switch needs no mode switch."
+        }
+      ],
+      "answer": [
+        "b",
+        "c",
+        "e"
+      ],
+      "explanation": "With pure user-level threads, the kernel is not aware of the threads, only one thread can run at a time, and one blocked thread blocks them all.",
+      "source": "from course: Week 04 - Thread.pptx slides 12, 15; own answer for the thread-library switch",
+      "quiz": "Sample quiz (from CS205 Finals Practice Quiz 2 (Short))",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0004",
+      "type": "written",
+      "stem": "A file currently has 50 blocks. The file allocation table (and, for indexed allocation, the index block) is already in main memory. Each block read or block write counts as one disk I/O.\n\n(a) Complete the table with the number of disk I/O operations for each case. For contiguous allocation, assume there is no room to grow at the start of the file but there is room at the end. Indexed allocation uses fixed-size blocks.\n\n| Operation | Contiguous | Chained | Indexed |\n|---|---|---|---|\n| (i) Add a block at the beginning | | | |\n| (ii) Add a block after the 25th block | | | |\n| (iii) Remove the 25th block | | | |\n\nJustify each answer briefly.\n\n(b) The disk is 64GB with 4KB blocks, and free space is tracked with a bit table (bitmap). How large is the bit table?\n\n(c) Explain why chained allocation performs badly when a program reads the file in random order, and how indexed allocation avoids this.",
+      "points": 10,
+      "modelAnswer": "**(a)**\n\n| Operation | Contiguous | Chained | Indexed |\n|---|---|---|---|\n| (i) Add at beginning | **101** | **1** | **1** |\n| (ii) Add after 25th | **51** | **27** | **1** |\n| (iii) Remove 25th | **48 or 50** | **26** | **0** |\n\n**Contiguous.** (i) No room at the front, so the whole file shifts down by one block: read 50 + write 50 shifted blocks + write the new block = 101. (ii) Blocks 26-50 shift down: read 25 + write 25, plus write the new block = 51. (iii) Close the gap: shift blocks 26-50 up (25 reads + 25 writes = 50), or shift blocks 1-24 down (24 + 24 = 48). Then update the start or length in the in-memory table.\n\n**Chained.** (i) Write the new block with its pointer set to the old first block = 1; the table's start pointer is in memory. (ii) Follow the chain: read blocks 1-25 (25 reads) to reach the 25th. Write the new block pointing to block 26 (1). Rewrite block 25 so it points to the new block (1). Total 27. (iii) Read blocks 1-25 (25 reads); block 25 holds the pointer to block 26. Rewrite block 24 to point to block 26 (1). Total 26.\n\n**Indexed.** The index is in memory, so adding a block anywhere only writes the new data block (1), and the index entry is updated in memory. Removing a block only deletes its index entry: 0 I/O. No data moves.\n\n**(b)** Number of blocks = 64GB / 4KB = 2^36 / 2^12 = 2^24. One bit per block = 2^24 bits = 2^21 bytes = **2MB**.\n\n**(c)** In chained allocation, the only way to find block k is to read blocks 1 to k−1 and follow their pointers: k disk reads for one random access. Indexed allocation keeps all the block addresses in the index block, so any block is found with one lookup (in memory) and read with one I/O.",
+      "wordLimit": 400,
+      "source": "from course: Week 10 File Management.pptx slides 11-19; Week 10 - Answer.pptx slide 2",
+      "quiz": "Sample quiz (from CS205 Finals Practice Quiz 2 (Short))",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0005",
+      "type": "single",
+      "stem": "During a DMA transfer of a whole block, the DMA module interrupts the CPU only once, when the transfer is complete.",
+      "points": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "True",
+          "explanation": "Correct. DMA moves the whole block itself and raises a single interrupt when the transfer is done."
+        },
+        {
+          "key": "b",
+          "text": "False",
+          "explanation": "Wrong. An interrupt for every word would be interrupt-driven I/O, and no interrupt at all would leave the CPU unaware that the block has arrived."
+        }
+      ],
+      "answer": [
+        "a"
+      ],
+      "shuffle": false,
+      "explanation": "The CPU is involved only at the start (setting up the transfer) and at the end (one interrupt).",
+      "source": "from course: Week 02 - Interrupts.pptx slides 33, 37",
+      "quiz": "Sample quiz (from CS205 Finals Practice Quiz 2 (Short))",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0006",
+      "type": "single",
+      "stem": "The diagram shows the five-state process model. Which event causes the transition marked **X**, from Running to Ready?\n\n![Five-state process model with the Running to Ready transition marked X](images/q0006-five-state-model.svg)",
+      "points": 2,
+      "options": [
+        {
+          "key": "a",
+          "text": "Timeout",
+          "explanation": "Correct. When the running process uses up its time slice, the OS pre-empts it and puts it back in the Ready queue."
+        },
+        {
+          "key": "b",
+          "text": "Event wait",
+          "explanation": "Wrong. Waiting for an event (such as I/O) moves a running process to Blocked, not Ready."
+        },
+        {
+          "key": "c",
+          "text": "Dispatch",
+          "explanation": "Wrong. Dispatch is the opposite direction: the scheduler picks a Ready process and moves it to Running."
+        },
+        {
+          "key": "d",
+          "text": "Event occurs",
+          "explanation": "Wrong. An event occurring moves a Blocked process to Ready; the process in this transition was Running."
+        }
+      ],
+      "answer": [
+        "a"
+      ],
+      "explanation": "A running process returns to Ready when it is pre-empted, most often because its time slice has run out.",
+      "source": "own answer",
+      "quiz": "Sample quiz (from CS205 Finals Practice Quiz 2 (Short))",
+      "addedAt": "2026-11-24"
+    }
+  ]
 }
