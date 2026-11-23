@@ -9,22 +9,22 @@
   <g fill="#eef3fb" stroke="#222222" stroke-width="2">
     <ellipse cx="70" cy="70" rx="55" ry="28"/>
     <ellipse cx="240" cy="70" rx="60" ry="28"/>
-    <ellipse cx="430" cy="70" rx="65" ry="28"/>
-    <ellipse cx="580" cy="70" rx="50" ry="28"/>
+    <ellipse cx="420" cy="70" rx="60" ry="28"/>
+    <ellipse cx="590" cy="70" rx="45" ry="28"/>
     <ellipse cx="335" cy="240" rx="65" ry="28"/>
   </g>
   <g fill="#222222" text-anchor="middle">
     <text x="70" y="76">New</text>
     <text x="240" y="76">Ready</text>
-    <text x="430" y="76">Running</text>
-    <text x="580" y="76">Exit</text>
+    <text x="420" y="76">Running</text>
+    <text x="590" y="76">Exit</text>
     <text x="335" y="246">Blocked</text>
   </g>
   <g stroke="#222222" stroke-width="2" fill="none" marker-end="url(#arrow)">
     <line x1="125" y1="70" x2="180" y2="70"/>
-    <path d="M290,52 Q335,15 375,52"/>
-    <path d="M378,90 Q335,125 292,90"/>
-    <line x1="495" y1="70" x2="530" y2="70"/>
+    <path d="M290,52 Q330,15 368,50"/>
+    <path d="M370,90 Q330,125 292,90"/>
+    <line x1="480" y1="70" x2="545" y2="70"/>
     <line x1="420" y1="98" x2="370" y2="214"/>
     <line x1="300" y1="216" x2="252" y2="98"/>
   </g>
@@ -32,7 +32,7 @@
     <text x="152" y="58">Admit</text>
     <text x="335" y="22">Dispatch</text>
     <text x="335" y="138" font-size="20" font-weight="bold" fill="#c0392b">X</text>
-    <text x="512" y="58">Release</text>
+    <text x="512" y="56">Release</text>
     <text x="440" y="165">Event wait</text>
     <text x="225" y="165">Event occurs</text>
   </g>
