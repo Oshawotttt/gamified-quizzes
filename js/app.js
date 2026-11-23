@@ -1,6 +1,6 @@
 // DOM wiring for the quiz page. All quiz logic lives in session.js and the
 // modules it uses; this file only renders state and forwards clicks.
-import { createProgressStore } from "./progress.js";
+import { createProgressStore, bankStats } from "./progress.js";
 import { pickNext } from "./select.js";
 import { createSession } from "./session.js";
 import { renderMarkdown, escapeHtml } from "./markdown.js";
@@ -40,8 +40,11 @@ let session = null;
 // Ask the browser not to evict our storage (helps on iOS when added to the Home Screen).
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
 
+// Before the bank loads (or if it fails to load), counts cover no questions.
+const stats = () => (session ? session.stats() : bankStats([], store.all()));
+
 function renderCounts() {
-  const s = session.stats();
+  const s = stats();
   $("#counts").innerHTML =
     `<span><b>${s.total}</b> questions</span>` +
     Object.entries(STATUS_LABELS).map(([k, label]) => `<span>${label} <b>${s[k]}</b></span>`).join("");
@@ -100,7 +103,13 @@ function renderQuestion(view) {
   }
   submit.addEventListener("click", () => {
     if (submit.disabled) return;
-    session.submit(response);
+    try {
+      session.submit(response);
+    } catch (err) {
+      // e.g. storage full: say so instead of silently doing nothing.
+      alert(`Could not save this answer: ${err.message}`);
+      return;
+    }
     render();
   });
 }
@@ -167,7 +176,7 @@ function daysAgo(iso) {
 }
 
 function renderStats(message = "", isError = false) {
-  const s = session.stats();
+  const s = stats();
   $("#statTable").innerHTML =
     `<tbody><tr><td>Questions in bank</td><td>${s.total}</td></tr>` +
     Object.entries(STATUS_LABELS).map(([k, label]) => `<tr><td>${label}</td><td>${s[k]}</td></tr>`).join("") +
@@ -183,7 +192,7 @@ function showStats(show) {
   $("#btnStats").setAttribute("aria-expanded", String(show));
   $("#btnStats").textContent = show ? "Quiz" : "Stats";
   if (show) renderStats();
-  else render();
+  else if (session) render();
   window.scrollTo(0, 0);
 }
 
@@ -214,6 +223,7 @@ function wireStats() {
     if (!confirm("Replace the progress on this device with the progress in this file?")) return;
     try {
       store.importJson(await file.text());
+      session?.restart();
       renderCounts();
       renderStats(`Imported ${store.all().length} attempts.`);
     } catch (err) {
@@ -223,12 +233,14 @@ function wireStats() {
   $("#btnReset").addEventListener("click", () => {
     if (!confirm("Delete all progress on this device? Export first if you want a backup.")) return;
     store.reset();
+    session?.restart();
     renderCounts();
     renderStats("Progress reset.");
   });
 }
 
 async function start() {
+  wireStats(); // Export/Import/Reset stay usable even if the bank fails to load.
   let bank;
   try {
     const res = await fetch(BANK_URL, { cache: "no-cache" });
@@ -239,7 +251,6 @@ async function start() {
     return;
   }
   session = createSession({ questions: bank.questions, store, pick: pickNext, now: () => new Date(), rng: Math.random });
-  wireStats();
   render();
 }
 

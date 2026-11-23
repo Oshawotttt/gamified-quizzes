@@ -58,7 +58,7 @@ export function createSession({ questions, store, pick, now, rng }) {
         throw new Error("Select at least one option");
       }
       const result = markAnswer(q, response);
-      const attemptIndex = store.record({
+      const attempt = {
         qid: q.id,
         at: toIso(now()),
         score: result.score,
@@ -66,16 +66,24 @@ export function createSession({ questions, store, pick, now, rng }) {
         outcome: result.outcome,
         guessed: false,
         response,
-      });
-      view = { ...view, state: "feedback", response, result, attemptIndex };
+      };
+      const attemptIndex = store.record(attempt);
+      view = { ...view, state: "feedback", response, result, attemptIndex, attempt: JSON.stringify(attempt) };
       return result;
     },
 
     next({ guessed = false } = {}) {
       if (view.state !== "feedback") throw new Error(`next is not allowed in state ${view.state}`);
-      if (guessed && view.question.type !== "written") store.setGuessed(view.attemptIndex, true);
+      // Only flag the attempt this session recorded: an import or reset during
+      // feedback replaces the store, and the index may now point elsewhere.
+      const stored = store.all()[view.attemptIndex];
+      const unchanged = stored && JSON.stringify({ ...stored, guessed: false }) === view.attempt;
+      if (guessed && view.question.type !== "written" && unchanged) store.setGuessed(view.attemptIndex, true);
       show();
     },
+
+    /** Drop the current question or feedback and show a new question (after import or reset). */
+    restart: () => show(),
 
     stats: () => bankStats(ids, store.all()),
   };

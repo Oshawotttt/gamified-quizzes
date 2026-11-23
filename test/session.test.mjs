@@ -147,6 +147,34 @@ test("works with the real pickNext and reports bank stats", () => {
   assert.equal(s.stats().right, 1);
 });
 
+test("next(guessed) after the store is replaced during feedback changes no attempt", () => {
+  const { s, store } = session([multi, tf], ["q0001", "q0002"]);
+  const backup = createProgressStore(memoryStorage());
+  for (let i = 0; i < 3; i++) backup.record({ qid: "q0002", at: NOW, score: 0, max: 1, outcome: "wrong", guessed: false, response: { selected: ["b"] } });
+  const exported = backup.exportJson(NOW);
+
+  s.submit({ selected: ["b"] });
+  store.importJson(exported);
+  s.next({ guessed: true });
+  assert.deepEqual(store.all().map((a) => a.guessed), [false, false, false]);
+
+  s.submit({ selected: ["a"] });
+  store.reset();
+  assert.doesNotThrow(() => s.next({ guessed: true }));
+  assert.deepEqual(store.all(), []);
+});
+
+test("restart shows a new question and drops the pending feedback", () => {
+  const { s, store } = session([multi, tf], ["q0001", "q0002"]);
+  s.submit({ selected: ["b"] });
+  store.reset();
+  s.restart();
+  assert.equal(s.current().state, "question");
+  assert.equal(s.current().question.id, "q0002");
+  assert.throws(() => s.next({ guessed: true }));
+  assert.deepEqual(store.all(), []);
+});
+
 test("an empty bank gives the empty state", () => {
   const s = createSession({ questions: [], store: createProgressStore(memoryStorage()), pick: pickNext, now: () => NOW, rng: Math.random });
   assert.equal(s.current().state, "empty");
