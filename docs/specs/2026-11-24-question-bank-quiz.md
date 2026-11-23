@@ -302,14 +302,17 @@ If exclusion empties the candidate set, the exclusion is dropped for that pick.
   - "have different selection functions depending on number of questions in the question bank. i'm hoping for around 200 questions. but mayb 500 is possible?" (user). Strategies, `LARGE_BANK = 100` threshold and constants per I5 (user: "1) ok"). Doc delta: `docs/CONTRACTS.md`.
   - Tuning constants are exported (`LARGE_BANK`, `WEIGHTS`, `BUCKETS`) in one place. Doc delta: `docs/CONTRACTS.md`.
 - **Acceptance criteria:**
-  - [ ] `test/select.test.mjs`: empty `questionIds` returns `null`; one question returns it even if it is in `recent`.
-  - [ ] `test/select.test.mjs`: 99 ids use `pickWeighted` and 100 ids use `pickBuckets` (checked by the different recent window: with 100 ids, none of the last 10 of `recent` is returned in 1000 picks; with 99 ids an id 4th-from-last in `recent` can be returned).
-  - [ ] `test/select.test.mjs`: `pickWeighted`, 10 000 seeded picks over a known status mix: frequency per status within 2 percentage points of its `WEIGHTS` share; the last 3 of `recent` are never returned.
-  - [ ] `test/select.test.mjs`: `pickBuckets`, 10 000 seeded picks over 200 ids with all three buckets non-empty: bucket frequencies within 2 percentage points of `BUCKETS`; with the unseen bucket empty, review and known split 0.5 : 0.15 re-normalised.
-  - [ ] `test/select.test.mjs`: `pickBuckets` known-bucket pick is the question with the oldest latest attempt.
-  - [ ] `test/select.test.mjs`: when every candidate is in `recent`, a question is still returned.
-  - [ ] `node --test` exits 0.
+  - [x] `test/select.test.mjs`: empty `questionIds` returns `null`; one question returns it even if it is in `recent`.
+  - [x] `test/select.test.mjs`: 99 ids use `pickWeighted` and 100 ids use `pickBuckets` (checked by the different recent window: with 100 ids, none of the last 10 of `recent` is returned in 1000 picks; with 99 ids an id 4th-from-last in `recent` can be returned).
+  - [x] `test/select.test.mjs`: `pickWeighted`, 10 000 seeded picks over a known status mix: frequency per status within 2 percentage points of its `WEIGHTS` share; the last 3 of `recent` are never returned.
+  - [x] `test/select.test.mjs`: `pickBuckets`, 10 000 seeded picks over 200 ids with all three buckets non-empty: bucket frequencies within 2 percentage points of `BUCKETS`; with the unseen bucket empty, review and known split 0.5 : 0.15 re-normalised.
+  - [x] `test/select.test.mjs`: `pickBuckets` known-bucket pick is the question with the oldest latest attempt.
+  - [x] `test/select.test.mjs`: when every candidate is in `recent`, a question is still returned.
+  - [x] `node --test` exits 0.
 - **Doc deltas:** `docs/CONTRACTS.md`: I5 with the constants and both strategies.
+  - `docs/CONTRACTS.md`: in the known bucket, "oldest latest attempt" compares positions in the `attempts` array (append-only, so lower index = older), matching the S4 rule that "latest" is by array order, not by `at`.
+  - `docs/CONTRACTS.md`: `pickWeighted` and `pickBuckets` also return `null` for an empty `questionIds`; `recent` defaults to `[]` and `rng` to `Math.random`.
+  - No doc: the recent windows (3 and 10) are module constants next to `LARGE_BANK`, `WEIGHTS` and `BUCKETS`, but not exported, since I5 fixes them.
 
 ### S6 — One-question-at-a-time quiz page
 
