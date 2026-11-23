@@ -336,15 +336,26 @@ If exclusion empties the candidate set, the exclusion is dropped for that pick.
   - Plain HTML/CSS/JS ES modules, no build step, no external CDN. Doc delta: `docs/ARCHITECTURE.md`.
   - Layout works at 360px width, 16px side gutter, no horizontal page scroll (wide code and tables scroll inside their box), light and dark via `prefers-color-scheme` (style carried over from the quizzer template). Transient.
 - **Acceptance criteria:**
-  - [ ] `test/session.test.mjs`: `submit` on a `multi` question records one attempt with the S3 score and `guessed: false`; `buttons()` is `["next-guessed", "next"]`; `next({ guessed: true })` sets `guessed: true` on that attempt and moves to a new `question` state.
-  - [ ] `test/session.test.mjs`: `next` before `submit` throws; `submit` twice throws.
-  - [ ] `test/session.test.mjs`: with a seeded `rng`, a 5-option question's `shownOptions` is a permutation of its keys and differs from source order for at least one of 20 showings; with `shuffle: false` it equals source order every time; the recorded attempt's `response.selected` holds option keys.
-  - [ ] `test/session.test.mjs`: on a `written` question, `submit` records an attempt with outcome `shown`, `score: null`, and `buttons()` is `["next"]`.
-  - [ ] `test/session.test.mjs`: `pick` receives all bank ids and the shown ids, most recent last, as `recent`.
-  - [ ] `test/markdown.test.mjs`: `![x](images/a.png)` renders `<img` with `src="bank/images/a.png"` and `alt="x"`; `<script>` in input is escaped; a table and a fenced code block render.
-  - [ ] `node -e "JSON.parse(require('fs').readFileSync('manifest.webmanifest','utf8'))"` exits 0.
-  - [ ] `node --test` exits 0 and `node scripts/validate-bank.mjs` exits 0.
+  - [x] `test/session.test.mjs`: `submit` on a `multi` question records one attempt with the S3 score and `guessed: false`; `buttons()` is `["next-guessed", "next"]`; `next({ guessed: true })` sets `guessed: true` on that attempt and moves to a new `question` state.
+  - [x] `test/session.test.mjs`: `next` before `submit` throws; `submit` twice throws.
+  - [x] `test/session.test.mjs`: with a seeded `rng`, a 5-option question's `shownOptions` is a permutation of its keys and differs from source order for at least one of 20 showings; with `shuffle: false` it equals source order every time; the recorded attempt's `response.selected` holds option keys.
+  - [x] `test/session.test.mjs`: on a `written` question, `submit` records an attempt with outcome `shown`, `score: null`, and `buttons()` is `["next"]`.
+  - [x] `test/session.test.mjs`: `pick` receives all bank ids and the shown ids, most recent last, as `recent`.
+  - [x] `test/markdown.test.mjs`: `![x](images/a.png)` renders `<img` with `src="bank/images/a.png"` and `alt="x"`; `<script>` in input is escaped; a table and a fenced code block render.
+  - [x] `node -e "JSON.parse(require('fs').readFileSync('manifest.webmanifest','utf8'))"` exits 0.
+  - [x] `node --test` exits 0 and `node scripts/validate-bank.mjs` exits 0.
 - **Doc deltas:** `README.md`: how to use the quiz (flow, buttons, counts, Add to Home Screen, export/import as rare backup). `docs/ARCHITECTURE.md`: module map (`bank.js`, `import.js`, `marking.js`, `progress.js`, `select.js`, `session.js`, `markdown.js`, `app.js`); storage persistence request and manifest; offline service worker out of scope.
+  - `README.md`: Submit stays disabled until an option is picked or the text is non-empty; `session.submit` also throws on an empty response, so the rule holds outside the page too.
+  - `README.md`: a written answer's "Next" never marks it guessed (`next({ guessed: true })` is ignored for written questions), because written attempts are `shown`, not marked.
+  - `docs/ARCHITECTURE.md`: "recent" (passed to `pickNext`) is the list of questions shown in this page visit only; it starts empty on each load.
+  - `docs/ARCHITECTURE.md`: when the browser blocks localStorage (e.g. some private modes), the page falls back to in-memory storage for that visit, so the quiz still works but progress is not kept.
+  - `docs/ARCHITECTURE.md`: Import asks for confirmation and replaces the device's progress (per the S4 rule); Export downloads `gamified-quizzes-progress-YYYY-MM-DD.json`.
+  - `docs/CONTRACTS.md`: `renderMarkdown` wraps tables in `<div class="scroll">` so wide tables scroll inside their box at 360px instead of widening the page, escapes `'` as well as `& < > "`, and accepts CRLF line endings.
+  - `README.md`: the header shows the total and each status count; each question shows its type tag, points and id (the id helps when reporting a bad question).
+  - `docs/CONTRACTS.md`: `session.restart()` drops the current question or feedback and shows a new question; the page calls it after Import or Reset. `next({ guessed: true })` flags the attempt only if the store still holds the exact attempt this session recorded, so a restored backup is never changed.
+  - `docs/ARCHITECTURE.md`: the Stats screen (Export, Import, Reset) works even if `bank/bank.json` fails to load, so progress can still be backed up; a failed save on Submit shows an alert instead of doing nothing.
+  - No doc: icons are a generated blue rounded square with a white ring and check mark; the sample diagram's labels were moved so "Release" no longer overlaps the states (bank copy and example kept identical).
+  - No doc: checked in headless Chrome at 360px (light and dark): all six sample questions, both feedback layouts, the stats screen; no horizontal page scroll and no console errors. The phone checks in **Human checks** still apply.
 
 ## Human checks
 
