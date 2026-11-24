@@ -1,6 +1,6 @@
 # gamified-quizzes
 
-Practice quizzes for CS205 finals.
+General practice quizzes.
 
 ## Play
 
