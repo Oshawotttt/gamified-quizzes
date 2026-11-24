@@ -1,189 +1,3196 @@
 {
   "version": 1,
-  "nextId": 7,
+  "nextId": 88,
   "questions": [
     {
-      "id": "q0001",
-      "type": "single",
-      "stem": "The CPU starts a DMA operation to read a 64KB block from disk into main memory. Which statement is TRUE while the transfer is in progress?",
-      "points": 2,
+      "id": "q0000",
+      "type": "multi",
+      "stem": "*Week 1 - Software Processes*\n\n[Dev] Choose all the correct statements about the waterfall process:",
       "options": [
         {
           "key": "a",
-          "text": "The CPU is interrupted once for every word the DMA module moves, so that it can update the memory buffer pointer each time.",
-          "explanation": "Wrong. An interrupt per word describes interrupt-driven I/O. DMA moves the whole block without the CPU and raises one interrupt at the end."
+          "text": "Each phase must be completed before the next phase begins",
+          "explanation": "True. Phases are strictly sequential; each one is signed off before the next starts."
         },
         {
           "key": "b",
-          "text": "The CPU must keep polling the DMA module's status register to find out when the transfer is complete.",
-          "explanation": "Wrong. Checking a status register repeatedly is polling (programmed I/O). With DMA, the module tells the CPU it is done with an interrupt."
+          "text": "Testing is performed throughout all phases of development",
+          "explanation": "False. Testing is a separate phase near the end; continuous testing belongs to agile/XP."
         },
         {
           "key": "c",
-          "text": "The CPU can keep executing other instructions, but may run slower when it needs the system bus.",
-          "explanation": "Correct. The CPU is involved only at the start and end of the transfer. In between it keeps running, but it is slowed down when it and the DMA module both need the bus."
+          "text": "It may produce software customers do not want",
+          "explanation": "True. The customer sees working software only at the end, so misunderstood or changed needs are found too late."
         },
         {
           "key": "d",
-          "text": "Because the DMA module moves the data itself, no interrupt is raised at any point of the transfer.",
-          "explanation": "Wrong. DMA raises one interrupt when the whole transfer is done, so the CPU knows the block is in memory."
+          "text": "It is suitable for projects with clear, well-understood, and stable requirements",
+          "explanation": "True. With stable requirements little rework is needed, so the up-front plan works."
         }
       ],
       "answer": [
-        "c"
+        "a",
+        "c",
+        "d"
       ],
-      "explanation": "DMA moves the whole block without the CPU; the CPU is involved only at the start and end, and runs slower when it needs the bus during the transfer.",
-      "source": "from course: Week 02 - Interrupts.pptx slides 33, 37",
-      "quiz": "Sample quiz (from CS205 Finals Practice Quiz 2 (Short))",
+      "explanation": "Waterfall is a plan-driven, sequential process: requirements, design, implementation, testing, operation, one after the other.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0001",
+      "type": "multi",
+      "stem": "*Week 1 - Software Processes*\n\n[Dev] Agile vs. waterfall",
+      "options": [
+        {
+          "key": "a",
+          "text": "Waterfall process is iterative",
+          "explanation": "False. Waterfall is linear and sequential, not iterative."
+        },
+        {
+          "key": "b",
+          "text": "Agile is about following a well-defined plan",
+          "explanation": "False. That describes plan-driven processes; agile prefers responding to change."
+        },
+        {
+          "key": "c",
+          "text": "Agile emphasizes comprehensive requirement documents",
+          "explanation": "False. Agile prefers working software over comprehensive documentation."
+        },
+        {
+          "key": "d",
+          "text": "Agile can be both iterative and incremental",
+          "explanation": "True. Agile builds the product in small increments, refined over repeated iterations (sprints)."
+        },
+        {
+          "key": "e",
+          "text": "You must implement Scrum to be agile",
+          "explanation": "False. Scrum is one agile framework; XP, Kanban and others are also agile."
+        }
+      ],
+      "answer": [
+        "d"
+      ],
+      "explanation": "Agile values responding to change over following a plan and working software over comprehensive documentation (Agile Manifesto).",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
       "addedAt": "2026-11-24"
     },
     {
       "id": "q0002",
-      "type": "single",
-      "stem": "A process is in the Blocked/Suspend state: it is waiting for an I/O event, and its image has been swapped out to disk. The I/O event now occurs, but main memory is still full. Which state does the process move to?",
-      "points": 2,
+      "type": "multi",
+      "stem": "*Week 1 - Software Processes*\n\n[Dev] Choose the correct statement about Scrum:",
       "options": [
         {
           "key": "a",
-          "text": "Ready/Suspend",
-          "explanation": "Correct. The event changes Blocked into Ready, but the process image is still on disk, so it stays suspended: Ready/Suspend."
+          "text": "Each sprint aims to complete a few backlog items",
+          "explanation": "True. The sprint backlog holds the few items the team commits to finishing in that sprint."
         },
         {
           "key": "b",
-          "text": "Ready",
-          "explanation": "Wrong. Ready needs the process to be in main memory. It moves to Ready only when it is swapped back in, and memory is still full."
+          "text": "Product owner must be the project manager",
+          "explanation": "False. The product owner represents the customer and owns the backlog; they should not be the project manager."
         },
         {
           "key": "c",
-          "text": "Running",
-          "explanation": "Wrong. A process on disk cannot be dispatched. It must first be swapped in and become Ready."
+          "text": "The Scrum master is the only person allowed to assign tasks to team members during a sprint",
+          "explanation": "False. The team self-organises and members pick tasks; the Scrum master is a facilitator, not a task assigner."
         },
         {
           "key": "d",
-          "text": "Blocked",
-          "explanation": "Wrong. Blocked means waiting for an event in main memory. The event has occurred and the process is not in memory."
+          "text": "Scrum focuses on contract negotiation",
+          "explanation": "False. Agile values customer collaboration over contract negotiation."
+        },
+        {
+          "key": "e",
+          "text": "Scrum mandates a strict step-by-step software process",
+          "explanation": "False. Scrum is a lightweight framework, not a strict step-by-step process."
         }
       ],
       "answer": [
         "a"
       ],
-      "explanation": "Suspension says *where* the process is; Ready/Blocked says *whether it can run*. The event makes it able to run, but it is still on disk.",
-      "source": "from course: Week 03 -Process.pptx slides 25-27; prof's main points",
-      "quiz": "Sample quiz (from CS205 Finals Practice Quiz 2 (Short))",
+      "explanation": "Scrum is a lightweight framework: a self-organising team delivers a few product backlog items in each time-boxed sprint.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
       "addedAt": "2026-11-24"
     },
     {
       "id": "q0003",
       "type": "multi",
-      "stem": "A process uses pure user-level threads (many-to-one model). It has 4 threads and runs on a 4-core machine. One of its threads calls a blocking `read()`. Which statements are TRUE?",
-      "points": 2,
+      "stem": "*Week 1 - Software Processes*\n\n[Dev] Choose the correct statements about XP:",
       "options": [
         {
           "key": "a",
-          "text": "The other three threads keep running on the other three cores while the read is in progress.",
-          "explanation": "False. With pure user-level threads only one thread of the process can run at a time, and a blocking call blocks them all. Running threads on several cores needs kernel-level threads."
+          "text": "Pair programming: two programmers working together to write code",
+          "explanation": "True. Pair programming is two developers at one workstation writing the same code."
         },
         {
           "key": "b",
-          "text": "The kernel schedules the process as one entity and does not know that the process has 4 threads.",
-          "explanation": "True. The kernel is not aware of user-level threads; it sees and schedules only the process."
+          "text": "XP is a part of the Scrum process",
+          "explanation": "False. XP is a separate agile method; teams may combine XP practices with Scrum, but it is not part of Scrum."
         },
         {
           "key": "c",
-          "text": "The whole process is blocked until the read completes, unless a technique such as jacketing is used.",
-          "explanation": "True. The kernel blocks the whole process on the system call. Jacketing turns the blocking call into a non-blocking check so another thread can run."
+          "text": "Code review is the study of source code by the original authors",
+          "explanation": "False. Code review is done by people other than the author."
         },
         {
           "key": "d",
-          "text": "Creating each of these threads required the kernel to create a matching kernel thread.",
-          "explanation": "False. A kernel thread per user thread is the one-to-one model. In the many-to-one model the thread library creates threads without the kernel."
+          "text": "TDD aims to write tests before writing actual code",
+          "explanation": "True. In TDD you write a failing test first, then the code to pass it."
+        }
+      ],
+      "answer": [
+        "a",
+        "d"
+      ],
+      "explanation": "Extreme Programming (XP) is an agile method built on engineering practices such as pair programming, TDD, code review and continuous integration.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0004",
+      "type": "multi",
+      "stem": "*Week 1 - Software Processes*\n\n[Ops] What are some of the tasks in software operations?",
+      "options": [
+        {
+          "key": "a",
+          "text": "Install software on cloud servers",
+          "explanation": "True. Installing and deploying software on servers is an operations task."
+        },
+        {
+          "key": "b",
+          "text": "Ensure that certain coding standards are followed properly",
+          "explanation": "False. Coding standards are a development concern (code review, linters)."
+        },
+        {
+          "key": "c",
+          "text": "Monitor server infrastructure and network traffic",
+          "explanation": "True. Monitoring infrastructure and traffic is core operations work."
+        },
+        {
+          "key": "d",
+          "text": "Respond to unplanned service interruptions",
+          "explanation": "True. Incident response to outages is operations work."
         },
         {
           "key": "e",
-          "text": "Switching between these threads can be done by the thread library, without switching to kernel mode.",
-          "explanation": "True. The library does the scheduling in user space, so a thread switch needs no mode switch."
+          "text": "Conduct data analysis to improve availability and performance",
+          "explanation": "True. Analysing monitoring data to improve availability and performance is operations work."
+        },
+        {
+          "key": "f",
+          "text": "Defense against personal attacks on top management",
+          "explanation": "False. Not a software operations task (distractor)."
+        }
+      ],
+      "answer": [
+        "a",
+        "c",
+        "d",
+        "e"
+      ],
+      "explanation": "Operations keeps the software running for users: deployment, monitoring, incident response and performance/availability analysis.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0005",
+      "type": "multi",
+      "stem": "*Week 1 - Software Processes*\n\n[Ops] What do we measure in monitoring:",
+      "options": [
+        {
+          "key": "a",
+          "text": "Response time",
+          "explanation": "True. Response time (latency) shows user-facing performance."
+        },
+        {
+          "key": "b",
+          "text": "Downtime",
+          "explanation": "True. Downtime measures availability."
+        },
+        {
+          "key": "c",
+          "text": "CPU utilization",
+          "explanation": "True. CPU utilisation shows resource load."
+        },
+        {
+          "key": "d",
+          "text": "The number of senior managers",
+          "explanation": "False. Headcount of managers is not a system metric."
+        },
+        {
+          "key": "e",
+          "text": "Network traffic coming to your servers",
+          "explanation": "True. Incoming network traffic shows load and possible attacks."
+        },
+        {
+          "key": "f",
+          "text": "All of the above",
+          "explanation": "False. Option d is wrong, so \"all of the above\" is wrong."
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c",
+        "e"
+      ],
+      "shuffle": false,
+      "explanation": "Monitoring measures technical health metrics of the running system: latency, availability, resource use and traffic.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0006",
+      "type": "multi",
+      "stem": "*Week 1 - Software Processes*\n\n[Ops] What are the problems with Dev and Ops silos?",
+      "options": [
+        {
+          "key": "a",
+          "text": "We can deploy to production every few minutes",
+          "explanation": "False. Frequent deployment is a benefit of DevOps, not a problem of silos."
+        },
+        {
+          "key": "b",
+          "text": "Deployments are isolated activities done after code-build",
+          "explanation": "True. Deployment becomes a separate, late step instead of part of the pipeline."
+        },
+        {
+          "key": "c",
+          "text": "Differences in delivery timelines",
+          "explanation": "True. Dev (fast sprints) and Ops (stability, change windows) work on different timelines."
+        },
+        {
+          "key": "d",
+          "text": "Creating \"throw it over the wall\" handoffs that slow delivery and reduce operability",
+          "explanation": "True. Dev \"throws\" code to Ops, who did not help build it, slowing delivery and making it harder to run."
         }
       ],
       "answer": [
         "b",
         "c",
-        "e"
+        "d"
       ],
-      "explanation": "With pure user-level threads, the kernel is not aware of the threads, only one thread can run at a time, and one blocked thread blocks them all.",
-      "source": "from course: Week 04 - Thread.pptx slides 12, 15; own answer for the thread-library switch",
-      "quiz": "Sample quiz (from CS205 Finals Practice Quiz 2 (Short))",
+      "explanation": "When Dev and Ops work as separate silos, software is handed over late, teams work to different timelines and deployments are slow and painful.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
       "addedAt": "2026-11-24"
     },
     {
-      "id": "q0004",
-      "type": "written",
-      "stem": "A file currently has 50 blocks. The file allocation table (and, for indexed allocation, the index block) is already in main memory. Each block read or block write counts as one disk I/O.\n\n(a) Complete the table with the number of disk I/O operations for each case. For contiguous allocation, assume there is no room to grow at the start of the file but there is room at the end. Indexed allocation uses fixed-size blocks.\n\n| Operation | Contiguous | Chained | Indexed |\n|---|---|---|---|\n| (i) Add a block at the beginning | | | |\n| (ii) Add a block after the 25th block | | | |\n| (iii) Remove the 25th block | | | |\n\nJustify each answer briefly.\n\n(b) The disk is 64GB with 4KB blocks, and free space is tracked with a bit table (bitmap). How large is the bit table?\n\n(c) Explain why chained allocation performs badly when a program reads the file in random order, and how indexed allocation avoids this.",
-      "points": 10,
-      "modelAnswer": "**(a)**\n\n| Operation | Contiguous | Chained | Indexed |\n|---|---|---|---|\n| (i) Add at beginning | **101** | **1** | **1** |\n| (ii) Add after 25th | **51** | **27** | **1** |\n| (iii) Remove 25th | **48 or 50** | **26** | **0** |\n\n**Contiguous.** (i) No room at the front, so the whole file shifts down by one block: read 50 + write 50 shifted blocks + write the new block = 101. (ii) Blocks 26-50 shift down: read 25 + write 25, plus write the new block = 51. (iii) Close the gap: shift blocks 26-50 up (25 reads + 25 writes = 50), or shift blocks 1-24 down (24 + 24 = 48). Then update the start or length in the in-memory table.\n\n**Chained.** (i) Write the new block with its pointer set to the old first block = 1; the table's start pointer is in memory. (ii) Follow the chain: read blocks 1-25 (25 reads) to reach the 25th. Write the new block pointing to block 26 (1). Rewrite block 25 so it points to the new block (1). Total 27. (iii) Read blocks 1-25 (25 reads); block 25 holds the pointer to block 26. Rewrite block 24 to point to block 26 (1). Total 26.\n\n**Indexed.** The index is in memory, so adding a block anywhere only writes the new data block (1), and the index entry is updated in memory. Removing a block only deletes its index entry: 0 I/O. No data moves.\n\n**(b)** Number of blocks = 64GB / 4KB = 2^36 / 2^12 = 2^24. One bit per block = 2^24 bits = 2^21 bytes = **2MB**.\n\n**(c)** In chained allocation, the only way to find block k is to read blocks 1 to k−1 and follow their pointers: k disk reads for one random access. Indexed allocation keeps all the block addresses in the index block, so any block is found with one lookup (in memory) and read with one I/O.",
-      "wordLimit": 400,
-      "source": "from course: Week 10 File Management.pptx slides 11-19; Week 10 - Answer.pptx slide 2",
-      "quiz": "Sample quiz (from CS205 Finals Practice Quiz 2 (Short))",
-      "addedAt": "2026-11-24"
-    },
-    {
-      "id": "q0005",
-      "type": "single",
-      "stem": "During a DMA transfer of a whole block, the DMA module interrupts the CPU only once, when the transfer is complete.",
-      "points": 2,
+      "id": "q0007",
+      "type": "multi",
+      "stem": "*Week 1 - Software Processes*\n\n[DevOps] What is DevOps about?",
       "options": [
         {
           "key": "a",
-          "text": "True",
-          "explanation": "Correct. DMA moves the whole block itself and raises a single interrupt when the transfer is done."
+          "text": "Close collaborations between software developers and operations engineers",
+          "explanation": "True. DevOps is close collaboration between developers and operations engineers."
         },
         {
           "key": "b",
-          "text": "False",
-          "explanation": "Wrong. An interrupt for every word would be interrupt-driven I/O, and no interrupt at all would leave the CPU unaware that the block has arrived."
-        }
-      ],
-      "answer": [
-        "a"
-      ],
-      "shuffle": false,
-      "explanation": "The CPU is involved only at the start (setting up the transfer) and at the end (one interrupt).",
-      "source": "from course: Week 02 - Interrupts.pptx slides 33, 37",
-      "quiz": "Sample quiz (from CS205 Finals Practice Quiz 2 (Short))",
-      "addedAt": "2026-11-24"
-    },
-    {
-      "id": "q0006",
-      "type": "single",
-      "stem": "The diagram shows the five-state process model. Which event causes the transition marked **X**, from Running to Ready?\n\n![Five-state process model with the Running to Ready transition marked X](images/q0006-five-state-model.svg)",
-      "points": 2,
-      "options": [
-        {
-          "key": "a",
-          "text": "Timeout",
-          "explanation": "Correct. When the running process uses up its time slice, the OS pre-empts it and puts it back in the Ready queue."
-        },
-        {
-          "key": "b",
-          "text": "Event wait",
-          "explanation": "Wrong. Waiting for an event (such as I/O) moves a running process to Blocked, not Ready."
+          "text": "Operation tasks are considered together with development tasks",
+          "explanation": "True. Operational concerns are planned with development work."
         },
         {
           "key": "c",
-          "text": "Dispatch",
-          "explanation": "Wrong. Dispatch is the opposite direction: the scheduler picks a Ready process and moves it to Running."
+          "text": "The use of automation to build/test/deploy software and infrastructure",
+          "explanation": "True. Automated build, test and deployment (CI/CD, infrastructure as code) is central to DevOps."
         },
         {
           "key": "d",
-          "text": "Event occurs",
-          "explanation": "Wrong. An event occurring moves a Blocked process to Ready; the process in this transition was Running."
+          "text": "The separation of two different teams doing agile and devops respectively",
+          "explanation": "False. A separate \"agile team\" plus \"DevOps team\" is the DevOps anti-pattern; it recreates the silos."
+        },
+        {
+          "key": "e",
+          "text": "Providing support for the whole software lifecycle",
+          "explanation": "True. A DevOps team supports software from design to production operation."
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c",
+        "e"
+      ],
+      "explanation": "DevOps breaks the Dev/Ops silo: one team, shared responsibility and automation across the whole lifecycle.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0008",
+      "type": "multi",
+      "stem": "*Week 1 - Software Processes*\n\n[DevOps] Choose the correct statements:",
+      "options": [
+        {
+          "key": "a",
+          "text": "DevSecOps only considers security at the end of the dev process",
+          "explanation": "False. DevSecOps integrates security throughout the process, not at the end."
+        },
+        {
+          "key": "b",
+          "text": "DevSecOps only considers security at the end of the ops process",
+          "explanation": "False. Same reason: security is continuous, not an end-of-ops gate."
+        },
+        {
+          "key": "c",
+          "text": "It can be challenging for operations personnel to understand software design problems",
+          "explanation": "True. Ops staff were not involved in design, so design problems are hard for them to diagnose."
+        },
+        {
+          "key": "d",
+          "text": "\"Shift left\" means doing more dev work at the early stages of a software project",
+          "explanation": "False. \"Shift left\" means doing security and testing earlier, not more dev work."
+        },
+        {
+          "key": "e",
+          "text": "Creating a dedicated DevOps team always eliminates silos between development and operations",
+          "explanation": "False. A separate DevOps team is an anti-pattern that can reinforce silos."
+        }
+      ],
+      "answer": [
+        "c"
+      ],
+      "explanation": "DevSecOps builds security into every stage instead of a gate at the end; \"shift left\" moves security and testing earlier.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0009",
+      "type": "written",
+      "stem": "*Week 1 - Software Processes*\n\nHow does the \"DevOps anti-pattern\" of assigning a separate \"DevOps team\" reinforce silos?",
+      "modelAnswer": "A separate \"DevOps team\" is just the old operations team with a new name. The agile development team still builds the software and hands it over for the DevOps team to deploy and operate.\nThis keeps the \"throw it over the wall\" handoff, split responsibilities and different goals, which are the silos DevOps aims to break down. Real DevOps puts dev and ops skills in one team that designs, tests, deploys and runs its own features.",
+      "explanation": "The slides name this the DevOps anti-pattern: calling an ops team a \"DevOps team\" next to an agile dev team, which hands the software over to be operated.",
+      "source": "from course: 01-Software Processes.pdf",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0010",
+      "type": "multi",
+      "stem": "*Week 2 - User Stories, Estimation, Planning*\n\n[Week 1 Review] Choose the correct statements:",
+      "options": [
+        {
+          "key": "a",
+          "text": "In a waterfall process, the phases are not followed in order",
+          "explanation": "False. Waterfall phases are strictly in order."
+        },
+        {
+          "key": "b",
+          "text": "Iterative and incremental processes can't accommodate changes",
+          "explanation": "False. Iterative and incremental processes exist to accommodate change."
+        },
+        {
+          "key": "c",
+          "text": "Agile emphasizes contract negotiation over customer collaboration",
+          "explanation": "False. Agile values customer collaboration over contract negotiation."
+        },
+        {
+          "key": "d",
+          "text": "In Scrum, product owner should not be the project manager",
+          "explanation": "True. The product owner represents the customer and backlog; combining it with project manager is discouraged."
+        },
+        {
+          "key": "e",
+          "text": "Monitoring server infrastructure and supporting users are part of software operations",
+          "explanation": "True. Monitoring and user support are operations tasks."
+        },
+        {
+          "key": "f",
+          "text": "With Dev and Ops silos, we can deploy to production every few minutes",
+          "explanation": "False. Silos slow deployment; frequent deploys come from DevOps."
+        },
+        {
+          "key": "g",
+          "text": "In DevSecOps, \"shift left\" means doing more dev work during the early stages of a software project",
+          "explanation": "False. \"Shift left\" means moving security and testing earlier."
+        },
+        {
+          "key": "h",
+          "text": "In DevSecOps, it is good to have a Dev team and a separate SecOps team",
+          "explanation": "False. A separate SecOps team is a silo; security should be inside the DevOps team (DevSecOps)."
+        }
+      ],
+      "answer": [
+        "d",
+        "e"
+      ],
+      "explanation": "Review of Week 1: waterfall, agile, Scrum roles, operations and DevSecOps.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0011",
+      "type": "multi",
+      "stem": "*Week 2 - User Stories, Estimation, Planning*\n\nSelect all the incorrect statements regarding software requirements:",
+      "options": [
+        {
+          "key": "a",
+          "text": "Business should dictate all decisions to keep projects on schedule",
+          "explanation": "True. Incorrect statement: Business and developers decide together; business alone cannot judge technical cost."
+        },
+        {
+          "key": "b",
+          "text": "Technical jargon improves shared understanding with business stakeholders",
+          "explanation": "True. Incorrect statement: Jargon hurts shared understanding; user stories use the user's language."
+        },
+        {
+          "key": "c",
+          "text": "Changing requirements and complexity hinder accurate estimates",
+          "explanation": "False. Correct statement: Changing requirements and complexity do make estimates hard."
+        },
+        {
+          "key": "d",
+          "text": "We should make incremental decisions using early and frequent feedback",
+          "explanation": "False. Correct statement: Incremental decisions with frequent feedback is the agile approach."
+        }
+      ],
+      "answer": [
+        "a",
+        "b"
+      ],
+      "explanation": "The question asks for the incorrect statements. Requirements need shared understanding between business and developers.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0012",
+      "type": "multi",
+      "stem": "*Week 2 - User Stories, Estimation, Planning*\n\nThe project is about building a web app for job seekers. Which of the following can be considered good user stories?",
+      "options": [
+        {
+          "key": "a",
+          "text": "Charting will be done with Python",
+          "explanation": "False. A technology choice, not user value."
+        },
+        {
+          "key": "b",
+          "text": "Recruiter wants to export matched job data to an Excel file",
+          "explanation": "True. One user role, one valuable and testable feature."
+        },
+        {
+          "key": "c",
+          "text": "As a user, I want the website to be amazing so I can enjoy using it",
+          "explanation": "False. \"Amazing\" is vague and not testable."
+        },
+        {
+          "key": "d",
+          "text": "The system should prompt users to save their work every 5 mins",
+          "explanation": "True. A specific, testable feature that gives users value."
+        },
+        {
+          "key": "e",
+          "text": "As a recruiter and a job seeker, I want to upload resumes, download job postings, send automatic emails, and set reminders so that I can use the system fully",
+          "explanation": "False. Too big (an epic) and mixes two roles; it must be split."
+        },
+        {
+          "key": "f",
+          "text": "The software will be released by Nov 30",
+          "explanation": "False. A release date is a plan or constraint, not a feature."
+        }
+      ],
+      "answer": [
+        "b",
+        "d"
+      ],
+      "explanation": "A good story describes one valuable, testable feature from a user's view (INVEST: Independent, Negotiable, Valuable, Estimable, Small, Testable).",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0013",
+      "type": "multi",
+      "stem": "*Week 2 - User Stories, Estimation, Planning*\n\nAdding details to user story - choose the correct statements:",
+      "options": [
+        {
+          "key": "a",
+          "text": "All details need to be provided far in advance",
+          "explanation": "False. Details are added when the story is about to be implemented."
+        },
+        {
+          "key": "b",
+          "text": "Some details can be missing when implementation starts",
+          "explanation": "True. Remaining details are worked out in conversation during implementation."
+        },
+        {
+          "key": "c",
+          "text": "Details given far in advance are usually accurate",
+          "explanation": "False. Early details often become wrong as understanding and requirements change."
+        },
+        {
+          "key": "d",
+          "text": "Providing all details in advanced is costly",
+          "explanation": "True. Writing details that later change or get dropped wastes effort."
+        }
+      ],
+      "answer": [
+        "b",
+        "d"
+      ],
+      "explanation": "Details are added just in time, through conversation, because needs change and early detail is wasted.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0014",
+      "type": "written",
+      "stem": "*Week 2 - User Stories, Estimation, Planning*\n\nAdd acceptance criteria to this story: \"User can pay for books with a credit card\"",
+      "modelAnswer": "- Can pay with Visa, MasterCard and American Express.\n- Payment is refused for an expired card or a wrong CVV, with an error message.\n- Payment is refused when the card has insufficient funds, and the order is not placed.\n- After a successful payment, the user sees an order confirmation and receives a receipt by email.\n- The full card number is never stored or shown (only the last 4 digits).",
+      "explanation": "Acceptance criteria are \"notes about what the story must do in order for the product owner to accept it as complete\" (Mike Cohn). Each criterion must be testable, like the slide's \"Can log in through Facebook\" example.",
+      "source": "from course: 02-User Stories, Estimation, Planning.pdf",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0015",
+      "type": "single",
+      "stem": "*Week 2 - User Stories, Estimation, Planning*\n\nWhat are the 3Cs for a user story?",
+      "options": [
+        {
+          "key": "a",
+          "text": "Cash-Car-Condo",
+          "explanation": "Wrong. A joke distractor."
+        },
+        {
+          "key": "b",
+          "text": "Customer-Conversation-Creation",
+          "explanation": "Wrong. \"Customer\" and \"Creation\" are not the 3Cs."
+        },
+        {
+          "key": "c",
+          "text": "Card-Conversation-Confirmation",
+          "explanation": "Correct. Card, Conversation, Confirmation."
+        },
+        {
+          "key": "d",
+          "text": "Client-Construction-Confirmation",
+          "explanation": "Wrong. \"Client\" and \"Construction\" are not the 3Cs."
+        }
+      ],
+      "answer": [
+        "c"
+      ],
+      "explanation": "Ron Jeffries' 3Cs: a short Card, the Conversation that adds details, and the Confirmation (acceptance criteria) that shows the story is done.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0016",
+      "type": "multi",
+      "stem": "*Week 2 - User Stories, Estimation, Planning*\n\nWhy user stories?",
+      "options": [
+        {
+          "key": "a",
+          "text": "Developers like to read requirement documents",
+          "explanation": "False. Stories exist to replace long requirement documents."
+        },
+        {
+          "key": "b",
+          "text": "They can be understood by both users and developers",
+          "explanation": "True. Plain-language stories give users and developers a shared understanding."
+        },
+        {
+          "key": "c",
+          "text": "They emphasize written communications",
+          "explanation": "False. They emphasise verbal communication (the Conversation), not written documents."
+        },
+        {
+          "key": "d",
+          "text": "They encourage detailed requirement very early in the project",
+          "explanation": "False. They defer details until just before implementation."
+        }
+      ],
+      "answer": [
+        "b"
+      ],
+      "explanation": "User stories are short, in plain user language, and push teams to talk instead of writing long specs.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0017",
+      "type": "multi",
+      "stem": "*Week 2 - User Stories, Estimation, Planning*\n\nChoose the correct statements regarding story point estimation:",
+      "options": [
+        {
+          "key": "a",
+          "text": "You can confidently give a story 40 points",
+          "explanation": "False. A 40-point story is too large to estimate confidently; split it."
+        },
+        {
+          "key": "b",
+          "text": "We need fine-grained, precise estimation scale",
+          "explanation": "False. Use a coarse scale (e.g. 1, 2, 3, 5, 8, 13); precision is false accuracy."
+        },
+        {
+          "key": "c",
+          "text": "We should just use hours, not points",
+          "explanation": "False. Points measure relative size and complexity, independent of who does the work."
+        },
+        {
+          "key": "d",
+          "text": "We should estimate as a team",
+          "explanation": "True. Team estimation pools knowledge and builds shared understanding."
+        },
+        {
+          "key": "e",
+          "text": "We can only estimate story points in a sprint",
+          "explanation": "False. Stories are estimated during backlog refinement and release planning too."
+        },
+        {
+          "key": "f",
+          "text": "Each story should be estimated on its own",
+          "explanation": "False. Stories are estimated relative to each other (compared with a reference story)."
+        }
+      ],
+      "answer": [
+        "d"
+      ],
+      "explanation": "Story points are relative size estimates, made by the whole team (e.g. planning poker) on a coarse scale.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0018",
+      "type": "single",
+      "stem": "*Week 2 - User Stories, Estimation, Planning*\n\nYour team was about halfway through a 3-point story when the sprint time is up. What should you do?",
+      "options": [
+        {
+          "key": "a",
+          "text": "Extend the sprint time to complete the story",
+          "explanation": "Wrong. Sprints are time-boxed; the length does not change."
+        },
+        {
+          "key": "b",
+          "text": "Put the story back into the backlog and add 1.5 points to the team velocity for this sprint",
+          "explanation": "Wrong. Partial points inflate velocity; an unfinished story counts as 0."
+        },
+        {
+          "key": "c",
+          "text": "Put the story back into the backlog, but do not add any of this story point to the team velocity",
+          "explanation": "Correct. The unfinished story returns to the backlog and counts for no points this sprint."
+        },
+        {
+          "key": "d",
+          "text": "Split the story, put the remaining half into the backlog, add 1.5 points for this sprint",
+          "explanation": "Wrong. Splitting after the fact to claim points distorts velocity."
+        },
+        {
+          "key": "e",
+          "text": "Add 3 points of this story to this sprint, and continue to complete this story in the next sprint",
+          "explanation": "Wrong. Claiming points for unfinished work makes velocity unreliable."
+        },
+        {
+          "key": "f",
+          "text": "Our team would do something else :)",
+          "explanation": "Wrong. The standard Scrum practice is option c."
+        }
+      ],
+      "answer": [
+        "c"
+      ],
+      "explanation": "This was a poll with no marked answer. Velocity is the number of story points completed per sprint, and a story counts only when it meets the definition of done.",
+      "source": "from course: 02-User Stories, Estimation, Planning.pdf",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0019",
+      "type": "multi",
+      "stem": "*Week 2 - User Stories, Estimation, Planning*\n\nFor a sprint:",
+      "options": [
+        {
+          "key": "a",
+          "text": "Longer duration is better",
+          "explanation": "False. Short sprints give faster feedback."
+        },
+        {
+          "key": "b",
+          "text": "Should complete some stories in the backlog",
+          "explanation": "True. Each sprint delivers some completed backlog stories."
+        },
+        {
+          "key": "c",
+          "text": "Product owner decides which stories to do",
+          "explanation": "False. The product owner prioritises, but the team decides what it can commit to."
+        },
+        {
+          "key": "d",
+          "text": "Burndown line has to be straight",
+          "explanation": "False. A burndown chart is rarely a straight line; it shows real progress."
+        },
+        {
+          "key": "e",
+          "text": "Sprint backlog records all user stories for the project",
+          "explanation": "False. The sprint backlog holds only this sprint's items; the product backlog holds all stories."
+        },
+        {
+          "key": "f",
+          "text": "We can estimate tasks in hours",
+          "explanation": "True. In sprint planning, stories are broken into tasks estimated in hours."
+        }
+      ],
+      "answer": [
+        "b",
+        "f"
+      ],
+      "explanation": "A sprint is a short, fixed time-box (typically 2-4 weeks) in which the team completes a few backlog stories, broken into tasks estimated in hours.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0020",
+      "type": "multi",
+      "stem": "*Week 3 - Collaboration Methods*\n\nVersion control concepts: choose the correct statements",
+      "options": [
+        {
+          "key": "a",
+          "text": "It is a good idea to use Dropbox for collaborative coding",
+          "explanation": "False. File sync has no history, branches or merge support, and overwrites changes."
+        },
+        {
+          "key": "b",
+          "text": "There is no need for version control when you work alone",
+          "explanation": "False. Alone you still need history, undo and branches."
+        },
+        {
+          "key": "c",
+          "text": "All repositories can have the same role in distributed versioning",
+          "explanation": "True. In a distributed VCS every repository is a full peer; \"central\" is just a convention."
+        },
+        {
+          "key": "d",
+          "text": "In Git, you can do version control without network connection",
+          "explanation": "True. Commits, branches and history are local; only push/pull need the network."
+        },
+        {
+          "key": "e",
+          "text": "It is not possible to have a central repo in Git",
+          "explanation": "False. Teams usually agree on a central repo (e.g. on GitHub)."
+        },
+        {
+          "key": "f",
+          "text": "Git uses delta-based version control",
+          "explanation": "False. Git stores snapshots, not deltas."
+        }
+      ],
+      "answer": [
+        "c",
+        "d"
+      ],
+      "explanation": "Git is a distributed VCS: every clone is a full repository, so most work is local.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0021",
+      "type": "multi",
+      "stem": "*Week 3 - Collaboration Methods*\n\nGit - recording changes:\n\n![Git file lifecycle: Untracked, Unmodified, Modified, Staged. Arrows: add the file (Untracked to Staged), edit the file (Unmodified to Modified), stage the file (Modified to Staged), remove the file (Unmodified to Untracked), commit (Staged to Unmodified)](images/q0021-wooclap-w3-q3-file-lifecycle.png)",
+      "options": [
+        {
+          "key": "a",
+          "text": "Commit adds files into the staging area",
+          "explanation": "False. `git add` stages files; commit saves the staged snapshot into the repository."
+        },
+        {
+          "key": "b",
+          "text": ".git folder contains all files in the working directory",
+          "explanation": "False. `.git` holds the repository database (objects, refs), not the working files."
+        },
+        {
+          "key": "c",
+          "text": "Untracked files can't be staged",
+          "explanation": "False. \"Add the file\" moves an untracked file straight to Staged."
+        },
+        {
+          "key": "d",
+          "text": "None of the above",
+          "explanation": "True. a, b and c are all wrong."
+        }
+      ],
+      "answer": [
+        "d"
+      ],
+      "shuffle": false,
+      "explanation": "In the diagram, `git add` moves files to Staged and `git commit` records the staged snapshot in the repository.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0022",
+      "type": "multi",
+      "stem": "*Week 3 - Collaboration Methods*\n\nAbout commits:\n\n![Commit graph: master and HEAD point to caf2ca, which has two parents 1a410e and 1f44cd; both have parent cac0ca; cac0ca has parent 1fd4dc (first commit)](images/q0022-wooclap-w3-q4-commit-graph.png)",
+      "options": [
+        {
+          "key": "a",
+          "text": "They all live in the working directory",
+          "explanation": "False. Commits live in the repository (`.git`), not the working directory."
+        },
+        {
+          "key": "b",
+          "text": "Three commits can share a parent",
+          "explanation": "True. Any number of branches can start from one commit; in the picture cac0ca already has two children."
+        },
+        {
+          "key": "c",
+          "text": "Each commit only has a single parent",
+          "explanation": "False. Merge commit caf2ca has two parents; the first commit has none."
+        },
+        {
+          "key": "d",
+          "text": "None of the above",
+          "explanation": "False. Option b is correct."
+        }
+      ],
+      "answer": [
+        "b"
+      ],
+      "shuffle": false,
+      "explanation": "Commits form a graph: a commit can have many children (branches) and more than one parent (merges).",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0023",
+      "type": "multi",
+      "stem": "*Week 3 - Collaboration Methods*\n\nObject graph of Git:\n\n![Git object graph: commits 1fd4dc, cac0ca and 1a410e each point to a tree; trees point to blobs \"version 1\", \"new file\" and \"version 2\"; the new.txt blob fa49b0 is shared by the second and third commits' trees](images/q0023-wooclap-w3-q5-object-graph.png)",
+      "options": [
+        {
+          "key": "a",
+          "text": "Each version of a file is stored only once",
+          "explanation": "True. A blob is keyed by its content hash; one version is stored once."
+        },
+        {
+          "key": "b",
+          "text": "The blob stores pointers to parent commit",
+          "explanation": "False. A blob holds only file content; the commit points to its parent."
+        },
+        {
+          "key": "c",
+          "text": "Multiple commits can share the same copy of a file",
+          "explanation": "True. Blob fa49b0 (\"new file\") is shared by the second and third commits."
+        },
+        {
+          "key": "d",
+          "text": "The tree node stores actual file content",
+          "explanation": "False. A tree holds file names and pointers to blobs; blobs hold content."
+        },
+        {
+          "key": "e",
+          "text": "A commit object stores a pointer to its parent",
+          "explanation": "True. Each commit points to its parent commit(s) and its tree."
+        }
+      ],
+      "answer": [
+        "a",
+        "c",
+        "e"
+      ],
+      "explanation": "Commit → tree → blobs. Objects are named by their content hash, so identical content is stored once.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0024",
+      "type": "multi",
+      "stem": "*Week 3 - Collaboration Methods*\n\nGit - undoing changes:",
+      "options": [
+        {
+          "key": "a",
+          "text": "\"git revert\" erases commit history",
+          "explanation": "False. `git revert` adds a new commit that undoes an old one; history is kept."
+        },
+        {
+          "key": "b",
+          "text": "\"git checkout <file>\" discards uncommitted changes in <file>",
+          "explanation": "True. It restores the file from the last commit, losing uncommitted edits."
+        },
+        {
+          "key": "c",
+          "text": "Deleting .git folder has no effect on git operations",
+          "explanation": "False. Deleting `.git` deletes the whole repository and history."
+        },
+        {
+          "key": "d",
+          "text": "All are correct",
+          "explanation": "False. Only b is correct."
+        }
+      ],
+      "answer": [
+        "b"
+      ],
+      "shuffle": false,
+      "explanation": "Git can undo at different levels; `revert` is the safe, history-keeping way.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0025",
+      "type": "multi",
+      "stem": "*Week 3 - Collaboration Methods*\n\nGit branching:",
+      "options": [
+        {
+          "key": "a",
+          "text": "A Git branch is a copy of the git repository",
+          "explanation": "False. A branch is a pointer, not a copy, which is why branching is cheap."
+        },
+        {
+          "key": "b",
+          "text": "A pointer to any commit can be a branch",
+          "explanation": "True. A branch is a named pointer to a commit."
+        },
+        {
+          "key": "c",
+          "text": "HEAD can point to any of the branches",
+          "explanation": "True. HEAD marks the checked-out branch and moves on `git checkout`/`git switch`."
+        },
+        {
+          "key": "d",
+          "text": "\"git checkout <branch>\" commits changes to <branch>",
+          "explanation": "False. It switches branches; it does not commit."
+        },
+        {
+          "key": "e",
+          "text": "\"git branch <name>\" creates the new commit <name>",
+          "explanation": "False. It creates a new branch pointer, not a commit."
+        }
+      ],
+      "answer": [
+        "b",
+        "c"
+      ],
+      "explanation": "A branch is a lightweight movable pointer to a commit; HEAD points to the current branch.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0026",
+      "type": "multi",
+      "stem": "*Week 3 - Collaboration Methods*\n\nGit merging:",
+      "options": [
+        {
+          "key": "a",
+          "text": "A fast-forward merge moves the commit forward",
+          "explanation": "False. The branch pointer moves forward; commits do not move."
+        },
+        {
+          "key": "b",
+          "text": "A fast-forward merge creates a new commit",
+          "explanation": "False. Fast-forward creates no new commit."
+        },
+        {
+          "key": "c",
+          "text": "A three-way merge needs a common ancestor",
+          "explanation": "True. It compares both tips with their common ancestor (the three \"ways\")."
+        },
+        {
+          "key": "d",
+          "text": "A three-way merge creates no new commit",
+          "explanation": "False. A three-way merge creates a merge commit with two parents."
+        }
+      ],
+      "answer": [
+        "c"
+      ],
+      "explanation": "Fast-forward: the target is a direct ancestor, so the branch pointer just moves. Three-way: histories diverged, so Git merges the two tips with their common ancestor into a new merge commit.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0027",
+      "type": "single",
+      "stem": "*Week 3 - Collaboration Methods*\n\nWhat kind of merging is this?\n\n![Commit graph: C0, C1, C2, then C4 on master and C3, C5 on iss53; C6 has parents C4 and C5; master points to C6, iss53 points to C5](images/q0027-wooclap-w3-q9-merge.png)",
+      "options": [
+        {
+          "key": "a",
+          "text": "Fast-forward",
+          "explanation": "Wrong. A fast-forward makes no merge commit; here C6 has two parents."
+        },
+        {
+          "key": "b",
+          "text": "Three-way",
+          "explanation": "Correct. Merging two diverged branches using common ancestor C2 makes merge commit C6."
+        },
+        {
+          "key": "c",
+          "text": "No merging",
+          "explanation": "Wrong. C6 is a merge commit."
+        },
+        {
+          "key": "d",
+          "text": "Branching",
+          "explanation": "Wrong. The picture shows branches being joined, not created."
+        }
+      ],
+      "answer": [
+        "b"
+      ],
+      "explanation": "The histories diverged at C2 (C4 on master, C3-C5 on iss53). Merge commit C6 has two parents, C4 and C5.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0028",
+      "type": "multi",
+      "stem": "*Week 3 - Collaboration Methods*\n\nRemote repository:",
+      "options": [
+        {
+          "key": "a",
+          "text": "All your branches are visible on the remote server",
+          "explanation": "False. Only branches you push are on the remote; local branches stay private."
+        },
+        {
+          "key": "b",
+          "text": "\"git pull\": send all your changes to the remote server",
+          "explanation": "False. `git pull` downloads and merges; `git push` sends."
+        },
+        {
+          "key": "c",
+          "text": "There can be conflicts when pushing to a remote server",
+          "explanation": "True. A push is rejected if the remote has new commits; you must pull and resolve conflicts first."
+        },
+        {
+          "key": "d",
+          "text": "None of the above",
+          "explanation": "False. Option c is correct."
+        }
+      ],
+      "answer": [
+        "c"
+      ],
+      "shuffle": false,
+      "explanation": "Remotes only receive what you push; pull fetches and merges remote changes into your branch.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0029",
+      "type": "multi",
+      "stem": "*Week 3 - Collaboration Methods*\n\nChoose the correct statements:\n\n![Two boxes: (1) a repository with commits 0b743, a6b4c, f4265 and branch master; arrow \"git clone janedoe@git.ourcompany.com:project.git\"; (2) a repository with the same commits, origin/master and a local master both on f4265](images/q0029-wooclap-w3-q11-clone.png)",
+      "options": [
+        {
+          "key": "a",
+          "text": "The local computer is shown in part (1)",
+          "explanation": "False. Part (1) is the remote server being cloned from."
+        },
+        {
+          "key": "b",
+          "text": "The remote git server is shown in part (2)",
+          "explanation": "False. Part (2) is the local computer after `git clone`."
+        },
+        {
+          "key": "c",
+          "text": "There is no remote git server",
+          "explanation": "False. git.ourcompany.com is the remote server."
+        },
+        {
+          "key": "d",
+          "text": "None of the above",
+          "explanation": "True. a, b and c are all wrong."
+        }
+      ],
+      "answer": [
+        "d"
+      ],
+      "shuffle": false,
+      "explanation": "Part (1) is the remote server (git.ourcompany.com). Part (2) is the local clone, which has the remote-tracking branch `origin/master` and its own `master`.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0030",
+      "type": "multi",
+      "stem": "*Week 3 - Collaboration Methods*\n\nCollaboration workflows:",
+      "options": [
+        {
+          "key": "a",
+          "text": "The centralized workflow uses a central repository with a single branch",
+          "explanation": "True. Everyone works on the single main branch of the central repo."
+        },
+        {
+          "key": "b",
+          "text": "The feature-branch workflow emphasizes short-lived branches",
+          "explanation": "False. Feature branches can live for a long time; short-lived branches are the trunk-based emphasis."
+        },
+        {
+          "key": "c",
+          "text": "Trunk-based development emphasizes frequent change integrations to the main branch",
+          "explanation": "True. Trunk-based development integrates small changes to main very often."
+        },
+        {
+          "key": "d",
+          "text": "All statements are incorrect",
+          "explanation": "False. a and c are correct."
+        }
+      ],
+      "answer": [
+        "a",
+        "c"
+      ],
+      "shuffle": false,
+      "explanation": "Centralized: everyone commits to one branch in a central repo. Feature branch: each feature gets its own branch, merged via pull request. Trunk-based: small, frequent merges to main.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0031",
+      "type": "multi",
+      "stem": "*Week 4 - Software Design*\n\n[Week 3 review] Choose the correct statements:",
+      "options": [
+        {
+          "key": "a",
+          "text": "Git commit can't be undone",
+          "explanation": "False. Commits can be undone with `git revert` or `git reset`."
+        },
+        {
+          "key": "b",
+          "text": "A commit can have more than two parents",
+          "explanation": "True. An octopus merge of several branches has more than two parents."
+        },
+        {
+          "key": "c",
+          "text": "Merge conflict always happens if the same file was changed in two different branches",
+          "explanation": "False. Conflicts happen only when the same lines (or nearby lines) change differently."
+        },
+        {
+          "key": "d",
+          "text": "Git branching is usually slow",
+          "explanation": "False. A branch is just a pointer, so branching is fast and cheap."
+        },
+        {
+          "key": "e",
+          "text": "Git cloning gives you all versions of the project",
+          "explanation": "True. A clone copies the full repository with its whole history."
+        },
+        {
+          "key": "f",
+          "text": "It is not possible to have a centralized repository in Git",
+          "explanation": "False. A central repo is a common convention in Git."
+        }
+      ],
+      "answer": [
+        "b",
+        "e"
+      ],
+      "explanation": "Review of Week 3: commits, merging, branching and cloning.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0032",
+      "type": "single",
+      "stem": "*Week 4 - Software Design*\n\nWhich is an example of DI when considering the following code snippets:\n\nSnippet 1:\n\n```java\npublic class Car {\n    private Driver injectedDriver;\n    public Car() {\n        this.injectedDriver = new Driver();\n    }\n    public void drive() {...}\n}\n```\n\nSnippet 2:\n\n```java\npublic class Car {\n    private Driver driver;\n    public Car(Driver driver) {\n        this.driver = driver;\n    }\n    public void drive() {...}\n}\n```",
+      "options": [
+        {
+          "key": "a",
+          "text": "Code snippet 1",
+          "explanation": "Wrong. Snippet 1 creates its own `Driver` with `new`, so it is tightly coupled (the field name does not make it DI)."
+        },
+        {
+          "key": "b",
+          "text": "Code snippet 2",
+          "explanation": "Correct. Snippet 2 receives the `Driver` through its constructor (constructor injection)."
+        },
+        {
+          "key": "c",
+          "text": "Both of them",
+          "explanation": "Wrong. Snippet 1 is not DI."
+        },
+        {
+          "key": "d",
+          "text": "None of them",
+          "explanation": "Wrong. Snippet 2 is DI."
+        }
+      ],
+      "answer": [
+        "b"
+      ],
+      "shuffle": false,
+      "explanation": "In dependency injection the object does not create its dependencies; they are passed in from outside.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0033",
+      "type": "multi",
+      "stem": "*Week 4 - Software Design*\n\nChoose the correct statement about dependency injection (DI):",
+      "options": [
+        {
+          "key": "a",
+          "text": "DI is compulsory in Java applications",
+          "explanation": "False. DI is a design technique, not required by Java."
+        },
+        {
+          "key": "b",
+          "text": "Dependencies can be defined via constructor arguments",
+          "explanation": "True. Constructor injection is the main variant."
+        },
+        {
+          "key": "c",
+          "text": "DI means object controls the creation of its dependencies",
+          "explanation": "False. It is the opposite: control of creation is inverted to the container."
+        },
+        {
+          "key": "d",
+          "text": "DI was invented in Hollywood",
+          "explanation": "False. \"Hollywood principle\" (\"don't call us, we'll call you\") is only a nickname for IoC."
+        },
+        {
+          "key": "e",
+          "text": "Dependencies can't be defined via fields",
+          "explanation": "False. Field injection with `@Autowired` exists."
+        },
+        {
+          "key": "f",
+          "text": "DI makes the code more tightly coupled",
+          "explanation": "False. DI makes code loosely coupled and easier to test."
+        }
+      ],
+      "answer": [
+        "b"
+      ],
+      "explanation": "DI is a form of Inversion of Control: a container (e.g. Spring) creates dependencies and injects them through the constructor, setters or fields.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0034",
+      "type": "written",
+      "stem": "*Week 4 - Software Design*\n\nWhich is the preferred DI variant, and why?",
+      "modelAnswer": "Constructor injection. All required dependencies must be provided (not null) when the object is created, so the object is always valid.\nThe fields can be `final`, giving immutable objects, and the class can be created in a unit test with mocks without the DI container.\nA long constructor argument list also exposes a code smell (too many responsibilities). Field injection hides dependencies, couples the class to the container and makes it too easy to add dependencies. Setter injection fits only optional dependencies (or breaking a circular dependency).",
+      "explanation": "The slides compare constructor, setter and field injection. Constructor injection is preferred for required dependencies.",
+      "source": "from course: 04-Software Design.pdf",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0035",
+      "type": "multi",
+      "stem": "*Week 4 - Software Design*\n\nSoftware architecture: select all the incorrect statements",
+      "options": [
+        {
+          "key": "a",
+          "text": "Monolithic architecture should not be used at all",
+          "explanation": "True. Incorrect statement: A monolith is simple and fine for small apps and teams."
+        },
+        {
+          "key": "b",
+          "text": "Microservices promote tight coupling of components",
+          "explanation": "True. Incorrect statement: Microservices aim for loose coupling between independent services."
+        },
+        {
+          "key": "c",
+          "text": "REST is based on microservices architecture",
+          "explanation": "True. Incorrect statement: REST is an architectural style for web APIs, independent of microservices."
+        },
+        {
+          "key": "d",
+          "text": "Microservices architecture makes it more difficult to scale parts of an application individually",
+          "explanation": "True. Incorrect statement: Microservices make it easier to scale one service on its own."
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "explanation": "All four statements are incorrect.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0036",
+      "type": "multi",
+      "stem": "*Week 4 - Software Design*\n\nChoose the correct statements about HTTP methods:",
+      "options": [
+        {
+          "key": "a",
+          "text": "A safe method is not necessarily idempotent",
+          "explanation": "False. A safe method changes nothing, so repeating it is always idempotent."
+        },
+        {
+          "key": "b",
+          "text": "An unsafe method is not idempotent",
+          "explanation": "False. PUT and DELETE are unsafe but idempotent."
+        },
+        {
+          "key": "c",
+          "text": "POST is idempotent, meaning multiple identical POST requests will always have the same effect",
+          "explanation": "False. POST is not idempotent; each POST may create a new resource."
+        },
+        {
+          "key": "d",
+          "text": "GET is intended only for retrieving data",
+          "explanation": "True. GET only reads data."
+        }
+      ],
+      "answer": [
+        "d"
+      ],
+      "explanation": "Safe = does not change server state (GET, HEAD). Idempotent = repeating the request has the same effect as doing it once (GET, PUT, DELETE). Every safe method is idempotent.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0037",
+      "type": "multi",
+      "stem": "*Week 4 - Software Design*\n\nChoose the correct statement about HTTP status codes:",
+      "options": [
+        {
+          "key": "a",
+          "text": "200 means everything is alright",
+          "explanation": "True. 200 OK."
+        },
+        {
+          "key": "b",
+          "text": "404 means resource has been found",
+          "explanation": "False. 404 means Not Found."
+        },
+        {
+          "key": "c",
+          "text": "201 does not mean anything",
+          "explanation": "False. 201 means Created (e.g. after a successful POST)."
+        },
+        {
+          "key": "d",
+          "text": "403 means user is not authenticated",
+          "explanation": "False. 403 means Forbidden (authenticated but not allowed); 401 means not authenticated."
+        },
+        {
+          "key": "e",
+          "text": "We must not return any HTTP codes from our APIs",
+          "explanation": "False. APIs should always return proper status codes."
         }
       ],
       "answer": [
         "a"
       ],
-      "explanation": "A running process returns to Ready when it is pre-empted, most often because its time slice has run out.",
+      "explanation": "REST APIs should return meaningful status codes: 2xx success, 4xx client error, 5xx server error.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0038",
+      "type": "multi",
+      "stem": "*Week 4 - Software Design*\n\nBest practices for REST API:",
+      "options": [
+        {
+          "key": "a",
+          "text": "Should be implemented in Java",
+          "explanation": "False. REST is language independent."
+        },
+        {
+          "key": "b",
+          "text": "Should use nouns for resources in API paths",
+          "explanation": "True. Paths name resources (`/books`), and HTTP methods give the action."
+        },
+        {
+          "key": "c",
+          "text": "Should follow a standard which is strictly enforced",
+          "explanation": "False. REST is a style with conventions, not a strictly enforced standard."
+        },
+        {
+          "key": "d",
+          "text": "Should show major.minor.patch version on public API paths",
+          "explanation": "False. Public paths show only the major version (e.g. `/v1/`)."
+        }
+      ],
+      "answer": [
+        "b"
+      ],
+      "explanation": "REST is an architectural style with conventions such as noun resources (`/books/1`) and HTTP verbs for actions.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0039",
+      "type": "written",
+      "stem": "*Week 5 - Persistence*\n\n[Week 4 Review] 1) You have used the command \"mvnw\" in the previous lab. What is it? 2) What is the purpose of the pom.xml file in your Spring Boot project?",
+      "modelAnswer": "1) `mvnw` is the Maven Wrapper: a script in the project that downloads and runs a fixed Maven version, so you can build without installing Maven yourself (e.g. `./mvnw spring-boot:run`).\n2) `pom.xml` (Project Object Model) is Maven's build file. It declares the project's details, its dependencies (e.g. Spring Boot starters), plugins and build settings.",
+      "explanation": "Both are part of building a Spring Boot project with Maven.",
       "source": "own answer",
-      "quiz": "Sample quiz (from CS205 Finals Practice Quiz 2 (Short))",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0040",
+      "type": "multi",
+      "stem": "*Week 5 - Persistence*\n\nRegarding JDBC: select all correct statements",
+      "options": [
+        {
+          "key": "a",
+          "text": "You only need to know Java when using JDBC",
+          "explanation": "False. You also need SQL."
+        },
+        {
+          "key": "b",
+          "text": "We have to write SQL in JDBC",
+          "explanation": "True. Queries are SQL strings sent through JDBC."
+        },
+        {
+          "key": "c",
+          "text": "JDBC hides DB-specific implementation details",
+          "explanation": "True. A vendor driver implements the JDBC interfaces, so your code does not depend on the DB's protocol."
+        },
+        {
+          "key": "d",
+          "text": "None are correct",
+          "explanation": "False. b and c are correct."
+        }
+      ],
+      "answer": [
+        "b",
+        "c"
+      ],
+      "shuffle": false,
+      "explanation": "JDBC is a low-level Java API: you write the SQL yourself, and the driver hides the DB-specific details.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0041",
+      "type": "multi",
+      "stem": "*Week 5 - Persistence*\n\nObject Relational Mapping: select all correct statements",
+      "options": [
+        {
+          "key": "a",
+          "text": "Java class name can be mapped to objects",
+          "explanation": "False. A class maps to a table, not to objects."
+        },
+        {
+          "key": "b",
+          "text": "Java field names can be mapped to DB columns",
+          "explanation": "True. Each field maps to a column."
+        },
+        {
+          "key": "c",
+          "text": "Java object can be mapped to a DB row",
+          "explanation": "True. Each object instance maps to a row."
+        },
+        {
+          "key": "d",
+          "text": "None are correct",
+          "explanation": "False. b and c are correct."
+        }
+      ],
+      "answer": [
+        "b",
+        "c"
+      ],
+      "shuffle": false,
+      "explanation": "ORM maps class to table, field to column, and object to row.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0042",
+      "type": "multi",
+      "stem": "*Week 5 - Persistence*\n\nProblems with ORM:",
+      "options": [
+        {
+          "key": "a",
+          "text": "Too much JDBC boilerplate code",
+          "explanation": "False. Removing boilerplate is a benefit of ORM."
+        },
+        {
+          "key": "b",
+          "text": "Confusing code",
+          "explanation": "True. Annotations and generated queries hide what happens, which can confuse."
+        },
+        {
+          "key": "c",
+          "text": "Can't do many-to-many mapping",
+          "explanation": "False. ORM supports many-to-many (`@ManyToMany`)."
+        },
+        {
+          "key": "d",
+          "text": "Might not be very performant",
+          "explanation": "True. Generated SQL can be slow (e.g. N+1 queries)."
+        }
+      ],
+      "answer": [
+        "b",
+        "d"
+      ],
+      "explanation": "ORM removes JDBC boilerplate, but its hidden queries can be confusing and slow.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0043",
+      "type": "multi",
+      "stem": "*Week 5 - Persistence*\n\nRelationship mapping: select all correct statements",
+      "options": [
+        {
+          "key": "a",
+          "text": "@Entity: to map a field to a column",
+          "explanation": "False. `@Entity` maps a class to a table; `@Column` maps a field."
+        },
+        {
+          "key": "b",
+          "text": "JPA assumes composition by default",
+          "explanation": "False. JPA assumes aggregation by default."
+        },
+        {
+          "key": "c",
+          "text": "Aggregation: child entity can't exist without parent",
+          "explanation": "False. That describes composition; in aggregation the child can exist alone."
+        },
+        {
+          "key": "d",
+          "text": "@ManyToMany produces a junction table",
+          "explanation": "True. A many-to-many needs a join (junction) table."
+        }
+      ],
+      "answer": [
+        "d"
+      ],
+      "explanation": "`@Entity` maps a class to a table. JPA assumes aggregation by default. Composition means the child cannot exist without its parent.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0044",
+      "type": "multi",
+      "stem": "*Week 5 - Persistence*\n\nGiven the JPA code below, choose the correct options:\n\n```java\n@Entity\npublic class User {\n    @Id @GeneratedValue\n    private Integer id;\n    private String email;\n    private String name;\n    private String password;\n    @OneToOne(mappedBy = \"user\", cascade = CascadeType.ALL)\n    private UserProfile profile;\n    ...\n}\n\n@Entity\npublic class UserProfile {\n    @Id @GeneratedValue\n    @Column(name = \"profile_id\")\n    private Integer id;\n    private int age;\n    @OneToOne\n    @JoinColumn(name = \"user_id\")\n    private User user;\n    ...\n}\n```",
+      "options": [
+        {
+          "key": "a",
+          "text": "\"mappedBy\": indicate that the foreign key for the relationship is in the class User",
+          "explanation": "False. `mappedBy` means the foreign key is in the other class (`UserProfile`)."
+        },
+        {
+          "key": "b",
+          "text": "\"CascadeType.ALL\": all persistence operations will not be propagated to relating entities",
+          "explanation": "False. `CascadeType.ALL` propagates all operations (persist, remove, ...)."
+        },
+        {
+          "key": "c",
+          "text": "\"@JoinColumn\": specify the foreign key name",
+          "explanation": "True. `@JoinColumn(name = \"user_id\")` names the foreign key column."
+        },
+        {
+          "key": "d",
+          "text": "None of the above are correct",
+          "explanation": "False. c is correct."
+        }
+      ],
+      "answer": [
+        "c"
+      ],
+      "shuffle": false,
+      "explanation": "`UserProfile` owns the relationship: its table has the `user_id` foreign key. `User` is the inverse side (`mappedBy`).",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0045",
+      "type": "multi",
+      "stem": "*Week 5 - Persistence*\n\nGiven the following JPA code:\n\n```java\n@Entity\npublic class Book {\n    @Id @GeneratedValue\n    private Integer id;\n    private String title;\n    @OneToMany(mappedBy = \"book\", orphanRemoval = true, cascade = CascadeType.ALL)\n    private List<Review> reviews;\n}\n\n@Entity\npublic class Review {\n    private @Id @GeneratedValue Long id;\n    private String review;\n    @ManyToOne\n    @JoinColumn(name = \"book_id\")\n    private Book book;\n}\n```",
+      "options": [
+        {
+          "key": "a",
+          "text": "This code implements an aggregation",
+          "explanation": "False. In aggregation the child would survive alone; here it does not."
+        },
+        {
+          "key": "b",
+          "text": "This code implements a composition",
+          "explanation": "True. Reviews cannot exist without their book: composition."
+        },
+        {
+          "key": "c",
+          "text": "This code implements neither",
+          "explanation": "False. It is a composition."
+        },
+        {
+          "key": "d",
+          "text": "If a review is removed from the \"reviews\" list, it does not get deleted from DB",
+          "explanation": "False. `orphanRemoval = true` deletes a review removed from the list."
+        }
+      ],
+      "answer": [
+        "b"
+      ],
+      "explanation": "`orphanRemoval = true` plus `CascadeType.ALL` make each review's life depend on its book.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0046",
+      "type": "multi",
+      "stem": "*Week 5 - Persistence*\n\nConsider the following code:\n\n```java\nimport org.springframework.data.jpa.repository.CrudRepository;\nimport org.springframework.stereotype.Repository;\n\n@Repository\npublic interface BookRepository extends CrudRepository<Book, Long> {\n    List<Book> findByTitle(String title);\n}\n\nBookRepository books;\nbooks.findAll();\nbooks.findById(id);\nbooks.save(new Book(\"I, Robot\"));\nbooks.deleteById(id);\n```",
+      "options": [
+        {
+          "key": "a",
+          "text": "You will have to provide implementation for methods such as findAll(), findByTitle(), etc.",
+          "explanation": "False. CRUD methods come from `CrudRepository`; `findByTitle` is derived from its name."
+        },
+        {
+          "key": "b",
+          "text": "You need to implement the BookRepository interface for your code to work",
+          "explanation": "False. You only declare the interface."
+        },
+        {
+          "key": "c",
+          "text": "BookRepository will be implemented by Spring automatically",
+          "explanation": "True. Spring creates the implementation automatically."
+        },
+        {
+          "key": "d",
+          "text": "None of these options are correct",
+          "explanation": "False. c is correct."
+        }
+      ],
+      "answer": [
+        "c"
+      ],
+      "shuffle": false,
+      "explanation": "Spring Data JPA generates the repository implementation at runtime, including derived queries such as `findByTitle`.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0047",
+      "type": "multi",
+      "stem": "*Week 5 - Persistence*\n\nNon-relational databases: select all correct statements",
+      "options": [
+        {
+          "key": "a",
+          "text": "NoSQL databases must use data tables with columns and rows",
+          "explanation": "False. Tables with rows and columns are the relational model."
+        },
+        {
+          "key": "b",
+          "text": "Data can be stored in the form of documents",
+          "explanation": "True. Document stores (e.g. MongoDB) store JSON-like documents."
+        },
+        {
+          "key": "c",
+          "text": "Can achieve improved scalability",
+          "explanation": "True. They scale horizontally across many servers."
+        },
+        {
+          "key": "d",
+          "text": "Not suitable for big data applications",
+          "explanation": "False. They are widely used for big data."
+        }
+      ],
+      "answer": [
+        "b",
+        "c"
+      ],
+      "explanation": "NoSQL databases store documents, key-values, wide columns or graphs, and scale out well.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0048",
+      "type": "multi",
+      "stem": "*Week 5 - Persistence*\n\nVector databases and embeddings: select all correct statements",
+      "options": [
+        {
+          "key": "a",
+          "text": "Embeddings are vector representations of data",
+          "explanation": "True. An embedding is a numeric vector that captures meaning."
+        },
+        {
+          "key": "b",
+          "text": "SQL databases cannot store embeddings",
+          "explanation": "False. SQL databases can store them (e.g. PostgreSQL with pgvector)."
+        },
+        {
+          "key": "c",
+          "text": "Vector databases enable fast similarity searches",
+          "explanation": "True. They are built for fast similarity search."
+        },
+        {
+          "key": "d",
+          "text": "Public LLM services such as OpenAI GPT-4 should have information about all your data and products",
+          "explanation": "False. Public LLMs do not know your private data, which is why RAG is used."
+        }
+      ],
+      "answer": [
+        "a",
+        "c"
+      ],
+      "explanation": "Embeddings turn data into vectors; vector databases index them for fast nearest-neighbour search, e.g. for RAG.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0049",
+      "type": "multi",
+      "stem": "*Week 6 - Sprint Planning and Execution*\n\n[Week 5 review] Choose all the correct statements:",
+      "options": [
+        {
+          "key": "a",
+          "text": "In Java apps, we can access the database via JDBC or JPA",
+          "explanation": "True. Both are standard ways to reach a DB from Java."
+        },
+        {
+          "key": "b",
+          "text": "You can't use SQL statements when using JPA",
+          "explanation": "False. JPA allows native SQL queries (and JPQL)."
+        },
+        {
+          "key": "c",
+          "text": "Under the hood, JPA implementations can use JDBC to access the database",
+          "explanation": "True. JPA providers such as Hibernate use JDBC underneath."
+        },
+        {
+          "key": "d",
+          "text": "@Entity annotation is to map a Java class to a column",
+          "explanation": "False. `@Entity` maps a class to a table."
+        },
+        {
+          "key": "e",
+          "text": "\"orphanRemoval = true\": removing a child will remove its parent as well",
+          "explanation": "False. It deletes the orphaned child, not the parent."
+        },
+        {
+          "key": "f",
+          "text": "Spring Data JPA generates code to implement your repositories automatically",
+          "explanation": "True. Spring Data JPA generates repository implementations."
+        },
+        {
+          "key": "g",
+          "text": "A transaction does not have to be atomic",
+          "explanation": "False. Transactions must be atomic (ACID)."
+        },
+        {
+          "key": "h",
+          "text": "It is best to store vector embeddings in SQL databases",
+          "explanation": "False. Vector databases are built for embeddings and similarity search."
+        }
+      ],
+      "answer": [
+        "a",
+        "c",
+        "f"
+      ],
+      "explanation": "Review of Week 5: JDBC, JPA, entities, transactions and vector databases.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0050",
+      "type": "written",
+      "stem": "*Week 6 - Sprint Planning and Execution*\n\n[Review] In a concise manner, explain how does Spring work?",
+      "modelAnswer": "Spring's core is an IoC (Inversion of Control) container, the application context. It scans the classpath for components (`@Component`, `@Service`, `@Repository`, `@RestController`...), creates them as beans and manages their lifecycle.\nIt then wires beans together by dependency injection (auto-wiring), so classes receive their dependencies instead of creating them: \"Don't call us, we'll call you\". Spring Boot adds auto-configuration on top.",
+      "explanation": "Spring is built on Inversion of Control and dependency injection.",
+      "source": "from course: 04-Software Design.pdf",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0051",
+      "type": "multi",
+      "stem": "*Week 6 - Sprint Planning and Execution*\n\nBacklog refinement: select all incorrect statements",
+      "options": [
+        {
+          "key": "a",
+          "text": "During backlog refinement, we can remove some user stories",
+          "explanation": "False. Correct statement: Outdated or unneeded stories can be removed."
+        },
+        {
+          "key": "b",
+          "text": "During backlog refinement, acceptance criteria should be added or clarified for each item.",
+          "explanation": "False. Correct statement: Adding and clarifying acceptance criteria is a core refinement task."
+        },
+        {
+          "key": "c",
+          "text": "Backlog refinement takes place only at the start of each sprint.",
+          "explanation": "True. Incorrect statement: Refinement happens throughout the sprint, not only at the start."
+        },
+        {
+          "key": "d",
+          "text": "Backlog refinement is solely for documentation purposes.",
+          "explanation": "True. Incorrect statement: It prepares items (split, estimate, clarify) for sprint planning, not just documents them."
+        }
+      ],
+      "answer": [
+        "c",
+        "d"
+      ],
+      "explanation": "The question asks for the incorrect statements. Refinement is ongoing work that keeps the backlog ready for planning.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0052",
+      "type": "multi",
+      "stem": "*Week 6 - Sprint Planning and Execution*\n\nDefinition of ready: select all correct statements",
+      "options": [
+        {
+          "key": "a",
+          "text": "A backlog item is considered ready when it is fully implemented and demonstrated to users.",
+          "explanation": "False. That describes \"done\", not \"ready\"."
+        },
+        {
+          "key": "b",
+          "text": "The definition of ready requires that acceptance criteria for backlog items are testable.",
+          "explanation": "True. Testable acceptance criteria are part of ready."
+        },
+        {
+          "key": "c",
+          "text": "Backlog items do not need to be estimated before being considered ready.",
+          "explanation": "False. Ready items must be estimated."
+        },
+        {
+          "key": "d",
+          "text": "Items large enough to span a few sprints can still meet the definition of ready.",
+          "explanation": "False. Ready items must fit within one sprint."
+        }
+      ],
+      "answer": [
+        "b"
+      ],
+      "explanation": "\"Ready\" means an item is clear, testable, estimated and small enough to finish within one sprint.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0053",
+      "type": "multi",
+      "stem": "*Week 6 - Sprint Planning and Execution*\n\nSprint planning and execution: select all correct statements",
+      "options": [
+        {
+          "key": "a",
+          "text": "The sprint goal should be decided by the product owner.",
+          "explanation": "False. The whole Scrum team agrees the sprint goal."
+        },
+        {
+          "key": "b",
+          "text": "Decomposition of backlog items into executable technical tasks is part of sprint planning.",
+          "explanation": "True. Items are split into technical tasks in sprint planning."
+        },
+        {
+          "key": "c",
+          "text": "Re-estimation of any backlog items is allowed during sprint planning.",
+          "explanation": "True. Items can be re-estimated as understanding improves."
+        },
+        {
+          "key": "d",
+          "text": "Only code development activities are done during sprint execution.",
+          "explanation": "False. Execution also includes testing, reviews, refinement and daily scrums."
+        }
+      ],
+      "answer": [
+        "b",
+        "c"
+      ],
+      "explanation": "In sprint planning the whole Scrum team sets the goal, picks items and breaks them into tasks.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0054",
+      "type": "multi",
+      "stem": "*Week 9 - Security*\n\n[Review] Choose all the incorrect statements:",
+      "options": [
+        {
+          "key": "a",
+          "text": "The sprint goal should be decided by the user.",
+          "explanation": "True. Incorrect statement: The Scrum team sets the sprint goal."
+        },
+        {
+          "key": "b",
+          "text": "We should only decompose backlog items into executable technical tasks during sprint retrospective.",
+          "explanation": "True. Incorrect statement: Decomposition happens in sprint planning; the retrospective improves the process."
+        },
+        {
+          "key": "c",
+          "text": "Re-estimation of any backlog items is not allowed during backlog refinement.",
+          "explanation": "True. Incorrect statement: Re-estimation is allowed in refinement."
+        },
+        {
+          "key": "d",
+          "text": "During the sprint, we can perform estimation for some tasks.",
+          "explanation": "False. Correct statement: New or changed tasks can be estimated during the sprint."
+        },
+        {
+          "key": "e",
+          "text": "A user story is considered ready when it is added into the backlog.",
+          "explanation": "True. Incorrect statement: Ready requires meeting the definition of ready (clear, testable, estimated, small)."
+        },
+        {
+          "key": "f",
+          "text": "During backlog refinement, we can add new user stories.",
+          "explanation": "False. Correct statement: New stories can be added during refinement."
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c",
+        "e"
+      ],
+      "explanation": "The question asks for the incorrect statements. Review of Week 6: sprint planning, refinement and definition of ready.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0055",
+      "type": "multi",
+      "stem": "*Week 9 - Security*\n\nAbout trust - select all the correct statements:",
+      "options": [
+        {
+          "key": "a",
+          "text": "We should trust the data sent from our users",
+          "explanation": "False. User input must always be validated."
+        },
+        {
+          "key": "b",
+          "text": "We can completely trust the network between our server and the clients",
+          "explanation": "False. The network can be sniffed or tampered with; use HTTPS."
+        },
+        {
+          "key": "c",
+          "text": "We should not use any external dependencies as we don't trust them :(",
+          "explanation": "False. External dependencies are fine if vetted and kept updated."
+        },
+        {
+          "key": "d",
+          "text": "None are correct",
+          "explanation": "True. a, b and c are all wrong."
+        }
+      ],
+      "answer": [
+        "d"
+      ],
+      "shuffle": false,
+      "explanation": "Zero trust: validate all input, secure the network (HTTPS), and vet dependencies instead of banning them.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0056",
+      "type": "multi",
+      "stem": "*Week 9 - Security*\n\nInput validation: choose the correct statements",
+      "options": [
+        {
+          "key": "a",
+          "text": "Mixing code and data in your software is a good practice",
+          "explanation": "False. Mixing code and data leads to injection attacks (e.g. SQL injection)."
+        },
+        {
+          "key": "b",
+          "text": "Whitelisting rejects inputs containing known dangerous values",
+          "explanation": "False. That is blacklisting; whitelisting accepts only known-good values."
+        },
+        {
+          "key": "c",
+          "text": "Jakarta Bean Validation API can define constraints on fields of a class via Java annotations",
+          "explanation": "True. E.g. `@NotNull`, `@Size`, `@Email` on fields."
+        },
+        {
+          "key": "d",
+          "text": "If the user input is not valid, your API should return a 404 HTTP status",
+          "explanation": "False. Invalid input returns 400 Bad Request; 404 means not found."
+        },
+        {
+          "key": "e",
+          "text": "@Valid can be used to check the arguments provided to controller's methods",
+          "explanation": "True. `@Valid` on a controller parameter triggers validation."
+        }
+      ],
+      "answer": [
+        "c",
+        "e"
+      ],
+      "explanation": "Validate input with allow-lists and Bean Validation annotations; reject bad input with 400.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0057",
+      "type": "multi",
+      "stem": "*Week 9 - Security*\n\nAuthentication and authorization - choose the incorrect statements:",
+      "options": [
+        {
+          "key": "a",
+          "text": "Authorization is to determine who you want",
+          "explanation": "True. Incorrect statement: Authorization decides what you can do."
+        },
+        {
+          "key": "b",
+          "text": "Authentication is to determine what you can do",
+          "explanation": "True. Incorrect statement: Authentication decides who you are."
+        },
+        {
+          "key": "c",
+          "text": "Basic HTTP authentication is secure with bcrypt password hashing",
+          "explanation": "True. Incorrect statement: Basic auth only Base64-encodes credentials on every request; it needs HTTPS. Bcrypt only protects stored passwords."
+        },
+        {
+          "key": "d",
+          "text": "In hashing, it is very hard to produce an output",
+          "explanation": "True. Incorrect statement: Hashing is easy to compute; it is hard to reverse."
+        },
+        {
+          "key": "e",
+          "text": "Encryption is to convert cipher text into plain text",
+          "explanation": "True. Incorrect statement: Encryption turns plain text into cipher text; decryption does the reverse."
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e"
+      ],
+      "explanation": "The question asks for the incorrect statements, and all five are incorrect.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0058",
+      "type": "written",
+      "stem": "*Week 9 - Security*\n\nBriefly explain why in hashing, the salt is not stored as a secret?",
+      "modelAnswer": "The salt's job is only to make each hash unique: the same password with different salts gives different hashes, so precomputed lookup (rainbow) tables don't work. It doesn't need to be secret for that.\nIt is unique per user and stored with the hashed password, because the server needs it to re-hash the login password and compare. Security comes from the slow hash (bcrypt, scrypt, argon2), not from hiding the salt.",
+      "explanation": "A salt is a random value added to each password before hashing.",
+      "source": "from course: 09-Security.pdf",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0059",
+      "type": "multi",
+      "stem": "*Week 9 - Security*\n\nA logged-in user tries to perform an unauthorized action:",
+      "options": [
+        {
+          "key": "a",
+          "text": "A status code of 401 should be returned",
+          "explanation": "False. 401 Unauthorized means not authenticated (not logged in)."
+        },
+        {
+          "key": "b",
+          "text": "A status code of 400 should be returned",
+          "explanation": "False. 400 Bad Request means invalid input."
+        },
+        {
+          "key": "c",
+          "text": "A status code of 403 should be returned",
+          "explanation": "True. 403 Forbidden: logged in but no permission."
+        },
+        {
+          "key": "d",
+          "text": "No status code should be returned",
+          "explanation": "False. APIs must always return a status code."
+        }
+      ],
+      "answer": [
+        "c"
+      ],
+      "explanation": "The user is authenticated but not allowed, so the answer is 403 Forbidden.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0060",
+      "type": "multi",
+      "stem": "*Week 9 - Security*\n\nGiven the following security configuration:\n\n```java\n@EnableWebSecurity\n@Configuration\npublic class SecurityConfig {\n    @Bean\n    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {\n        http\n            .authorizeHttpRequests((authz) -> authz\n                .requestMatchers(HttpMethod.GET, \"/books\", \"/books/**\").permitAll()\n                .requestMatchers(HttpMethod.POST, \"/books\").authenticated()\n                .requestMatchers(HttpMethod.PUT, \"/books/*\").authenticated()\n                .requestMatchers(HttpMethod.DELETE, \"/books/*\").authenticated())\n            .httpBasic(Customizer.withDefaults())\n            ...\n        return http.build();\n    }\n    ...\n}\n```",
+      "options": [
+        {
+          "key": "a",
+          "text": "The code does not allow clients to do basic authentication by sending username/password in the HTTP header",
+          "explanation": "False. `httpBasic()` enables basic authentication."
+        },
+        {
+          "key": "b",
+          "text": "You can post to the URL \"/books/1\" if authenticated",
+          "explanation": "False. POST is only allowed on `/books`, not `/books/1`."
+        },
+        {
+          "key": "c",
+          "text": "You can update a book via the URL \"/books/1\" if authenticated",
+          "explanation": "True. PUT on `/books/*` matches `/books/1` for authenticated users."
+        },
+        {
+          "key": "d",
+          "text": "All options are incorrect",
+          "explanation": "False. c is correct."
+        }
+      ],
+      "answer": [
+        "c"
+      ],
+      "shuffle": false,
+      "explanation": "Each `requestMatchers` rule pairs an HTTP method with a URL pattern.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0061",
+      "type": "multi",
+      "stem": "*Week 9 - Security*\n\n[JWT vs. Basic Auth] Choose all the correct statements:",
+      "options": [
+        {
+          "key": "a",
+          "text": "JWTs have built-in expiration capabilities",
+          "explanation": "True. The `exp` claim sets the expiry."
+        },
+        {
+          "key": "b",
+          "text": "JWTs are completely secure without HTTPS",
+          "explanation": "False. A stolen token can be replayed, so HTTPS is still needed."
+        },
+        {
+          "key": "c",
+          "text": "Basic authentication requires sending username/password with every single request to the server",
+          "explanation": "True. Basic auth is stateless and sends credentials every time."
+        },
+        {
+          "key": "d",
+          "text": "JWTs are only used for authentication, not for authorization",
+          "explanation": "False. JWT claims (e.g. roles) are also used for authorization."
+        },
+        {
+          "key": "e",
+          "text": "JWTs are always encrypted, so their contents cannot be read by anyone",
+          "explanation": "False. JWTs are signed, not encrypted; the Base64url payload is readable."
+        }
+      ],
+      "answer": [
+        "a",
+        "c"
+      ],
+      "explanation": "A JWT is a signed token with claims; Basic Auth sends the credentials on every request.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0062",
+      "type": "multi",
+      "stem": "*Week 9 - Security*\n\n[Cors] Select all the correct statements:",
+      "options": [
+        {
+          "key": "a",
+          "text": "Two URLs with different ports are considered different origins.",
+          "explanation": "True. A different port means a different origin."
+        },
+        {
+          "key": "b",
+          "text": "The same-origin policy allows scripts from http://myapp.com to access resources from https://myapp.com",
+          "explanation": "False. http and https are different schemes, so different origins."
+        },
+        {
+          "key": "c",
+          "text": "CORS is automatically enabled in all Spring Boot applications by default.",
+          "explanation": "False. CORS must be configured in Spring (e.g. `@CrossOrigin` or a CORS config)."
+        },
+        {
+          "key": "d",
+          "text": "If a backend API is running at http://localhost:8080 and the frontend is at http://localhost, requests from the frontend to the backend are considered same-origin.",
+          "explanation": "False. Port 80 vs 8080 makes them different origins."
+        }
+      ],
+      "answer": [
+        "a"
+      ],
+      "explanation": "Origin = scheme + host + port; all three must match to be same-origin.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0063",
+      "type": "multi",
+      "stem": "*Week 10 - Software Testing*\n\n[Week 9 Review] Select all the incorrect statements:",
+      "options": [
+        {
+          "key": "a",
+          "text": "Attackers can't see your text password sent in the HTTP header if it's encoded in Base64",
+          "explanation": "True. Incorrect statement: Base64 is an encoding, decoded by anyone."
+        },
+        {
+          "key": "b",
+          "text": "It is a must to store plaintext passwords in database",
+          "explanation": "True. Incorrect statement: Store only salted, slow hashes."
+        },
+        {
+          "key": "c",
+          "text": "A status code of 403 should be returned when resource is not found",
+          "explanation": "True. Incorrect statement: Not found is 404; 403 is forbidden."
+        },
+        {
+          "key": "d",
+          "text": "Authorization is to determine the permissions of users",
+          "explanation": "False. Correct statement: Authorization decides what a user may do."
+        },
+        {
+          "key": "e",
+          "text": "Whitelisting rejects inputs containing known dangerous values",
+          "explanation": "True. Incorrect statement: Whitelisting accepts only known-good values."
+        },
+        {
+          "key": "f",
+          "text": "It is better to implement your own algorithm for password hashing",
+          "explanation": "True. Incorrect statement: Use well-tested libraries (bcrypt, argon2); never roll your own crypto."
+        },
+        {
+          "key": "g",
+          "text": "JWTs can be signed using asymmetric signing algorithms",
+          "explanation": "False. Correct statement: JWTs can be signed with RSA or ECDSA key pairs (e.g. RS256)."
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c",
+        "e",
+        "f"
+      ],
+      "explanation": "The question asks for the incorrect statements. Review of Week 9 security.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0064",
+      "type": "multi",
+      "stem": "*Week 10 - Software Testing*\n\nWhat's the purpose of software testing?",
+      "options": [
+        {
+          "key": "a",
+          "text": "To uncover bugs",
+          "explanation": "True. Testing finds defects."
+        },
+        {
+          "key": "b",
+          "text": "To learn about the software",
+          "explanation": "True. Tests show how the software actually behaves."
+        },
+        {
+          "key": "c",
+          "text": "To clarify user stories",
+          "explanation": "True. Acceptance tests make user stories concrete."
+        },
+        {
+          "key": "d",
+          "text": "To verify contracts",
+          "explanation": "True. Tests check that components meet their contracts (specs, interfaces)."
+        },
+        {
+          "key": "e",
+          "text": "To assess quality of the software",
+          "explanation": "True. Test results give a measure of quality."
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e"
+      ],
+      "explanation": "All five options are purposes of testing given in the course.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0065",
+      "type": "multi",
+      "stem": "*Week 10 - Software Testing*\n\nWhich of the following is not a good software testing approach?",
+      "options": [
+        {
+          "key": "a",
+          "text": "Try to devise all test cases",
+          "explanation": "True. Testing every case is infeasible; choose representative cases."
+        },
+        {
+          "key": "b",
+          "text": "Select random parts of the code to test as software behavior is not predictable",
+          "explanation": "True. Tests should be designed systematically, not picked at random."
+        },
+        {
+          "key": "c",
+          "text": "Wait for the software to fail in production, then perform some tests",
+          "explanation": "True. Testing must happen before production."
+        },
+        {
+          "key": "d",
+          "text": "Conduct tests only when development is done",
+          "explanation": "True. Testing should start early and run continuously."
+        },
+        {
+          "key": "e",
+          "text": "Try to find only cases in which the code would work well",
+          "explanation": "True. Tests should try to make the code fail."
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e"
+      ],
+      "explanation": "All five are bad approaches. Good testing is systematic (partitions, boundaries), early and aimed at finding failures.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0066",
+      "type": "multi",
+      "stem": "*Week 10 - Software Testing*\n\nChoose the correct statements about TDD, blackbox/whitebox, etc.:",
+      "options": [
+        {
+          "key": "a",
+          "text": "In TDD, we write the application code first",
+          "explanation": "False. TDD writes the test first."
+        },
+        {
+          "key": "b",
+          "text": "In blackbox testing, we look at the code to design test cases",
+          "explanation": "False. Black-box testing does not look at the code."
+        },
+        {
+          "key": "c",
+          "text": "In whitebox testing, we only look at the input to the application to be tested",
+          "explanation": "False. White-box testing looks at the code's structure."
+        },
+        {
+          "key": "d",
+          "text": "Length of valid input is from 40 to 100 characters: we can have 3 partitions of the input space",
+          "explanation": "True. Partitions: under 40, 40-100, over 100."
+        },
+        {
+          "key": "e",
+          "text": "Boundary values are useful because they can make the app fails",
+          "explanation": "True. Bugs cluster at boundaries (e.g. 39, 40, 100, 101)."
+        }
+      ],
+      "answer": [
+        "d",
+        "e"
+      ],
+      "explanation": "Black-box tests come from the spec; white-box tests come from the code.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0067",
+      "type": "multi",
+      "stem": "*Week 10 - Software Testing*\n\nGiven the following code, choose the correct statement about code coverage:\n\n```java\nint coverage(boolean a) {\n    int x = 0;\n    if (a) x = 1;\n    return 100 / x;\n}\n```",
+      "options": [
+        {
+          "key": "a",
+          "text": "If a test uses \"a = True\", it can achieve 100% branch coverage",
+          "explanation": "False. `a = true` runs every statement but misses the false branch."
+        },
+        {
+          "key": "b",
+          "text": "If a test uses \"a = False\", it can achieve 100% path coverage",
+          "explanation": "False. `a = false` covers one path only (and divides by zero)."
+        },
+        {
+          "key": "c",
+          "text": "It is not possible to achieve 100% branch coverage in this case",
+          "explanation": "False. Two tests (true and false) give 100% branch coverage."
+        },
+        {
+          "key": "d",
+          "text": "It is possible to achieve 100% statement coverage in this case",
+          "explanation": "True. `a = true` alone runs every statement."
+        }
+      ],
+      "answer": [
+        "d"
+      ],
+      "explanation": "Statement coverage counts lines run; branch coverage needs both outcomes of `if (a)`; path coverage needs every path.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0068",
+      "type": "multi",
+      "stem": "*Week 10 - Software Testing*\n\nCoverage: choose the correct statements",
+      "options": [
+        {
+          "key": "a",
+          "text": "Code coverage is the most important measure in software testing",
+          "explanation": "False. Coverage is not an adequacy criterion."
+        },
+        {
+          "key": "b",
+          "text": "Assertion-free testing is a good software testing approach",
+          "explanation": "False. Tests without assertions never fail, so they inflate coverage without checking anything."
+        },
+        {
+          "key": "c",
+          "text": "100% code coverage does not ensure that all customer requirements are met",
+          "explanation": "True. Covered code can still be wrong, and missing features have no code to cover."
+        },
+        {
+          "key": "d",
+          "text": "We should not measure code coverage at all",
+          "explanation": "False. Coverage is useful for finding untested code."
+        }
+      ],
+      "answer": [
+        "c"
+      ],
+      "explanation": "Coverage shows what code ran, not whether the behaviour is right.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0069",
+      "type": "written",
+      "stem": "*Week 10 - Software Testing*\n\nProvide three (3) good reasons for using code coverage measures?",
+      "modelAnswer": "1) Identifies untested code.\n2) Shows places where testing is inadequate, to guide which new test cases to write.\n3) Gives an objective, automatically computed measure (e.g. with JaCoCo) to track test progress over time and spot unreachable or dead code.",
+      "explanation": "Coverage is a tool to find gaps in testing, not a goal in itself.",
+      "source": "given + from course: 10-Software Testing.pdf + own answer",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0070",
+      "type": "multi",
+      "stem": "*Week 10 - Software Testing*\n\nGiven the following code, choose the correct statement about mocking:\n\n```java\n@Mock private BookRepository books;\n@InjectMocks private BookServiceImpl bookService;\n\n@Test\nvoid addBook_ShouldSaveAndReturnBook...() {\n    Book book = new Book(\"This is a New Title\");\n    when(books.findByTitle(any(String.class)))\n        .thenReturn(Collections.emptyList());\n    when(books.save(any(Book.class)))\n        .thenReturn(book);\n\n    Book savedBook = bookService.addBook(book);\n\n    assertNotNull(savedBook); // more assertions needed...\n    // verify\n    verify(books).findByTitle(book.getTitle());\n    verify(books).save(book);\n}\n```",
+      "options": [
+        {
+          "key": "a",
+          "text": "The test will fail if bookService.addBook() returns null",
+          "explanation": "True. `assertNotNull(savedBook)` fails on null."
+        },
+        {
+          "key": "b",
+          "text": "The actual JPA repository's findByTitle method was called during the test",
+          "explanation": "False. Only the mock is called; the real repository is never used."
+        },
+        {
+          "key": "c",
+          "text": "The mock is configured to return an empty list when findByTitle is called with any string",
+          "explanation": "True. `any(String.class)` matches any title, and the stub returns an empty list."
+        },
+        {
+          "key": "d",
+          "text": "The \"when(books.save(any(Book.class))).thenReturn(book)\" statement ensures that when save() is called with any Book object, it will return the exact same book object that was passed to addBook()",
+          "explanation": "False. It always returns the fixed `book` variable, whatever Book is passed to `save()`."
+        }
+      ],
+      "answer": [
+        "a",
+        "c"
+      ],
+      "explanation": "`@Mock` creates a fake repository and `@InjectMocks` puts it into the service; `when(...).thenReturn(...)` stubs its answers.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0071",
+      "type": "multi",
+      "stem": "*Week 10 - Software Testing*\n\nTesting practices: choose the correct statements",
+      "options": [
+        {
+          "key": "a",
+          "text": "You need immediate feedback from unit tests",
+          "explanation": "True. Fast unit tests give quick feedback on each change."
+        },
+        {
+          "key": "b",
+          "text": "Unit tests should validate multiple software components at the same time",
+          "explanation": "False. A unit test isolates one component."
+        },
+        {
+          "key": "c",
+          "text": "Mocking can be used in unit tests",
+          "explanation": "True. Mocks replace dependencies to isolate the unit."
+        },
+        {
+          "key": "d",
+          "text": "Integration tests usually run faster than unit tests",
+          "explanation": "False. Integration tests are slower (DB, network, more code)."
+        },
+        {
+          "key": "e",
+          "text": "Regression testing: we can run previously passed integration tests",
+          "explanation": "True. Regression testing reruns earlier passing tests to catch new breakage."
+        }
+      ],
+      "answer": [
+        "a",
+        "c",
+        "e"
+      ],
+      "explanation": "Unit tests check one unit in isolation and run fast; integration tests check units together and run slower.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0072",
+      "type": "multi",
+      "stem": "*Week 11 - Code Review, Refactoring and Pair Programming*\n\n[Week 10 Review] Select all the correct statements:",
+      "options": [
+        {
+          "key": "a",
+          "text": "A good testing approach is to cover all possible inputs from users",
+          "explanation": "False. Testing all inputs is infeasible."
+        },
+        {
+          "key": "b",
+          "text": "Unit testing only tests one line of code at a time",
+          "explanation": "False. A unit is a method or class, not a line."
+        },
+        {
+          "key": "c",
+          "text": "Integration tests might need mocking",
+          "explanation": "True. External services (e.g. a payment API) may still be mocked in integration tests."
+        },
+        {
+          "key": "d",
+          "text": "Good code coverage number ensures high quality test cases",
+          "explanation": "False. Coverage says nothing about assertion quality."
+        },
+        {
+          "key": "e",
+          "text": "Boundary value analysis is used together with input space partitioning to find good test cases",
+          "explanation": "True. Partition the input space, then test the partition boundaries."
+        },
+        {
+          "key": "f",
+          "text": "\"when(bookRepository.findById(bookId)).thenReturn(Optional.of(existingBook));\" -> this line of code calls the \"findById\" method in the actual JPA repository",
+          "explanation": "False. `when()` stubs the mock; the real repository is not called."
+        }
+      ],
+      "answer": [
+        "c",
+        "e"
+      ],
+      "explanation": "Review of Week 10 testing.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0073",
+      "type": "multi",
+      "stem": "*Week 11 - Code Review, Refactoring and Pair Programming*\n\nWhich are some good reasons to do code review?",
+      "options": [
+        {
+          "key": "a",
+          "text": "Insurance against author's disappearance",
+          "explanation": "True. Reviewers know the code if the author leaves."
+        },
+        {
+          "key": "b",
+          "text": "Improve accountability",
+          "explanation": "True. Authors write more carefully when others will read their code."
+        },
+        {
+          "key": "c",
+          "text": "Force code documentation",
+          "explanation": "True. Code must be understandable to the reviewer, so it gets documented."
+        },
+        {
+          "key": "d",
+          "text": "Improve development speed",
+          "explanation": "True. Catching defects early saves time later."
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "explanation": "All four are benefits of code review given in the course.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0074",
+      "type": "multi",
+      "stem": "*Week 11 - Code Review, Refactoring and Pair Programming*\n\nWhich code needs review?",
+      "options": [
+        {
+          "key": "a",
+          "text": "Code that is below a triviality threshold",
+          "explanation": "False. Trivial changes can skip review."
+        },
+        {
+          "key": "b",
+          "text": "Highly abstract algorithms",
+          "explanation": "True. Complex, abstract code is hard to get right."
+        },
+        {
+          "key": "c",
+          "text": "Code written by experienced developers",
+          "explanation": "True. Experts make mistakes too."
+        },
+        {
+          "key": "d",
+          "text": "Buggy code",
+          "explanation": "True. Buggy areas need extra review."
+        }
+      ],
+      "answer": [
+        "b",
+        "c",
+        "d"
+      ],
+      "explanation": "Everything above a triviality threshold should be reviewed, whoever wrote it.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0075",
+      "type": "multi",
+      "stem": "*Week 11 - Code Review, Refactoring and Pair Programming*\n\nTechnical debts:",
+      "options": [
+        {
+          "key": "a",
+          "text": "Reduce time when removing existing features",
+          "explanation": "False. Debt makes every change, removals included, slower."
+        },
+        {
+          "key": "b",
+          "text": "Can be caused by management deadlines",
+          "explanation": "True. Deadline pressure leads to shortcuts."
+        },
+        {
+          "key": "c",
+          "text": "Incur more time to understand current implementation",
+          "explanation": "True. Messy code takes longer to understand."
+        },
+        {
+          "key": "d",
+          "text": "Are the extra effort that it takes to add new features",
+          "explanation": "False. Debt is the extra effort caused by poor code, not the normal effort of adding features."
+        }
+      ],
+      "answer": [
+        "b",
+        "c"
+      ],
+      "explanation": "Technical debt is the extra future cost caused by quick-and-dirty, not-quite-right code.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0076",
+      "type": "multi",
+      "stem": "*Week 11 - Code Review, Refactoring and Pair Programming*\n\nWhen should you do refactoring:",
+      "options": [
+        {
+          "key": "a",
+          "text": "When the code is well-structured",
+          "explanation": "False. Well-structured code does not need refactoring."
+        },
+        {
+          "key": "b",
+          "text": "When the code has duplication",
+          "explanation": "True. Duplication is a classic smell."
+        },
+        {
+          "key": "c",
+          "text": "When you are trying to fix bugs",
+          "explanation": "True. Making code clearer helps find and fix the bug."
+        },
+        {
+          "key": "d",
+          "text": "After a code review session",
+          "explanation": "True. Reviews reveal smells to fix."
+        },
+        {
+          "key": "e",
+          "text": "When adding new features and the current code is messy",
+          "explanation": "True. Clean up first, then add the feature."
+        },
+        {
+          "key": "f",
+          "text": "When we have no test cases",
+          "explanation": "False. Write tests first; refactoring without tests is risky."
+        }
+      ],
+      "answer": [
+        "b",
+        "c",
+        "d",
+        "e"
+      ],
+      "explanation": "Refactor when code smells, as part of daily work, with tests as a safety net.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0077",
+      "type": "multi",
+      "stem": "*Week 11 - Code Review, Refactoring and Pair Programming*\n\nHow to refactor the following code:\n\n```java\nint discount(int inputVal, int quantity, int yearToDate) {\n    if (inputVal > 50) inputVal -= 2;\n    if (quantity > 100) inputVal -= 1;\n    if (yearToDate > 10000) inputVal -= 4;\n    return inputVal;\n}\n```",
+      "options": [
+        {
+          "key": "a",
+          "text": "Remove the assignment to parameter",
+          "explanation": "True. \"Remove assignments to parameters\" is the named refactoring."
+        },
+        {
+          "key": "b",
+          "text": "No need refactoring; the code already looks good",
+          "explanation": "False. Reassigning `inputVal` is a smell."
+        },
+        {
+          "key": "c",
+          "text": "Use \"final\" keywords on parameters",
+          "explanation": "True. `final` parameters make the compiler block reassignment."
+        },
+        {
+          "key": "d",
+          "text": "Do not use parameters",
+          "explanation": "False. The method needs its inputs; only the reassignment is the problem."
+        }
+      ],
+      "answer": [
+        "a",
+        "c"
+      ],
+      "explanation": "The smell is assignment to a parameter. Use a local variable (`int result = inputVal;`) and change `result` instead.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0078",
+      "type": "multi",
+      "stem": "*Week 11 - Code Review, Refactoring and Pair Programming*\n\nWhat could be considered a code smell?",
+      "options": [
+        {
+          "key": "a",
+          "text": "A method mostly uses data from its own class",
+          "explanation": "False. That is normal; feature envy is using another class's data."
+        },
+        {
+          "key": "b",
+          "text": "Method parameter is reassigned in the method's body",
+          "explanation": "True. Assignment to a parameter."
+        },
+        {
+          "key": "c",
+          "text": "try {...} catch (Exception e) { throw new RuntimeException(\"e\");}",
+          "explanation": "True. Catching a generic `Exception` and rethrowing with a useless message hides the real error."
+        },
+        {
+          "key": "d",
+          "text": "A long Java method",
+          "explanation": "True. Long method."
+        },
+        {
+          "key": "e",
+          "text": "Syntax errors",
+          "explanation": "False. Syntax errors are compile errors, not smells."
+        }
+      ],
+      "answer": [
+        "b",
+        "c",
+        "d"
+      ],
+      "explanation": "A code smell is a design weakness that slows development, not a bug.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0079",
+      "type": "multi",
+      "stem": "*Week 11 - Code Review, Refactoring and Pair Programming*\n\nSelect all the benefits of pair programming:",
+      "options": [
+        {
+          "key": "a",
+          "text": "Knowledge sharing",
+          "explanation": "True. Both developers learn the code and each other's skills."
+        },
+        {
+          "key": "b",
+          "text": "Keeping focus",
+          "explanation": "True. A partner keeps you on task."
+        },
+        {
+          "key": "c",
+          "text": "Code review on the go",
+          "explanation": "True. The navigator reviews each line as it is written."
+        },
+        {
+          "key": "d",
+          "text": "Individual code ownership",
+          "explanation": "False. Pairing builds collective, not individual, ownership."
+        },
+        {
+          "key": "e",
+          "text": "Fast for onboarding new members",
+          "explanation": "True. New members learn quickly by pairing."
+        },
+        {
+          "key": "f",
+          "text": "Improve design quality",
+          "explanation": "True. Two people discuss design choices."
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "c",
+        "e",
+        "f"
+      ],
+      "explanation": "Pairing spreads knowledge and reviews code as it is written.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0080",
+      "type": "multi",
+      "stem": "*Week 11 - Code Review, Refactoring and Pair Programming*\n\nPairing styles:",
+      "options": [
+        {
+          "key": "a",
+          "text": "Expert-novice should not be used in driver-navigator pairing",
+          "explanation": "False. Expert-novice is a common driver-navigator pairing."
+        },
+        {
+          "key": "b",
+          "text": "It is not possible to do novice-novice pairing",
+          "explanation": "False. Novice-novice pairing is possible, though it needs support."
+        },
+        {
+          "key": "c",
+          "text": "In driver-navigator pairing, the navigator is in charge of tactical thinking",
+          "explanation": "False. The driver handles tactics; the navigator thinks strategically."
+        },
+        {
+          "key": "d",
+          "text": "Strong-style pairing involves an expert and a novice",
+          "explanation": "True. \"For an idea to go into the computer, it must go through someone else's hands.\""
+        },
+        {
+          "key": "e",
+          "text": "Red-Green-Refactor: red and green refer to failing and passing tests, respectively",
+          "explanation": "True. Red = failing test, green = passing test (ping-pong / TDD)."
+        }
+      ],
+      "answer": [
+        "d",
+        "e"
+      ],
+      "explanation": "Driver = types, tactical; navigator = reviews, strategic. Strong style: the expert navigates and the novice drives.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0081",
+      "type": "multi",
+      "stem": "*Week 11 - Code Review, Refactoring and Pair Programming*\n\nPairing - what you should do:",
+      "options": [
+        {
+          "key": "a",
+          "text": "Choose a user story and start programming right away",
+          "explanation": "False. Plan before coding."
+        },
+        {
+          "key": "b",
+          "text": "Must finish a user story in a pairing session",
+          "explanation": "False. A story can span sessions."
+        },
+        {
+          "key": "c",
+          "text": "Should only do pairing face to face",
+          "explanation": "False. Remote pairing works with screen sharing."
+        },
+        {
+          "key": "d",
+          "text": "Need to do some planning before the pairing session",
+          "explanation": "True. Agree the goal and approach first."
+        }
+      ],
+      "answer": [
+        "d"
+      ],
+      "explanation": "Plan the session first: goal, tasks, roles, breaks.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0082",
+      "type": "multi",
+      "stem": "*Week 11 - Code Review, Refactoring and Pair Programming*\n\nPairing - what you should not do:",
+      "options": [
+        {
+          "key": "a",
+          "text": "Reply to emails during the session",
+          "explanation": "True. Should not do: It breaks focus."
+        },
+        {
+          "key": "b",
+          "text": "Stop your partner right away when he makes a mistake",
+          "explanation": "True. Should not do: Wait a few seconds; the driver may spot it."
+        },
+        {
+          "key": "c",
+          "text": "Should leave room for others to think",
+          "explanation": "False. Leaving room to think is good practice."
+        },
+        {
+          "key": "d",
+          "text": "Snatch the keyboard whenever you can",
+          "explanation": "True. Should not do: Switch roles respectfully."
+        }
+      ],
+      "answer": [
+        "a",
+        "b",
+        "d"
+      ],
+      "explanation": "The question asks for bad pairing behaviour.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0083",
+      "type": "multi",
+      "stem": "*Week 12 - Deployment*\n\nComputing infrastructure:",
+      "options": [
+        {
+          "key": "a",
+          "text": "All containers running on the same host share the host OS kernel",
+          "explanation": "True. Containers are isolated processes on the shared host kernel."
+        },
+        {
+          "key": "b",
+          "text": "VMs provide better security and isolation capability compared to containers",
+          "explanation": "True. Each VM has its own kernel, so isolation is stronger."
+        },
+        {
+          "key": "c",
+          "text": "In Platform as a Service (PaaS), users manage the operating system and virtualization layers",
+          "explanation": "False. In PaaS the provider manages the OS and virtualisation; users manage apps and data (that is IaaS)."
+        },
+        {
+          "key": "d",
+          "text": "Container images are typically much larger in size (GB) compared to VM images (MB)",
+          "explanation": "False. It is the other way round: container images are MBs, VM images GBs."
+        }
+      ],
+      "answer": [
+        "a",
+        "b"
+      ],
+      "explanation": "VMs virtualise hardware and each runs a full guest OS. Containers virtualise the OS and share the host kernel.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0084",
+      "type": "multi",
+      "stem": "*Week 12 - Deployment*\n\nCloud services:",
+      "options": [
+        {
+          "key": "a",
+          "text": "On-premises: less control over your infrastructure",
+          "explanation": "False. On-premises gives more control."
+        },
+        {
+          "key": "b",
+          "text": "On-premises: may have issues of resource under-utilization",
+          "explanation": "True. Hardware bought for peak load sits idle at other times."
+        },
+        {
+          "key": "c",
+          "text": "Cloud-based: issues of vendor lock-in",
+          "explanation": "True. Provider-specific services make moving away hard."
+        },
+        {
+          "key": "d",
+          "text": "Cloud-based: need to spend much capital upfront",
+          "explanation": "False. Cloud is pay-as-you-go (operating cost); upfront capital is the on-premises problem."
+        }
+      ],
+      "answer": [
+        "b",
+        "c"
+      ],
+      "explanation": "On-premises gives full control but needs upfront hardware; cloud is pay-as-you-go but ties you to a provider.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0085",
+      "type": "multi",
+      "stem": "*Week 12 - Deployment*\n\nSoftware packaging methods: select all the incorrect statements",
+      "options": [
+        {
+          "key": "a",
+          "text": "In a multi-stage Docker build, the runtime stage typically uses the full JDK to run the application",
+          "explanation": "True. Incorrect statement: The runtime stage uses a small JRE image; the JDK is only in the build stage."
+        },
+        {
+          "key": "b",
+          "text": "A Dockerfile using single-stage build includes all build tools, compilers, and dependencies in the final image",
+          "explanation": "False. Correct statement: A single-stage image keeps every build tool, so it is large."
+        },
+        {
+          "key": "c",
+          "text": "Docker Compose can only be used to run applications locally",
+          "explanation": "True. Incorrect statement: Compose can also run multi-container apps on servers."
+        },
+        {
+          "key": "d",
+          "text": "When using containerized applications, developers still need to ensure the host machine has the right JVM",
+          "explanation": "True. Incorrect statement: The image already contains the JVM; the host only needs a container runtime."
+        }
+      ],
+      "answer": [
+        "a",
+        "c",
+        "d"
+      ],
+      "explanation": "The question asks for the incorrect statements. Containers package the app with its runtime; multi-stage builds keep the final image small.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0086",
+      "type": "multi",
+      "stem": "*Week 12 - Deployment*\n\nContinuous X:",
+      "options": [
+        {
+          "key": "a",
+          "text": "Staging environment incurs no additional cost",
+          "explanation": "False. Staging copies production infrastructure, so it costs money."
+        },
+        {
+          "key": "b",
+          "text": "Production environment contains real customer data",
+          "explanation": "True. Production serves real users and their data."
+        },
+        {
+          "key": "c",
+          "text": "In continuous integration, we manually build and test software when there is a new commit",
+          "explanation": "False. CI builds and tests automatically on each commit."
+        },
+        {
+          "key": "d",
+          "text": "Continuous delivery does not deploy to production automatically",
+          "explanation": "True. The production release needs a manual approval step."
+        }
+      ],
+      "answer": [
+        "b",
+        "d"
+      ],
+      "explanation": "CI builds and tests every commit automatically. Continuous delivery keeps the software always releasable, with a manual approval to production. Continuous deployment releases automatically.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
+      "addedAt": "2026-11-24"
+    },
+    {
+      "id": "q0087",
+      "type": "multi",
+      "stem": "*Week 12 - Deployment*\n\nDevSecOps practices: select all the incorrect statements",
+      "options": [
+        {
+          "key": "a",
+          "text": "SAST requires the software to be running before scanning can begin",
+          "explanation": "True. Incorrect statement: SAST scans code without running it; DAST needs a running app."
+        },
+        {
+          "key": "b",
+          "text": "SAST is used early in the SDLC, while DAST can only be used later in the development process",
+          "explanation": "False. Correct statement: SAST runs on code early; DAST needs a running build, so it comes later."
+        },
+        {
+          "key": "c",
+          "text": "DAST is a white-box testing approach that requires access to source code",
+          "explanation": "True. Incorrect statement: DAST is black-box testing and needs no source code."
+        },
+        {
+          "key": "d",
+          "text": "SAST might produce many false positives",
+          "explanation": "False. Correct statement: Static analysis without runtime context often flags false positives."
+        }
+      ],
+      "answer": [
+        "a",
+        "c"
+      ],
+      "explanation": "The question asks for the incorrect statements. SAST (static) scans source code without running it; DAST (dynamic) attacks the running app from outside.",
+      "source": "given",
+      "quiz": "CS203 Wooclap All Weeks",
       "addedAt": "2026-11-24"
     }
   ]
