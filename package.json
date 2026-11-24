@@ -1,8 +1,18 @@
 {
   "name": "gamified-quizzes",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "description": "One-question-at-a-time practice quiz over a single question bank, served as static files on GitHub Pages.",
+  "bin": {
+    "gamified-quizzes": "scripts/install-skill.mjs"
+  },
+  "files": [
+    "scripts/install-skill.mjs",
+    "js/bank.js",
+    "js/import.js",
+    ".claude/skills/md-to-quiz-json"
+  ],
   "scripts": {
     "test": "node --test",
     "validate": "node scripts/validate-bank.mjs"
