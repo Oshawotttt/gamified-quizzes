@@ -1,7 +1,7 @@
 {
-  "name": "CS205 Practice Quiz",
-  "short_name": "CS205 Quiz",
-  "description": "One question at a time from the CS205 question bank. Progress stays on this device.",
+  "name": "Gamified Quiz",
+  "short_name": "Gamified Quiz",
+  "description": "One question at a time from the question bank. Progress stays on this device.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

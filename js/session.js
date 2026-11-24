@@ -1,5 +1,7 @@
 // Quiz session: a DOM-free state machine for one-question-at-a-time practice.
 // States: "question" -> submit(response) -> "feedback" -> next() -> "question" ...
+// Written questions are self-marked: nothing is recorded at submit, and
+// next({ mark }) records the mark. The written text is never stored.
 // ("empty" when the bank has no questions.)
 import { markAnswer } from "./marking.js";
 import { bankStats } from "./progress.js";
@@ -12,6 +14,9 @@ function shuffled(keys, rng) {
   }
   return out;
 }
+
+/** Self-marks for written questions, passed as next({ mark }). */
+export const SELF_MARKS = ["right", "partial", "wrong"];
 
 const toIso = (t) => (t instanceof Date ? t.toISOString() : String(t));
 
@@ -45,7 +50,7 @@ export function createSession({ questions, store, pick, now, rng }) {
 
     buttons() {
       if (view.state === "question") return ["submit"];
-      if (view.state === "feedback") return view.question.type === "written" ? ["next"] : ["next-guessed", "next"];
+      if (view.state === "feedback") return view.question.type === "written" ? ["next-right", "next-wrong", "next-partial"] : ["next-guessed", "next"];
       return [];
     },
 
@@ -53,8 +58,13 @@ export function createSession({ questions, store, pick, now, rng }) {
       if (view.state !== "question") throw new Error(`submit is not allowed in state ${view.state}`);
       const q = view.question;
       if (q.type === "written") {
-        if (!response || typeof response.text !== "string" || !response.text.trim()) throw new Error("Written answer is empty");
-      } else if (!response || !Array.isArray(response.selected) || response.selected.length === 0) {
+        if (!response || typeof response.text !== "string") throw new Error("Written response needs a text string");
+        // Not recorded here: the attempt is recorded by next({ mark }).
+        const result = markAnswer(q, response);
+        view = { ...view, state: "feedback", response, result, attemptIndex: null, attempt: null };
+        return result;
+      }
+      if (!response || !Array.isArray(response.selected) || response.selected.length === 0) {
         throw new Error("Select at least one option");
       }
       const result = markAnswer(q, response);
@@ -72,13 +82,21 @@ export function createSession({ questions, store, pick, now, rng }) {
       return result;
     },
 
-    next({ guessed = false } = {}) {
+    next({ guessed = false, mark } = {}) {
       if (view.state !== "feedback") throw new Error(`next is not allowed in state ${view.state}`);
+      if (view.question.type === "written") {
+        if (!SELF_MARKS.includes(mark)) throw new Error(`mark must be one of ${SELF_MARKS.join(", ")}`);
+        // "partial" is recorded as guessed so it shows and is reviewed as Guessed.
+        // The written text is not stored (response is {}).
+        store.record({ qid: view.question.id, at: toIso(now()), score: null, max: view.result.max, outcome: mark, guessed: mark === "partial", response: {} });
+        show();
+        return;
+      }
       // Only flag the attempt this session recorded: an import or reset during
       // feedback replaces the store, and the index may now point elsewhere.
       const stored = store.all()[view.attemptIndex];
       const unchanged = stored && JSON.stringify({ ...stored, guessed: false }) === view.attempt;
-      if (guessed && view.question.type !== "written" && unchanged) store.setGuessed(view.attemptIndex, true);
+      if (guessed && unchanged) store.setGuessed(view.attemptIndex, true);
       show();
     },
 

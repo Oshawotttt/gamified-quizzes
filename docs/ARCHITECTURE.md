@@ -31,7 +31,7 @@ Data flow: `app.js` fetches `bank/bank.json`, creates a progress store over `loc
 - On load the page calls `navigator.storage.persist()` when available and links `manifest.webmanifest` (Add to Home Screen).
 - Export/import is a rare backup. The stats screen shows "Last export: N days ago" (or "never"). Import asks for confirmation and replaces the device's progress. Export downloads `gamified-quizzes-progress-YYYY-MM-DD.json`.
 - When the browser blocks localStorage (e.g. some private modes), the page falls back to in-memory storage for that visit: the quiz works but progress is not kept.
-- The Stats screen (Export, Import, Reset) works even if `bank/bank.json` fails to load, so progress can still be backed up. A failed save on Submit shows an alert instead of doing nothing.
+- The Stats screen (Export, Import, Reset) works even if `bank/bank.json` fails to load, so progress can still be backed up. A failed save on Submit (or on a written self-mark button) shows an alert instead of doing nothing.
 - "recent" (passed to `pickNext`) is the list of questions shown in this page visit only; it starts empty on each load.
 
 ## Out of scope

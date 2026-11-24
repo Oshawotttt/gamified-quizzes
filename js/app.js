@@ -2,7 +2,7 @@
 // modules it uses; this file only renders state and forwards clicks.
 import { createProgressStore, bankStats } from "./progress.js";
 import { pickNext } from "./select.js";
-import { createSession } from "./session.js";
+import { createSession, SELF_MARKS } from "./session.js";
 import { renderMarkdown, escapeHtml } from "./markdown.js";
 import { optionKey } from "./bank.js";
 import { questionPoints } from "./marking.js";
@@ -15,6 +15,14 @@ const MARK_LABELS = {
   "correct-missed": "✔ Correct, you missed it",
   "wrong-ticked": "✘ Wrong, you ticked it",
   "wrong-unticked": "Wrong, left unticked",
+};
+
+const NEXT_BUTTONS = {
+  "next-guessed": '<button type="button" id="btnNextGuessed">Next (I guessed)</button>',
+  next: '<button type="button" class="primary" id="btnNext">Next</button>',
+  "next-right": '<button type="button" class="primary" id="btnNext-right">Next (correct)</button>',
+  "next-wrong": '<button type="button" id="btnNext-wrong">Next (wrong)</button>',
+  "next-partial": '<button type="button" id="btnNext-partial">Next (partial)</button>',
 };
 
 const $ = (sel) => document.querySelector(sel);
@@ -70,13 +78,14 @@ function renderQuestion(view) {
   const byKey = new Map((q.options ?? []).map((o) => [o.key, o]));
   let body;
   if (q.type === "written") {
-    body = `<textarea id="answer" placeholder="Type your answer…" aria-label="Your answer"></textarea><div class="wc" id="wc"></div>`;
+    body = `<textarea id="answer" placeholder="Type your answer (optional, not saved)…" aria-label="Your answer"></textarea><div class="wc" id="wc"></div>`;
   } else {
     body = `<div class="opts">${view.shownOptions
       .map((key, i) => `<label class="opt"><input type="${inputKind(q)}" name="opt" value="${escapeHtml(key)}"><span class="l">${optionKey(i)}.</span><span class="body">${md(byKey.get(key).text)}</span></label>`)
       .join("")}</div>`;
   }
-  root.innerHTML = `${header(q)}${body}<div class="actions"><button type="button" class="primary" id="btnSubmit" disabled>Submit</button></div>`;
+  const submitLabel = q.type === "written" ? "Review answer" : "Submit";
+  root.innerHTML = `${header(q)}${body}<div class="actions"><button type="button" class="primary" id="btnSubmit" disabled>${submitLabel}</button></div>`;
 
   const submit = $("#btnSubmit");
   let response;
@@ -87,7 +96,7 @@ function renderQuestion(view) {
       const n = words(ta.value);
       $("#wc").textContent = `${n} / ${limit} words${n > limit ? " (over the guide)" : ""}`;
       $("#wc").classList.toggle("over", n > limit);
-      submit.disabled = !ta.value.trim();
+      submit.disabled = false; // writing is optional: the model answer can be revealed straight away
       response = { text: ta.value };
     };
     ta.addEventListener("input", update);
@@ -123,7 +132,7 @@ function renderFeedback(view) {
   let body;
   if (q.type === "written") {
     body =
-      `<div class="compare"><div><h3>Your answer</h3><div class="yours">${escapeHtml(view.response.text)}</div></div>` +
+      `<div class="compare"><div><h3>Your answer</h3><div class="yours">${view.response.text.trim() ? escapeHtml(view.response.text) : '<span class="muted">(nothing written)</span>'}</div></div>` +
       `<div><h3>Model answer</h3>${md(q.modelAnswer)}</div></div>`;
   } else {
     const ticked = new Set(view.response.selected);
@@ -142,21 +151,23 @@ function renderFeedback(view) {
     (q.source ? `<h3>Source</h3><p class="source">${escapeHtml(q.source)}</p>` : "");
   const buttons = session
     .buttons()
-    .map((b) =>
-      b === "next-guessed"
-        ? '<button type="button" id="btnNextGuessed">Next (I guessed)</button>'
-        : '<button type="button" class="primary" id="btnNext">Next</button>',
-    )
+    .map((b) => NEXT_BUTTONS[b])
     .join("");
   $("#quiz").innerHTML = `${header(q)}${body}${extra ? `<div class="extra">${extra}</div>` : ""}<div class="actions">${buttons}</div>`;
 
-  const go = (guessed) => {
-    session.next({ guessed });
+  const go = (opts) => {
+    try {
+      session.next(opts);
+    } catch (err) {
+      alert(`Could not save this answer: ${err.message}`);
+      return;
+    }
     render();
     window.scrollTo(0, 0);
   };
-  $("#btnNext").addEventListener("click", () => go(false));
-  $("#btnNextGuessed")?.addEventListener("click", () => go(true));
+  $("#btnNext")?.addEventListener("click", () => go({ guessed: false }));
+  $("#btnNextGuessed")?.addEventListener("click", () => go({ guessed: true }));
+  for (const mark of SELF_MARKS) $(`#btnNext-${mark}`)?.addEventListener("click", () => go({ mark }));
 }
 
 function render() {

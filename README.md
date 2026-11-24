@@ -1,6 +1,6 @@
 # gamified-quizzes
 
-Practice quizzes for CS205 finals.
+General practice quizzes.
 
 ## Play
 
@@ -9,9 +9,9 @@ Practice quizzes for CS205 finals.
 One question is shown at a time, from one question bank (`bank/bank.json`).
 
 - The header shows the bank total and the count per status: unseen, wrong, partial, guessed, right, shown. Each question shows its type tag, points and id (the id helps when reporting a bad question).
-- Submit stays disabled until an option is picked (single/multi) or the text is non-empty (written). After Submit, inputs lock and feedback shows: per-option correct-ticked / correct-missed / wrong-ticked / wrong-unticked marks, each option's explanation under it, the score `x / max` to 2 decimals, the overall explanation and the source.
+- Submit stays disabled until an option is picked (single/multi). Written questions have a "Review answer" button instead, always enabled: writing is optional and the text is never saved. After Submit, inputs lock and feedback shows: per-option correct-ticked / correct-missed / wrong-ticked / wrong-unticked marks, each option's explanation under it, the score `x / max` to 2 decimals, the overall explanation and the source.
 - For single/multi questions there are two buttons after Submit: "Next (I guessed)" and "Next", to record whether you actually answered or guessed.
-- Written questions are not marked: your text and the model answer are shown side by side (stacked on a phone), then one "Next". A written answer is never marked guessed.
+- Written questions are self-marked: your text and the model answer are shown side by side (stacked on a phone), then "Next (correct)", "Next (wrong)" and "Next (partial)". Partial is recorded as guessed, so it comes back for review like a guessed question.
 - The Stats screen shows the counts, "Last export: N days ago" (or "never"), Export progress, Import progress and Reset progress (with a confirm dialog). Progress is saved automatically in the browser; export/import is a rare backup. Add the page to the Home Screen to keep its storage.
 
 ## Develop
