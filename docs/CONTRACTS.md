@@ -88,7 +88,7 @@ questionPoints(question) // points, default 1
 - `allOrNothing` = `max` only when the selected set equals the answer set, else 0. Kept for reference; `score` is what counts.
 - `outcome`: `right` when `score == max`, `wrong` when `score == 0`, else `partial`. Compared within 1e-9, so floating-point results such as `0.4 * 5` still count as `right`.
 - Selected keys that are not option keys are ignored by the score (neither a correct nor a wrong choice) but make `allOrNothing` 0.
-- Written: no score, outcome `shown`; status `shown` counts like `right` in selection.
+- Written: `markAnswer` gives no score, outcome `shown`. The session does not record that result: the user self-marks (see Session). Status `shown` (older attempts only) counts like `right` in selection.
 
 ## Progress store (`js/progress.js`)
 
@@ -149,9 +149,10 @@ pickBuckets(questionIds, attempts, { recent, rng })
 `createSession({ questions, store, pick, now, rng })`: states `question` then `feedback` (`empty` when the bank has no questions).
 
 - `current()` includes `shownOptions`: option keys in shown order (shuffled via `rng` unless `shuffle: false`).
-- `buttons()`: `["submit"]`, then `["next-guessed", "next"]` for `single`/`multi` or `["next"]` for `written`.
-- `submit(response)`: records one attempt with `guessed: false`; throws outside the `question` state and on an empty response (no selected option, or blank text).
-- `next({ guessed })`: throws before `submit`. `guessed: true` is ignored for `written` questions (attempts are `shown`, not marked) and flags the attempt only if the store still holds the exact attempt this session recorded, so a restored backup is never changed.
+- `buttons()`: `["submit"]`, then `["next-guessed", "next"]` for `single`/`multi` or `["next-right", "next-wrong", "next-partial"]` for `written`.
+- `submit(response)`: for `single`/`multi`, records one attempt with `guessed: false`; throws on no selected option. For `written`, records nothing; blank text is allowed (it reveals the model answer). Throws outside the `question` state.
+- `next({ guessed })` (`single`/`multi`): throws before `submit`. `guessed: true` flags the attempt only if the store still holds the exact attempt this session recorded, so a restored backup is never changed.
+- `next({ mark })` (`written`): `mark` is one of `SELF_MARKS` (`"right"`, `"partial"`, `"wrong"`), else throws. Records `{ score: null, max, outcome: mark, guessed: mark === "partial", response: {} }`, so partial shows as status `guessed`. The written text is never stored.
 - `pick` receives all bank ids and, as `recent`, the ids shown in this visit, most recent last.
 - `restart()` drops the current question or feedback and shows a new question; the page calls it after Import or Reset.
 - `stats()` returns `bankStats` for the bank.

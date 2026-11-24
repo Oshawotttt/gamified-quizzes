@@ -87,8 +87,13 @@ test("next before submit throws; submit twice throws", () => {
 test("submit with an empty response throws", () => {
   const a = session([multi], ["q0001"]).s;
   assert.throws(() => a.submit({ selected: [] }));
-  const w = session([written], ["q0004"]).s;
-  assert.throws(() => w.submit({ text: "   " }));
+});
+
+test("written: blank text is allowed (reveal the model answer without writing)", () => {
+  const { s, store } = session([written], ["q0004"]);
+  s.submit({ text: "" });
+  assert.equal(s.current().state, "feedback");
+  assert.deepEqual(store.all(), []);
 });
 
 test("options are shuffled per showing unless shuffle is false; responses store keys", () => {
@@ -113,18 +118,30 @@ test("options are shuffled per showing unless shuffle is false; responses store 
   }
 });
 
-test("written: submit records outcome shown with no score, and only a Next button", () => {
+test("written: submit records nothing; the self-mark buttons record the mark without the text", () => {
   const { s, store } = session([written], ["q0004"]);
   assert.deepEqual(s.current().shownOptions, []);
   s.submit({ text: "My answer" });
+  assert.deepEqual(store.all(), []);
+  assert.deepEqual(s.buttons(), ["next-right", "next-wrong", "next-partial"]);
+  assert.throws(() => s.next());
+  assert.throws(() => s.next({ guessed: true }));
+  s.next({ mark: "right" });
   const [a] = store.all();
-  assert.equal(a.outcome, "shown");
-  assert.equal(a.score, null);
-  assert.equal(a.max, 10);
-  assert.deepEqual(a.response, { text: "My answer" });
-  assert.deepEqual(s.buttons(), ["next"]);
-  s.next({ guessed: true });
-  assert.equal(store.all()[0].guessed, false);
+  assert.deepEqual(a, { qid: "q0004", at: NOW, score: null, max: 10, outcome: "right", guessed: false, response: {} });
+  assert.equal(s.current().state, "question");
+});
+
+test("written: partial is recorded as guessed; wrong as wrong", () => {
+  const { s, store } = session([written], ["q0004"]);
+  s.submit({ text: "x" });
+  s.next({ mark: "partial" });
+  assert.equal(s.stats().guessed, 1);
+  assert.deepEqual([store.all()[0].outcome, store.all()[0].guessed], ["partial", true]);
+  s.submit({ text: "" });
+  s.next({ mark: "wrong" });
+  assert.equal(s.stats().wrong, 1);
+  assert.equal(store.all()[1].guessed, false);
 });
 
 test("pick receives all bank ids and the shown ids, most recent last", () => {
@@ -132,7 +149,7 @@ test("pick receives all bank ids and the shown ids, most recent last", () => {
   for (let i = 0; i < 3; i++) {
     const q = s.current().question;
     s.submit(q.type === "written" ? { text: "x" } : { selected: ["a"] });
-    s.next();
+    s.next(q.type === "written" ? { mark: "right" } : {});
   }
   assert.deepEqual(calls.map((c) => c.ids), Array(4).fill(["q0001", "q0002", "q0004"]));
   assert.deepEqual(calls.map((c) => c.recent), [[], ["q0002"], ["q0002", "q0004"], ["q0002", "q0004", "q0001"]]);
