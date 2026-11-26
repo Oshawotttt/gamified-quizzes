@@ -115,3 +115,9 @@ textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
 .stat-table td:last-child { text-align: right; font-variant-numeric: tabular-nums; }
 .msg { min-height: 1.5em; font-size: 14px; color: var(--muted); }
 .msg.error { color: var(--warn); }
+
+/* Bank picker */
+[hidden] { display: none !important; }
+.bank-list { display: grid; gap: 8px; margin-top: 12px; }
+.bank-list button { width: 100%; text-align: left; font-size: 16px; padding: 14px 16px; min-height: 52px; overflow-wrap: anywhere; }
+.top h1 { min-width: 0; overflow-wrap: anywhere; }

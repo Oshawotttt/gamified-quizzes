@@ -1,7 +1,7 @@
 {
   "name": "Gamified Quiz",
   "short_name": "Gamified Quiz",
-  "description": "One question at a time from the question bank. Progress stays on this device.",
+  "description": "Choose a question bank, then practise one question at a time. Progress stays on this device.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

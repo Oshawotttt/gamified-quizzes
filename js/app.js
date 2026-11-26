@@ -6,9 +6,9 @@ import { createSession, SELF_MARKS } from "./session.js";
 import { renderMarkdown, escapeHtml } from "./markdown.js";
 import { optionKey } from "./bank.js";
 import { questionPoints } from "./marking.js";
+import { loadIndex, bankFromUrl, bankDir } from "./banks.js";
 
-const BANK_URL = "banks/cs203/bank.json";
-const IMAGE_BASE = "banks/cs203";
+const APP_TITLE = "Gamified Quiz";
 const STATUS_LABELS = { unseen: "Unseen", wrong: "Wrong", partial: "Partial", guessed: "Guessed", right: "Right", shown: "Shown" };
 const MARK_LABELS = {
   "correct-ticked": "✔ Correct, you ticked it",
@@ -26,7 +26,7 @@ const NEXT_BUTTONS = {
 };
 
 const $ = (sel) => document.querySelector(sel);
-const md = (text) => `<div class="md">${renderMarkdown(text, { base: IMAGE_BASE })}</div>`;
+const md = (text) => `<div class="md">${renderMarkdown(text, { base: bankDir(bank.id) })}</div>`;
 const words = (s) => (s.trim().match(/\S+/g) || []).length;
 const fmt = (n) => n.toFixed(2);
 const wordLimit = (q) => q.wordLimit ?? 250;
@@ -45,14 +45,19 @@ function pageStorage() {
   }
 }
 
-const store = createProgressStore(pageStorage(), "cs203");
+const storage = pageStorage();
+let banks = []; // [{ id, name }] from banks/index.json, in picker order
+let indexError = null; // why the bank list could not be loaded, shown on the picker
+let bank = null; // the chosen { id, name }; null on the picker
+let store = null; // progress store of the chosen bank
 let session = null;
+let openCount = 0; // bumped on every bank switch so a slow bank load cannot land in the wrong bank
 
 // Ask the browser not to evict our storage (helps on iOS when added to the Home Screen).
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
 
 // Before the bank loads (or if it fails to load), counts cover no questions.
-const stats = () => (session ? session.stats() : bankStats([], store.all()));
+const stats = () => (session ? session.stats() : bankStats([], store ? store.all() : []));
 
 function renderCounts() {
   const s = stats();
@@ -224,7 +229,7 @@ function wireStats() {
   $("#btnBack").addEventListener("click", () => showStats(false));
   $("#btnExport").addEventListener("click", () => {
     const now = new Date();
-    download(`gamified-quizzes-progress-${now.toISOString().slice(0, 10)}.json`, store.exportJson(now));
+    download(`gamified-quizzes-${bank.id}-progress-${now.toISOString().slice(0, 10)}.json`, store.exportJson(now));
     renderStats("Progress exported.");
   });
   $("#btnImport").addEventListener("click", () => $("#importFile").click());
@@ -251,19 +256,98 @@ function wireStats() {
   });
 }
 
-async function start() {
-  wireStats(); // Export/Import/Reset stay usable even if the bank fails to load.
-  let bank;
+/* ---------- bank picker ---------- */
+
+async function fetchJson(url) {
+  const res = await fetch(url, { cache: "no-cache" });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+function setUrl(bankId) {
+  const url = new URL(window.location.href);
+  if (bankId) url.searchParams.set("bank", bankId);
+  else url.searchParams.delete("bank");
+  if (url.href !== window.location.href) history.pushState(null, "", url);
+}
+
+/** Header and sections for the picker (bank null) or a chosen bank. */
+function showScreen() {
+  const inBank = bank !== null;
+  $("#title").textContent = inBank ? bank.name : APP_TITLE;
+  document.title = inBank ? `${bank.name} · ${APP_TITLE}` : APP_TITLE;
+  $("#btnBanks").hidden = !inBank;
+  $("#btnStats").hidden = !inBank;
+  $("#counts").hidden = !inBank;
+  $("#picker").hidden = inBank;
+  $("#quiz").hidden = !inBank;
+  $("#stats").hidden = true;
+  $("#btnStats").setAttribute("aria-expanded", "false");
+  $("#btnStats").textContent = "Stats";
+  window.scrollTo(0, 0);
+}
+
+function showPicker(error = null) {
+  openCount++;
+  bank = null;
+  store = null;
+  session = null;
+  showScreen();
+  const list = banks
+    .map((b) => `<button type="button" class="bank" data-bank="${escapeHtml(b.id)}">${escapeHtml(b.name)}</button>`)
+    .join("");
+  $("#picker").innerHTML =
+    `<h2>Choose a question bank</h2>` +
+    (error ? `<p class="msg error">${escapeHtml(error)}</p>` : "") +
+    (list ? `<div class="bank-list">${list}</div>` : error ? "" : '<p class="muted">No question banks yet.</p>');
+  for (const btn of $("#picker").querySelectorAll("button.bank")) {
+    btn.addEventListener("click", () => {
+      const chosen = banks.find((b) => b.id === btn.dataset.bank);
+      setUrl(chosen.id);
+      openBank(chosen);
+    });
+  }
+}
+
+/** Start a fresh session on a bank: its own progress, images and question list. */
+async function openBank(chosen) {
+  const mine = ++openCount;
+  bank = chosen;
+  session = null;
+  store = createProgressStore(storage, bank.id);
+  showScreen();
+  renderCounts();
+  $("#quiz").innerHTML = '<p class="muted">Loading questions…</p>';
+  let questions;
   try {
-    const res = await fetch(BANK_URL, { cache: "no-cache" });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    bank = await res.json();
+    questions = (await fetchJson(`${bankDir(bank.id)}/bank.json`)).questions;
   } catch (err) {
+    if (mine !== openCount) return;
     $("#quiz").innerHTML = `<p class="msg error">Could not load the question bank (${escapeHtml(err.message)}).</p>`;
     return;
   }
-  session = createSession({ questions: bank.questions, store, pick: pickNext, now: () => new Date(), rng: Math.random });
+  if (mine !== openCount) return;
+  session = createSession({ questions, store, pick: pickNext, now: () => new Date(), rng: Math.random });
   render();
+}
+
+/** Show whatever the URL names: a listed ?bank= opens that bank, anything else the picker. */
+function route() {
+  const chosen = bankFromUrl(window.location.search, banks);
+  if (chosen && chosen.id === bank?.id) return;
+  if (chosen) openBank(chosen);
+  else showPicker(indexError);
+}
+
+async function start() {
+  wireStats();
+  $("#btnBanks").addEventListener("click", () => {
+    setUrl(null);
+    showPicker(indexError);
+  });
+  ({ banks, error: indexError } = await loadIndex(fetchJson));
+  window.addEventListener("popstate", route);
+  route();
 }
 
 start();
