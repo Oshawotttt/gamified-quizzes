@@ -40,7 +40,7 @@ function scriptedPick(order) {
 }
 
 function session(questions, order, rng = mulberry32(1)) {
-  const store = createProgressStore(memoryStorage());
+  const store = createProgressStore(memoryStorage(), "a");
   const { pick, calls } = scriptedPick(order);
   return { s: createSession({ questions, store, pick, now: () => NOW, rng }), store, calls };
 }
@@ -156,7 +156,7 @@ test("pick receives all bank ids and the shown ids, most recent last", () => {
 });
 
 test("works with the real pickNext and reports bank stats", () => {
-  const store = createProgressStore(memoryStorage());
+  const store = createProgressStore(memoryStorage(), "a");
   const s = createSession({ questions: [multi, tf], store, pick: pickNext, now: () => NOW, rng: mulberry32(3) });
   assert.deepEqual(s.stats(), { total: 2, unseen: 2, wrong: 0, partial: 0, guessed: 0, right: 0, shown: 0 });
   const q = s.current().question;
@@ -166,7 +166,7 @@ test("works with the real pickNext and reports bank stats", () => {
 
 test("next(guessed) after the store is replaced during feedback changes no attempt", () => {
   const { s, store } = session([multi, tf], ["q0001", "q0002"]);
-  const backup = createProgressStore(memoryStorage());
+  const backup = createProgressStore(memoryStorage(), "a");
   for (let i = 0; i < 3; i++) backup.record({ qid: "q0002", at: NOW, score: 0, max: 1, outcome: "wrong", guessed: false, response: { selected: ["b"] } });
   const exported = backup.exportJson(NOW);
 
@@ -193,7 +193,7 @@ test("restart shows a new question and drops the pending feedback", () => {
 });
 
 test("an empty bank gives the empty state", () => {
-  const s = createSession({ questions: [], store: createProgressStore(memoryStorage()), pick: pickNext, now: () => NOW, rng: Math.random });
+  const s = createSession({ questions: [], store: createProgressStore(memoryStorage(), "a"), pick: pickNext, now: () => NOW, rng: Math.random });
   assert.equal(s.current().state, "empty");
   assert.deepEqual(s.buttons(), []);
 });

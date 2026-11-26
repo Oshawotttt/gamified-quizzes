@@ -45,7 +45,7 @@ function pageStorage() {
   }
 }
 
-const store = createProgressStore(pageStorage());
+const store = createProgressStore(pageStorage(), "cs203");
 let session = null;
 
 // Ask the browser not to evict our storage (helps on iOS when added to the Home Screen).
