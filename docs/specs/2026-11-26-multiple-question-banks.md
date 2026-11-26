@@ -130,17 +130,22 @@ createProgressStore(storage, bankId) => { /* same methods as today */ }
   - Image handling is unchanged apart from the folder: each `images/<file>` beside the import file is copied to `banks/<id>/images/<qid>-<file>` and its markdown path rewritten to `images/<qid>-<file>`.
   - The import file format does not change.
 - **Acceptance criteria:**
-  - [ ] `--bank cs203 --dry-run` leaves that `bank.json` and `banks/index.json` byte-identical, exits 0, prints `added N` (`test/import.test.mjs`).
-  - [ ] `--bank <id>` appends questions, copies an image to `banks/<id>/images/<qid>-cat.png`, leaves other banks and the index unchanged; `validate-bank.mjs` exits 0 after (`test/import.test.mjs`).
-  - [ ] `--new demo --name "Demo Bank"` creates `banks/demo/bank.json` with first id `q0001`, creates `banks/demo/images/`, appends `{ "id": "demo", "name": "Demo Bank" }` to the index; `validate-bank.mjs` exits 0 after (`test/import.test.mjs`).
-  - [ ] `--new demo --name "Demo Bank" --dry-run`, and `--new` with an invalid import, create no folder and leave the index byte-identical (`test/import.test.mjs`).
-  - [ ] Exit 1 with nothing written for: neither flag; both flags; `--new` without `--name`; `--new` with an existing id; `--bank` with an unknown id; `--new` with id `Bad Id` (`test/import.test.mjs`).
-  - [ ] A stem that exists in bank A is added, not skipped, when importing into bank B (`test/import.test.mjs`).
-  - [ ] `node --test` passes.
+  - [x] `--bank cs203 --dry-run` leaves that `bank.json` and `banks/index.json` byte-identical, exits 0, prints `added N` (`test/import.test.mjs`).
+  - [x] `--bank <id>` appends questions, copies an image to `banks/<id>/images/<qid>-cat.png`, leaves other banks and the index unchanged; `validate-bank.mjs` exits 0 after (`test/import.test.mjs`).
+  - [x] `--new demo --name "Demo Bank"` creates `banks/demo/bank.json` with first id `q0001`, creates `banks/demo/images/`, appends `{ "id": "demo", "name": "Demo Bank" }` to the index; `validate-bank.mjs` exits 0 after (`test/import.test.mjs`).
+  - [x] `--new demo --name "Demo Bank" --dry-run`, and `--new` with an invalid import, create no folder and leave the index byte-identical (`test/import.test.mjs`).
+  - [x] Exit 1 with nothing written for: neither flag; both flags; `--new` without `--name`; `--new` with an existing id; `--bank` with an unknown id; `--new` with id `Bad Id` (`test/import.test.mjs`).
+  - [x] A stem that exists in bank A is added, not skipped, when importing into bank B (`test/import.test.mjs`).
+  - [x] `node --test` passes.
 - **Doc deltas:**
   - `docs/CONTRACTS.md` "Import file": new usage line, `--bank`/`--new`/`--name` rules and errors, new bank shape, image copy target `banks/<id>/images/<qid>-<file>`, duplicate check per bank, import file stays bank-agnostic.
   - `README.md` "Add a quiz": commands with `--bank` and `--new`; renaming, deleting or moving questions between banks is done by hand.
   - `.claude/skills/md-to-quiz-json/SKILL.md`: dry-run and add commands include `--bank <id>`.
+  - `docs/CONTRACTS.md` "Import file": also exit 1 for an unknown option, a flag without a value, a flag given twice, or `--new` with an empty `--name`. Why: a typo must not write to the wrong place.
+  - `docs/CONTRACTS.md` "Import file": the summary line names the bank (`added N (qA-qB) to <id>, skipped M duplicate(s)`). Why: shows which bank was written.
+  - `docs/CONTRACTS.md` "Import file": with `--new`, the index is rewritten as 2-space indented JSON when the bank is appended. Why: same writer as `bank.json`; the content is unchanged apart from the new entry.
+  - `docs/CONTRACTS.md` "Import file": add-quiz checks `banks/index.json` with `validateIndex` first and exits 1 with nothing written if it is invalid; it creates `banks/<id>/images/` when missing for `--bank` too. Why: git drops the empty `images/` of a bank created without images.
+  - `.claude/skills/md-to-quiz-json/SKILL.md` updated in this subtask (not left to the docs pass) because the skill runs the command and the old one now fails; it also tells the agent to ask which bank and to use `--new ... --dry-run` for a new bank.
 
 ### S3: Progress per bank
 
