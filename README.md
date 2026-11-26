@@ -18,6 +18,7 @@ The page opens on a picker listing the question banks by name (from `banks/index
 
 ## Develop
 
+- `npm start`: serve the page at http://localhost:8080. Opening `index.html` straight from disk does not work: browsers block ES modules and `fetch` on `file://` URLs.
 - `node --test`: run the tests.
 - `node scripts/validate-bank.mjs [bank file]`: validate one bank file, or with no argument `banks/index.json` and every bank it lists.
 
