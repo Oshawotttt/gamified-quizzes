@@ -79,7 +79,7 @@ createProgressStore(storage, bankId) => { /* same methods as today */ }
 - **Blocked by:** none
 - **Branch:** `feat/multiple-banks`
 - **Order on branch:** 1
-- **Files:** `js/bank.js`, `scripts/validate-bank.mjs`, `bank/` moved to `banks/cs203/`, new `banks/index.json`, `test/bank.test.mjs`, `test/import.test.mjs` (temp repo copies `banks/`), `docs/CONTRACTS.md`, `docs/ARCHITECTURE.md`, new `docs/adr/0002-multiple-banks.md`, `docs/adr/0001-json-question-bank.md`, `README.md`. `scripts/add-quiz.mjs` gets only the minimal path change (bank at `banks/cs203/`) needed to keep its tests green until S2.
+- **Files:** `js/bank.js`, `scripts/validate-bank.mjs`, `bank/` moved to `banks/cs203/`, new `banks/index.json`, `test/bank.test.mjs`, `test/import.test.mjs` (temp repo copies `banks/`), `docs/CONTRACTS.md`, `docs/ARCHITECTURE.md`, new `docs/adr/0002-multiple-banks.md`, `docs/adr/0001-json-question-bank.md`, `README.md`. `scripts/add-quiz.mjs` gets only the minimal path change (bank at `banks/cs203/`) needed to keep its tests green until S2. `js/app.js` gets only the minimal path change (`BANK_URL`/`IMAGE_BASE` at `banks/cs203`) so the page keeps working until S4; `js/import.js` comment wording only.
 - **Seams:**
   - `validateIndex(json)`: catches bad version, bad/duplicate ids, missing/empty names; misses whether folders exist.
   - `node scripts/validate-bank.mjs [bank file]`: catches a listed bank with no `bank.json`, an invalid index, invalid banks, missing images across all banks; misses page loading.
@@ -91,18 +91,20 @@ createProgressStore(storage, bankId) => { /* same methods as today */ }
   - ADR-0001 says "The bank is one file, `bank/bank.json`". New ADR-0002 records "several banks, one folder each, listed with their display names in `banks/index.json`"; ADR-0001 keeps its JSON-vs-SQL decision and gets one line pointing to ADR-0002 (user).
   - Move with `git mv` so image history is kept (transient).
 - **Acceptance criteria:**
-  - [ ] `validateIndex` returns `[]` for `{ version: 1, banks: [{ id: "a", name: "A" }, { id: "b-2", name: "B" }] }` and an error for each of: wrong version, `banks` not an array, id `"Bad Id"`, duplicate id, missing `name`, `name: ""` (`node --test test/bank.test.mjs`).
-  - [ ] `node scripts/validate-bank.mjs` with no argument exits 0 on the committed repo and prints one `OK` line per bank (`test/bank.test.mjs`).
-  - [ ] With no argument, it exits 1 when the index lists an id with no `banks/<id>/bank.json`, and when the index is invalid (temp repo tests in `test/bank.test.mjs`).
-  - [ ] With a bank file argument it validates that one file, as today (existing tests pass).
-  - [ ] `bank/` no longer exists; `banks/cs203/bank.json` holds all 88 existing questions with unchanged ids and content; `banks/cs203/images/` holds the 5 existing images; `banks/index.json` is `{ "version": 1, "banks": [ { "id": "cs203", "name": "CS203" } ] }` (`node scripts/validate-bank.mjs`, `git status`).
-  - [ ] `node --test` passes.
+  - [x] `validateIndex` returns `[]` for `{ version: 1, banks: [{ id: "a", name: "A" }, { id: "b-2", name: "B" }] }` and an error for each of: wrong version, `banks` not an array, id `"Bad Id"`, duplicate id, missing `name`, `name: ""` (`node --test test/bank.test.mjs`).
+  - [x] `node scripts/validate-bank.mjs` with no argument exits 0 on the committed repo and prints one `OK` line per bank (`test/bank.test.mjs`).
+  - [x] With no argument, it exits 1 when the index lists an id with no `banks/<id>/bank.json`, and when the index is invalid (temp repo tests in `test/bank.test.mjs`).
+  - [x] With a bank file argument it validates that one file, as today (existing tests pass).
+  - [x] `bank/` no longer exists; `banks/cs203/bank.json` holds all 88 existing questions with unchanged ids and content; `banks/cs203/images/` holds the 5 existing images; `banks/index.json` is `{ "version": 1, "banks": [ { "id": "cs203", "name": "CS203" } ] }` (`node scripts/validate-bank.mjs`, `git status`).
+  - [x] `node --test` passes.
 - **Doc deltas:**
   - `docs/CONTRACTS.md` "Bank file": replace "one bank only" with the I-index format (display name only in the index, not in `bank.json`) and the bank folder layout; ids unique per bank; "Images are not shared between banks; each bank holds its own copies."; keep "no quiz filters or topic tags".
   - `docs/CONTRACTS.md`: `validate-bank.mjs` with no argument validates the index and every bank in it.
   - `docs/ARCHITECTURE.md` "Folders": `banks/index.json`, `banks/<id>/bank.json`, `banks/<id>/images/`.
   - `docs/adr/0002-multiple-banks.md` (new) and the pointer line in ADR-0001.
   - `README.md`: "one question bank (`bank/bank.json`)" replaced by the banks folder description.
+  - `docs/CONTRACTS.md`: `validate-bank.mjs` with no argument prints `OK <id>: N question(s), nextId N` per bank and checks every bank before exiting (so one run reports all broken banks); with a file argument the output stays `OK: ...`. Why: per-bank lines name which bank passed.
+  - No doc: `js/app.js` points at `banks/cs203` as a stopgap until the picker replaces it; why: keeps the page loading between commits.
 
 ### S2: add-quiz targets an existing bank or creates a new one
 
