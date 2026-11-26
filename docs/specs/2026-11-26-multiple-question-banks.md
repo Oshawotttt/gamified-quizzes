@@ -153,7 +153,7 @@ createProgressStore(storage, bankId) => { /* same methods as today */ }
 - **Blocked by:** S1
 - **Branch:** `feat/multiple-banks`
 - **Order on branch:** 3
-- **Files:** `js/progress.js`, `test/progress.test.mjs`, `docs/CONTRACTS.md`, `docs/ARCHITECTURE.md`.
+- **Files:** `js/progress.js`, `test/progress.test.mjs`, `test/session.test.mjs` (passes a bank id), `js/app.js` (passes `"cs203"` until S4), `docs/CONTRACTS.md`, `docs/ARCHITECTURE.md`.
 - **Seams:**
   - `createProgressStore(storage, bankId)` with an in-memory storage: catches per-bank keys, isolation, migration, export/import bank check; misses real localStorage quirks.
 - **Decisions:**
@@ -161,14 +161,18 @@ createProgressStore(storage, bankId) => { /* same methods as today */ }
   - The legacy key `gamified-quizzes.progress.v1` is moved (copied, then removed) to `gamified-quizzes.progress.v1.cs203` the first time the `cs203` store is created and its own key is absent; other banks never read the legacy key (user).
   - An export carries `bank: "<bankId>"`. Importing an export of a different bank throws (message names both ids) and leaves the store unchanged. An export with no `bank` field is accepted into whichever bank is open (user).
 - **Acceptance criteria:**
-  - [ ] Two stores on one storage with ids `a` and `b`: attempts recorded in `a` are not in `b.all()` (`node --test test/progress.test.mjs`).
-  - [ ] Legacy key present, `cs203` key absent: the `cs203` store returns the legacy attempts and the legacy key is removed; a store for another id starts empty (`test/progress.test.mjs`).
-  - [ ] Export of bank `a` has `bank: "a"`; importing it into `b` throws and leaves `b` unchanged; an export with no `bank` field imports into `b` (`test/progress.test.mjs`).
-  - [ ] Corrupt stored JSON for bank `a` is kept under `gamified-quizzes.progress.corrupt.a` (`test/progress.test.mjs`).
-  - [ ] `node --test` passes.
+  - [x] Two stores on one storage with ids `a` and `b`: attempts recorded in `a` are not in `b.all()` (`node --test test/progress.test.mjs`).
+  - [x] Legacy key present, `cs203` key absent: the `cs203` store returns the legacy attempts and the legacy key is removed; a store for another id starts empty (`test/progress.test.mjs`).
+  - [x] Export of bank `a` has `bank: "a"`; importing it into `b` throws and leaves `b` unchanged; an export with no `bank` field imports into `b` (`test/progress.test.mjs`).
+  - [x] Corrupt stored JSON for bank `a` is kept under `gamified-quizzes.progress.corrupt.a` (`test/progress.test.mjs`).
+  - [x] `node --test` passes.
 - **Doc deltas:**
   - `docs/CONTRACTS.md` "Progress store": I-progress keys, export `bank` field, import refusal rule, legacy migration to `cs203`.
   - `docs/ARCHITECTURE.md` "Progress storage": progress is per bank; export file name includes the bank id.
+  - `docs/CONTRACTS.md` "Progress store": `PROGRESS_KEY`/`CORRUPT_KEY` constants replaced by `progressKey(bankId)`, `corruptKey(bankId)` and `LEGACY_PROGRESS_KEY`; `createProgressStore` throws without a non-empty bank id. Why: keys depend on the bank; a missing id would silently share one key.
+  - `docs/CONTRACTS.md` "Progress store": the stored value keeps the old shape (no `bank` field); only `exportJson` text adds `bank`. Why: the key already names the bank.
+  - `docs/CONTRACTS.md` "Progress store": an import whose `bank` field is present but not equal to the open bank id (any value, including non-strings) is refused. Why: the spec rule, applied without type special-cases.
+  - No doc: legacy migration copies the raw text even if it is corrupt, so it then lands in `gamified-quizzes.progress.corrupt.cs203`; the old `gamified-quizzes.progress.corrupt` key is left alone. Why: nothing is lost either way.
 
 ### S4: Bank picker screen
 
