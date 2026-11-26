@@ -5,7 +5,7 @@ import { mkdtempSync, writeFileSync, mkdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { validateBank } from "../js/bank.js";
+import { validateBank, validateIndex } from "../js/bank.js";
 
 const IMAGES = new Set(["images/q0002-diagram.png", "images/q0003-chip.jpg"]);
 const imageExists = (p) => IMAGES.has(p);
@@ -152,3 +152,23 @@ test("validate-bank script exits 1 on a file that is not JSON", () => {
   const r = spawnSync(process.execPath, [script, join(dir, "bank.json")], { encoding: "utf8" });
   assert.equal(r.status, 1);
 });
+
+test("validateIndex accepts a valid index", () => {
+  assert.deepEqual(validateIndex({ version: 1, banks: [{ id: "a", name: "A" }, { id: "b-2", name: "B" }] }), []);
+});
+
+const brokenIndexes = [
+  ["wrong version", { version: 2, banks: [{ id: "a", name: "A" }] }, /version/],
+  ["banks not an array", { version: 1, banks: {} }, /banks/],
+  ["bad id", { version: 1, banks: [{ id: "Bad Id", name: "A" }] }, /banks\[0\]\.id/],
+  ["duplicate id", { version: 1, banks: [{ id: "a", name: "A" }, { id: "a", name: "B" }] }, /banks\[1\]\.id.*duplicate/],
+  ["missing name", { version: 1, banks: [{ id: "a" }] }, /banks\[0\]\.name/],
+  ["empty name", { version: 1, banks: [{ id: "a", name: "" }] }, /banks\[0\]\.name/],
+];
+
+for (const [name, index, pattern] of brokenIndexes) {
+  test(`validateIndex reports an error for: ${name}`, () => {
+    const errors = validateIndex(index);
+    assert.ok(errors.some((e) => pattern.test(e)), `no error matches ${pattern}:\n${errors.join("\n")}`);
+  });
+}

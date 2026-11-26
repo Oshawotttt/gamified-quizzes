@@ -206,3 +206,37 @@ export function validateBank(json, { imageExists } = {}) {
   }
   return errors;
 }
+
+export const BANK_ID_PATTERN = /^[a-z0-9][a-z0-9-]*$/;
+
+/**
+ * Validate the bank index, `banks/index.json`:
+ * `{ version: 1, banks: [{ id, name }] }`. List order is the picker order.
+ * Does not check that the bank folders exist.
+ */
+export function validateIndex(json) {
+  if (!json || typeof json !== "object" || Array.isArray(json)) return ["index: must be an object"];
+  const errors = [];
+  if (json.version !== 1) errors.push(`version: must be 1 (got ${JSON.stringify(json.version)})`);
+  if (!Array.isArray(json.banks)) {
+    errors.push("banks: must be an array");
+    return errors;
+  }
+  const seen = new Map();
+  json.banks.forEach((b, i) => {
+    const path = `banks[${i}]`;
+    if (!b || typeof b !== "object" || Array.isArray(b)) {
+      errors.push(`${path}: must be an object`);
+      return;
+    }
+    if (typeof b.id !== "string" || !BANK_ID_PATTERN.test(b.id)) {
+      errors.push(`${path}.id: must match ${BANK_ID_PATTERN} (got ${JSON.stringify(b.id)})`);
+    } else if (seen.has(b.id)) {
+      errors.push(`${path}.id: duplicate id ${b.id} (also banks[${seen.get(b.id)}])`);
+    } else {
+      seen.set(b.id, i);
+    }
+    if (!isNonEmptyString(b.name)) errors.push(`${path}.name: is required (non-empty string)`);
+  });
+  return errors;
+}
