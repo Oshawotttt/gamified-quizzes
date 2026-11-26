@@ -6,7 +6,9 @@ General practice quizzes.
 
 **https://oshawotttt.github.io/gamified-quizzes/**
 
-One question is shown at a time, from one question bank (`bank/bank.json`).
+The page opens on a picker listing the question banks by name (from `banks/index.json`). Choosing one starts its quiz; one session uses one bank only. One question is shown at a time.
+
+- The header shows the bank's name and a "Banks" button that returns to the picker. Choosing a bank, the Banks button and browser Back/Forward each move between picker and bank (each change is a history entry, so the phone Back gesture returns to the picker). The chosen bank is kept in the URL as `?bank=<id>`: reload and bookmarks keep the bank, while `./` or an unknown id shows the picker. The Home Screen icon opens the picker. Progress is separate per bank.
 
 - The header shows the bank total and the count per status: unseen, wrong, partial, guessed, right, shown. Each question shows its type tag, points and id (the id helps when reporting a bad question).
 - Submit stays disabled until an option is picked (single/multi). Written questions have a "Review answer" button instead, always enabled: writing is optional and the text is never saved. After Submit, inputs lock and feedback shows: per-option correct-ticked / correct-missed / wrong-ticked / wrong-unticked marks, each option's explanation under it, the score `x / max` to 2 decimals, the overall explanation and the source.
@@ -17,15 +19,21 @@ One question is shown at a time, from one question bank (`bank/bank.json`).
 ## Develop
 
 - `node --test`: run the tests.
-- `node scripts/validate-bank.mjs [bank file]`: validate the bank (default `bank/bank.json`).
+- `node scripts/validate-bank.mjs [bank file]`: validate one bank file, or with no argument `banks/index.json` and every bank it lists.
+
+Banks live in `banks/<id>/` (`bank.json` and `images/`), listed with display names in `banks/index.json`.
 
 ### Add a quiz
 
 1. Write the import file (format: `docs/CONTRACTS.md`, "Import file"), with images beside it in an `images/` folder.
-2. `node scripts/add-quiz.mjs <import file> --dry-run`
-3. `node scripts/add-quiz.mjs <import file>`, then commit `bank/`.
+2. Dry run, into an existing bank or a new one:
+   - `node scripts/add-quiz.mjs <import file> --bank <id> --dry-run`
+   - `node scripts/add-quiz.mjs <import file> --new <id> --name "<display name>" --dry-run`
+3. Run the same command without `--dry-run`, then commit `banks/`.
 
-`examples/sample-import/` holds a sample import, added as `q0001`-`q0006`. Its image is an SVG (`five-state-model.svg`, a five-state process diagram drawn for the sample); its true/false and image questions were written for the sample (sources are given in the file).
+Renaming or deleting a bank, or moving questions between banks, is done by hand (edit the files).
+
+`examples/sample-import/` holds a sample import (added to a new bank it gets `q0001`-`q0006`). Its image is an SVG (`five-state-model.svg`, a five-state process diagram drawn for the sample); its true/false and image questions were written for the sample (sources are given in the file).
 
 The import file can also be written by the `md-to-quiz-json` Claude Code skill (see below).
 
@@ -53,7 +61,7 @@ Restart Claude Code after installing. Then run:
 /md-to-quiz-json "<path to Answers .md file>"
 ```
 
-The skill writes `<Quiz-title>.json` next to the markdown file, with any images in an `images/` folder beside it. Add it to the bank from this repo with `node scripts/add-quiz.mjs <file>`.
+The skill writes `<Quiz-title>.json` next to the markdown file, with any images in an `images/` folder beside it. Add it to the bank from this repo with `node scripts/add-quiz.mjs <file> --bank <id>` (or `--new <id> --name "<display name>"`).
 
 ### Update and versions
 
