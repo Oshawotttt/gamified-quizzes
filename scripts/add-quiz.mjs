@@ -8,7 +8,7 @@
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { BANK_ID_PATTERN } from "../js/bank.js";
+import { BANK_ID_PATTERN, validateIndex } from "../js/bank.js";
 import { planImport } from "../js/import.js";
 
 const USAGE = [
@@ -62,7 +62,12 @@ function localDate(d = new Date()) {
 
 const opts = parseArgs(process.argv.slice(2));
 const index = readJson(indexFile);
-const knownIds = Array.isArray(index.banks) ? index.banks.map((b) => b.id) : [];
+const indexErrors = validateIndex(index);
+if (indexErrors.length) {
+  for (const e of indexErrors) console.error(e);
+  fail(`${indexErrors.length} error(s) in ${indexFile}; nothing written`);
+}
+const knownIds = index.banks.map((b) => b.id);
 
 let bankId;
 let bank;
@@ -111,7 +116,8 @@ if (plan.added.length === 0) {
   process.exit(0);
 }
 
-if (opts.new !== undefined) mkdirSync(join(bankDir, "images"), { recursive: true });
+// Git does not keep empty folders, so an existing bank may have no images/ yet.
+mkdirSync(join(bankDir, "images"), { recursive: true });
 for (const c of plan.imageCopies) {
   copyFileSync(join(importDir, c.from), join(bankDir, c.to));
 }

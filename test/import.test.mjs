@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { cpSync, mkdtempSync, mkdirSync, readFileSync, readdirSync, writeFileSync, existsSync } from "node:fs";
+import { cpSync, mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -296,4 +296,24 @@ test("add-quiz exits 1 when the import file is missing", () => {
   const dir = tempRepo();
   const r = run(dir, [join(dir, "nope.json"), "--bank", "cs203"]);
   assert.equal(r.status, 1);
+});
+
+test("add-quiz --bank copies images into a bank that has no images/ folder yet", () => {
+  const dir = tempRepoWithOther();
+  rmSync(join(dir, "banks", "other", "images"), { recursive: true });
+  const file = writeImport(dir, catQuiz(), { "cat.png": "png" });
+  const r = run(dir, [file, "--bank", "other"]);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.equal(readFileSync(join(dir, "banks", "other", "images", "q0002-cat.png"), "utf8"), "png");
+});
+
+test("add-quiz exits 1 and writes nothing when banks/index.json is invalid", () => {
+  const dir = tempRepo();
+  writeFileSync(indexPath(dir), JSON.stringify({ version: 1 }));
+  const before = snapshot(dir);
+  const file = writeImport(dir, catQuiz(), { "cat.png": "png" });
+  const r = run(dir, [file, "--new", "demo", "--name", "Demo"]);
+  assert.equal(r.status, 1, r.stdout + r.stderr);
+  assert.match(r.stderr, /banks/);
+  assertUnchanged(dir, before);
 });
