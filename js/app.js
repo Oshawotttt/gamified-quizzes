@@ -51,7 +51,7 @@ let indexError = null; // why the bank list could not be loaded, shown on the pi
 let bank = null; // the chosen { id, name }; null on the picker
 let store = null; // progress store of the chosen bank
 let session = null;
-let openCount = 0; // bumped on every bank switch so a slow bank load cannot land in the wrong bank
+let loadGeneration = 0; // bumped on every bank switch so a slow bank load cannot land in the wrong bank
 
 // Ask the browser not to evict our storage (helps on iOS when added to the Home Screen).
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
@@ -288,7 +288,7 @@ function showScreen() {
 }
 
 function showPicker(error = null) {
-  openCount++;
+  loadGeneration++;
   bank = null;
   store = null;
   session = null;
@@ -311,7 +311,7 @@ function showPicker(error = null) {
 
 /** Start a fresh session on a bank: its own progress, images and question list. */
 async function openBank(chosen) {
-  const mine = ++openCount;
+  const mine = ++loadGeneration;
   bank = chosen;
   session = null;
   store = createProgressStore(storage, bank.id);
@@ -322,11 +322,11 @@ async function openBank(chosen) {
   try {
     questions = (await fetchJson(`${bankDir(bank.id)}/bank.json`)).questions;
   } catch (err) {
-    if (mine !== openCount) return;
+    if (mine !== loadGeneration) return;
     $("#quiz").innerHTML = `<p class="msg error">Could not load the question bank (${escapeHtml(err.message)}).</p>`;
     return;
   }
-  if (mine !== openCount) return;
+  if (mine !== loadGeneration) return;
   session = createSession({ questions, store, pick: pickNext, now: () => new Date(), rng: Math.random });
   render();
 }
