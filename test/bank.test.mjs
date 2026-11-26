@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, writeFileSync, mkdirSync } from "node:fs";
+import { cpSync, mkdtempSync, writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -172,3 +172,61 @@ for (const [name, index, pattern] of brokenIndexes) {
     assert.ok(errors.some((e) => pattern.test(e)), `no error matches ${pattern}:\n${errors.join("\n")}`);
   });
 }
+
+function tempBanksRepo(index, banks = {}) {
+  const dir = mkdtempSync(join(tmpdir(), "repo-"));
+  for (const d of ["js", "scripts"]) cpSync(join(repo, d), join(dir, d), { recursive: true });
+  mkdirSync(join(dir, "banks"));
+  writeFileSync(join(dir, "banks", "index.json"), typeof index === "string" ? index : JSON.stringify(index));
+  for (const [id, bank] of Object.entries(banks)) {
+    mkdirSync(join(dir, "banks", id, "images"), { recursive: true });
+    writeFileSync(join(dir, "banks", id, "bank.json"), JSON.stringify(bank));
+  }
+  return dir;
+}
+
+const runIn = (dir) => spawnSync(process.execPath, [join(dir, "scripts", "validate-bank.mjs")], { cwd: dir, encoding: "utf8" });
+const emptyBank = () => ({ version: 1, nextId: 1, questions: [] });
+
+test("validate-bank script with no argument prints one OK line per bank in the index", () => {
+  const index = JSON.parse(readFileSync(join(repo, "banks", "index.json"), "utf8"));
+  const r = spawnSync(process.execPath, [script], { cwd: repo, encoding: "utf8" });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  const okLines = r.stdout.split("\n").filter((l) => l.startsWith("OK"));
+  assert.equal(okLines.length, index.banks.length, r.stdout);
+  index.banks.forEach((b, i) => assert.match(okLines[i], new RegExp(`^OK ${b.id}:`)));
+});
+
+test("validate-bank script with no argument validates every bank in a temp repo", () => {
+  const dir = tempBanksRepo({ version: 1, banks: [{ id: "a", name: "A" }, { id: "b", name: "B" }] }, { a: emptyBank(), b: emptyBank() });
+  const r = runIn(dir);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.equal(r.stdout.split("\n").filter((l) => l.startsWith("OK")).length, 2, r.stdout);
+});
+
+test("validate-bank script exits 1 when the index lists a bank with no bank.json", () => {
+  const dir = tempBanksRepo({ version: 1, banks: [{ id: "a", name: "A" }, { id: "gone", name: "Gone" }] }, { a: emptyBank() });
+  const r = runIn(dir);
+  assert.equal(r.status, 1, r.stdout + r.stderr);
+  assert.match(r.stderr, /gone/);
+});
+
+test("validate-bank script exits 1 when the index is invalid", () => {
+  const dir = tempBanksRepo({ version: 1, banks: [{ id: "a" }] }, { a: emptyBank() });
+  const r = runIn(dir);
+  assert.equal(r.status, 1, r.stdout + r.stderr);
+  assert.match(r.stderr, /banks\[0\]\.name/);
+});
+
+test("validate-bank script exits 1 when the index is not JSON", () => {
+  const dir = tempBanksRepo("{ nope", { a: emptyBank() });
+  assert.equal(runIn(dir).status, 1);
+});
+
+test("validate-bank script exits 1 on a missing image in any bank", () => {
+  const bad = { version: 1, nextId: 2, questions: [{ ...validBank().questions[3], id: "q0001", stem: "![x](images/q0001-x.png)" }] };
+  const dir = tempBanksRepo({ version: 1, banks: [{ id: "a", name: "A" }, { id: "b", name: "B" }] }, { a: emptyBank(), b: bad });
+  const r = runIn(dir);
+  assert.equal(r.status, 1, r.stdout + r.stderr);
+  assert.match(r.stderr, /q0001-x\.png.*not found/);
+});

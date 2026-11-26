@@ -178,7 +178,7 @@ function validateImages(q, path, imageExists) {
 
 /**
  * Validate a whole bank file (I1).
- * opts.imageExists(path): whether `bank/<path>` exists.
+ * opts.imageExists(path): whether `<bank folder>/<path>` exists.
  */
 export function validateBank(json, { imageExists } = {}) {
   if (!json || typeof json !== "object" || Array.isArray(json)) return ["bank: must be an object"];

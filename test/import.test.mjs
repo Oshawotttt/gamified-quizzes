@@ -107,7 +107,7 @@ test("a missing title is an error", () => {
 
 function tempRepo() {
   const dir = mkdtempSync(join(tmpdir(), "repo-"));
-  for (const d of ["js", "scripts", "bank"]) cpSync(join(repo, d), join(dir, d), { recursive: true });
+  for (const d of ["js", "scripts", "banks"]) cpSync(join(repo, d), join(dir, d), { recursive: true });
   cpSync(join(repo, "package.json"), join(dir, "package.json"));
   return dir;
 }
@@ -125,29 +125,29 @@ const run = (dir, args) => spawnSync(process.execPath, [join(dir, "scripts", "ad
 
 test("add-quiz --dry-run leaves bank.json byte-identical and exits 0", () => {
   const dir = tempRepo();
-  const before = readFileSync(join(dir, "bank", "bank.json"));
+  const before = readFileSync(join(dir, "banks", "cs203", "bank.json"));
   const q = choice("A brand new question with a picture? ![p](images/cat.png)");
   const file = writeImport(dir, { version: 1, title: "Quiz", questions: [q] }, { "cat.png": "png" });
   const r = run(dir, [file, "--dry-run"]);
   assert.equal(r.status, 0, r.stdout + r.stderr);
-  assert.ok(readFileSync(join(dir, "bank", "bank.json")).equals(before));
-  assert.ok(!existsSync(join(dir, "bank", "images", "q" + String(JSON.parse(before).nextId).padStart(4, "0") + "-cat.png")));
+  assert.ok(readFileSync(join(dir, "banks", "cs203", "bank.json")).equals(before));
+  assert.ok(!existsSync(join(dir, "banks", "cs203", "images", "q" + String(JSON.parse(before).nextId).padStart(4, "0") + "-cat.png")));
   assert.match(r.stdout, /added 1/i);
 });
 
 test("add-quiz exits 1 on an invalid file and writes nothing", () => {
   const dir = tempRepo();
-  const before = readFileSync(join(dir, "bank", "bank.json"));
+  const before = readFileSync(join(dir, "banks", "cs203", "bank.json"));
   const file = writeImport(dir, { version: 1, title: "Quiz", questions: [{ ...choice("Bad?"), id: "q0001" }] });
   const r = run(dir, [file]);
   assert.equal(r.status, 1);
   assert.match(r.stderr, /questions\[0\]\.id/);
-  assert.ok(readFileSync(join(dir, "bank", "bank.json")).equals(before));
+  assert.ok(readFileSync(join(dir, "banks", "cs203", "bank.json")).equals(before));
 });
 
 test("add-quiz appends questions, copies images and leaves the import file in place", () => {
   const dir = tempRepo();
-  const bankFile = join(dir, "bank", "bank.json");
+  const bankFile = join(dir, "banks", "cs203", "bank.json");
   const start = JSON.parse(readFileSync(bankFile, "utf8"));
   const id = "q" + String(start.nextId).padStart(4, "0");
   const q = choice("A brand new question with a picture? ![p](images/cat.png)");
@@ -157,7 +157,7 @@ test("add-quiz appends questions, copies images and leaves the import file in pl
   const bank = JSON.parse(readFileSync(bankFile, "utf8"));
   assert.equal(bank.questions.length, start.questions.length + 1);
   assert.equal(bank.questions.at(-1).id, id);
-  assert.equal(readFileSync(join(dir, "bank", "images", `${id}-cat.png`), "utf8"), "png");
+  assert.equal(readFileSync(join(dir, "banks", "cs203", "images", `${id}-cat.png`), "utf8"), "png");
   assert.ok(existsSync(file));
   assert.match(r.stdout, new RegExp(id));
   const v = spawnSync(process.execPath, [join(dir, "scripts", "validate-bank.mjs")], { encoding: "utf8" });

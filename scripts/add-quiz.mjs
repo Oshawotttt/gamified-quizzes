@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import { planImport } from "../js/import.js";
 
 const repo = fileURLToPath(new URL("..", import.meta.url));
-const bankDir = join(repo, "bank");
+const bankDir = join(repo, "banks", "cs203");
 const bankFile = join(bankDir, "bank.json");
 
 const args = process.argv.slice(2);

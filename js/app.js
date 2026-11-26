@@ -7,8 +7,8 @@ import { renderMarkdown, escapeHtml } from "./markdown.js";
 import { optionKey } from "./bank.js";
 import { questionPoints } from "./marking.js";
 
-const BANK_URL = "bank/bank.json";
-const IMAGE_BASE = "bank";
+const BANK_URL = "banks/cs203/bank.json";
+const IMAGE_BASE = "banks/cs203";
 const STATUS_LABELS = { unseen: "Unseen", wrong: "Wrong", partial: "Partial", guessed: "Guessed", right: "Right", shown: "Shown" };
 const MARK_LABELS = {
   "correct-ticked": "✔ Correct, you ticked it",
