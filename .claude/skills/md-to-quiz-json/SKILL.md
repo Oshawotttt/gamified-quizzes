@@ -88,8 +88,10 @@ node <skill dir>/validate-import.mjs <output .json>
 If the current directory is the `gamified-quizzes` repo (it has `scripts/add-quiz.mjs`), also run:
 
 ```
-node scripts/add-quiz.mjs <output .json> --dry-run
+node scripts/add-quiz.mjs <output .json> --bank <id> --dry-run
 ```
+
+- `<id>` is a bank id from `banks/index.json`. Ask the user which bank if it is not clear. For a bank that does not exist yet, use `--new <id> --name "<display name>" --dry-run` instead.
 
 - A skipped duplicate is not an error. It means the bank already has that stem. Tell the user which questions were skipped.
 - Never run it without `--dry-run`. Adding to the bank is the user's step.
@@ -103,4 +105,4 @@ Tell the user:
 - The output path and the number of questions by type.
 - The option explanations that you wrote yourself (the answer paragraph had no reason for them), listed by question number, so they can check them.
 - Any question you stopped on, with the reason.
-- The command to add it, run in the gamified-quizzes repo: `node scripts/add-quiz.mjs <output .json>`.
+- The command to add it, run in the gamified-quizzes repo: `node scripts/add-quiz.mjs <output .json> --bank <id>` (or `--new <id> --name "<display name>"` for a new bank).
