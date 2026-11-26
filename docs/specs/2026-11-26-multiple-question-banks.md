@@ -195,14 +195,18 @@ createProgressStore(storage, bankId) => { /* same methods as today */ }
   - Index fails to load or is invalid: the picker shows an error message. The chosen bank fails to load: error message plus the Banks button.
   - One session uses one bank only.
 - **Acceptance criteria:**
-  - [ ] `loadIndex` returns `{ id, name }` entries in index order and `error: null` (`node --test test/banks.test.mjs`).
-  - [ ] `loadIndex` returns no banks and an error when the fetch fails and when the index fails `validateIndex` (`test/banks.test.mjs`).
-  - [ ] `bankFromUrl("?bank=cs203", banks)` returns the `cs203` entry; `""`, `"?bank="` and `"?bank=nope"` return null (`test/banks.test.mjs`).
-  - [ ] `manifest.webmanifest` `start_url` is `./` (`test/banks.test.mjs` reads the file).
-  - [ ] `node --test` passes.
+  - [x] `loadIndex` returns `{ id, name }` entries in index order and `error: null` (`node --test test/banks.test.mjs`).
+  - [x] `loadIndex` returns no banks and an error when the fetch fails and when the index fails `validateIndex` (`test/banks.test.mjs`).
+  - [x] `bankFromUrl("?bank=cs203", banks)` returns the `cs203` entry; `""`, `"?bank="` and `"?bank=nope"` return null (`test/banks.test.mjs`).
+  - [x] `manifest.webmanifest` `start_url` is `./` (`test/banks.test.mjs` reads the file).
+  - [x] `node --test` passes.
 - **Doc deltas:**
   - `README.md` "Play": picker screen listing banks by name, Banks button, one bank per session, `?bank=<id>` keeps the bank on reload/bookmark, Home Screen icon opens the picker.
   - `docs/ARCHITECTURE.md` "Modules": `banks.js`; data flow starts at `banks/index.json`; markdown image base is `banks/<id>`.
+  - `README.md` "Play": choosing a bank, the Banks button and browser Back/Forward all move between picker and bank; each change is a history entry (`pushState`), and `popstate` re-reads `?bank=`. Why: the phone Back gesture should return to the picker.
+  - `docs/ARCHITECTURE.md` "Modules": `banks.js` also exports `INDEX_URL` and `bankDir(id)`; `loadIndex` never rejects. Why: `app.js` builds the bank and image paths from one place.
+  - No doc: `app.js` ignores a bank load that finishes after the user has switched bank (a counter per switch). Why: a slow fetch must not start a session in the wrong bank.
+  - No doc: picker heading "Choose a question bank"; an empty index shows "No question banks yet."; page title becomes `<bank name> · Gamified Quiz`; `index.html` meta description reworded like the manifest; global `[hidden] { display: none !important; }` so flex elements (`.counts`) hide. Why: presentation details.
 
 ## Human checks
 
