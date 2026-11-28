@@ -544,16 +544,6 @@
       "addedAt": "2026-11-24"
     },
     {
-      "id": "q0014",
-      "type": "written",
-      "stem": "*Week 2 - User Stories, Estimation, Planning*\n\nAdd acceptance criteria to this story: \"User can pay for books with a credit card\"",
-      "modelAnswer": "- Can pay with Visa, MasterCard and American Express.\n- Payment is refused for an expired card or a wrong CVV, with an error message.\n- Payment is refused when the card has insufficient funds, and the order is not placed.\n- After a successful payment, the user sees an order confirmation and receives a receipt by email.\n- The full card number is never stored or shown (only the last 4 digits).",
-      "explanation": "Acceptance criteria are \"notes about what the story must do in order for the product owner to accept it as complete\" (Mike Cohn). Each criterion must be testable, like the slide's \"Can log in through Facebook\" example.",
-      "source": "from course: 02-User Stories, Estimation, Planning.pdf",
-      "quiz": "CS203 Wooclap All Weeks",
-      "addedAt": "2026-11-24"
-    },
-    {
       "id": "q0015",
       "type": "single",
       "stem": "*Week 2 - User Stories, Estimation, Planning*\n\nWhat are the 3Cs for a user story?",
@@ -662,50 +652,6 @@
       ],
       "explanation": "Story points are relative size estimates, made by the whole team (e.g. planning poker) on a coarse scale.",
       "source": "given",
-      "quiz": "CS203 Wooclap All Weeks",
-      "addedAt": "2026-11-24"
-    },
-    {
-      "id": "q0018",
-      "type": "single",
-      "stem": "*Week 2 - User Stories, Estimation, Planning*\n\nYour team was about halfway through a 3-point story when the sprint time is up. What should you do?",
-      "options": [
-        {
-          "key": "a",
-          "text": "Extend the sprint time to complete the story",
-          "explanation": "Wrong. Sprints are time-boxed; the length does not change."
-        },
-        {
-          "key": "b",
-          "text": "Put the story back into the backlog and add 1.5 points to the team velocity for this sprint",
-          "explanation": "Wrong. Partial points inflate velocity; an unfinished story counts as 0."
-        },
-        {
-          "key": "c",
-          "text": "Put the story back into the backlog, but do not add any of this story point to the team velocity",
-          "explanation": "Correct. The unfinished story returns to the backlog and counts for no points this sprint."
-        },
-        {
-          "key": "d",
-          "text": "Split the story, put the remaining half into the backlog, add 1.5 points for this sprint",
-          "explanation": "Wrong. Splitting after the fact to claim points distorts velocity."
-        },
-        {
-          "key": "e",
-          "text": "Add 3 points of this story to this sprint, and continue to complete this story in the next sprint",
-          "explanation": "Wrong. Claiming points for unfinished work makes velocity unreliable."
-        },
-        {
-          "key": "f",
-          "text": "Our team would do something else :)",
-          "explanation": "Wrong. The standard Scrum practice is option c."
-        }
-      ],
-      "answer": [
-        "c"
-      ],
-      "explanation": "This was a poll with no marked answer. Velocity is the number of story points completed per sprint, and a story counts only when it meets the definition of done.",
-      "source": "from course: 02-User Stories, Estimation, Planning.pdf",
       "quiz": "CS203 Wooclap All Weeks",
       "addedAt": "2026-11-24"
     },
