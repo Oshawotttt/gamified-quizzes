@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Gamified Quiz</title>
-<meta name="description" content="One question at a time from the question bank.">
+<meta name="description" content="Choose a question bank, then practise one question at a time.">
 <meta name="theme-color" content="#2f5fd0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -18,14 +18,17 @@
 <body>
 <header class="top">
   <div class="top-row">
-    <h1>Gamified Quiz</h1>
-    <button type="button" id="btnStats" aria-expanded="false" aria-controls="stats">Stats</button>
+    <h1 id="title">Gamified Quiz</h1>
+    <button type="button" id="btnBanks" hidden>Banks</button>
+    <button type="button" id="btnStats" aria-expanded="false" aria-controls="stats" hidden>Stats</button>
   </div>
-  <div class="counts" id="counts" aria-live="polite"></div>
+  <div class="counts" id="counts" aria-live="polite" hidden></div>
 </header>
 
 <main id="main">
-  <section id="quiz" class="card" aria-live="polite"><p class="muted">Loading questions…</p></section>
+  <section id="picker" class="card" aria-live="polite"><p class="muted">Loading question banks…</p></section>
+
+  <section id="quiz" class="card" aria-live="polite" hidden></section>
 
   <section id="stats" class="card" hidden>
     <h2>Progress</h2>

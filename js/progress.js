@@ -1,9 +1,13 @@
 // Progress store (I4): an append-only list of attempts kept in localStorage,
-// plus the per-question status and bank counts derived from it.
+// one list per bank, plus the per-question status and bank counts derived from it.
 
 // Prefixed: every oshawotttt.github.io project site shares one origin and one localStorage.
-export const PROGRESS_KEY = "gamified-quizzes.progress.v1";
-export const CORRUPT_KEY = "gamified-quizzes.progress.corrupt";
+export const progressKey = (bankId) => `gamified-quizzes.progress.v1.${bankId}`;
+export const corruptKey = (bankId) => `gamified-quizzes.progress.corrupt.${bankId}`;
+
+// Progress from before banks existed belongs to the original bank.
+export const LEGACY_PROGRESS_KEY = "gamified-quizzes.progress.v1";
+const LEGACY_BANK_ID = "cs203";
 
 export const OUTCOMES = ["right", "partial", "wrong", "shown"];
 export const STATUSES = ["unseen", "wrong", "partial", "guessed", "right", "shown"];
@@ -36,32 +40,55 @@ export function progressError(json) {
   return null;
 }
 
-function parseProgress(text) {
+function parseJson(text) {
   let json;
   try {
     json = JSON.parse(text);
   } catch (e) {
     throw new Error(`Not valid JSON: ${e.message}`);
   }
+  return json;
+}
+
+function parseProgress(text) {
+  return toState(parseJson(text));
+}
+
+function toState(json) {
   const problem = progressError(json);
   if (problem) throw new Error(`Not a progress file: ${problem}`);
   return { version: 1, lastExportAt: json.lastExportAt, attempts: json.attempts };
 }
 
-/** storage: anything with getItem/setItem/removeItem (window.localStorage in the page). */
-export function createProgressStore(storage) {
+/** Move pre-bank progress to the original bank's key, once. */
+function migrateLegacy(storage, key) {
+  const legacy = storage.getItem(LEGACY_PROGRESS_KEY);
+  if (legacy === null || storage.getItem(key) !== null) return;
+  storage.setItem(key, legacy);
+  storage.removeItem(LEGACY_PROGRESS_KEY);
+}
+
+/**
+ * storage: anything with getItem/setItem/removeItem (window.localStorage in the page).
+ * bankId: the bank this progress belongs to; each bank has its own key.
+ */
+export function createProgressStore(storage, bankId) {
+  if (typeof bankId !== "string" || bankId === "") throw new Error("createProgressStore needs a bank id");
+  const key = progressKey(bankId);
+  if (bankId === LEGACY_BANK_ID) migrateLegacy(storage, key);
+
   let state = emptyState();
-  const raw = storage.getItem(PROGRESS_KEY);
+  const raw = storage.getItem(key);
   if (raw !== null) {
     try {
       state = parseProgress(raw);
     } catch {
       // Keep the unreadable text so it can be recovered by hand; start empty.
-      storage.setItem(CORRUPT_KEY, raw);
+      storage.setItem(corruptKey(bankId), raw);
     }
   }
 
-  const save = () => storage.setItem(PROGRESS_KEY, JSON.stringify(state));
+  const save = () => storage.setItem(key, JSON.stringify(state));
 
   return {
     all: () => state.attempts.map((a) => ({ ...a })),
@@ -80,16 +107,21 @@ export function createProgressStore(storage) {
     exportJson(now) {
       state.lastExportAt = now instanceof Date ? now.toISOString() : String(now);
       save();
-      return JSON.stringify(state, null, 2);
+      return JSON.stringify({ version: state.version, bank: bankId, lastExportAt: state.lastExportAt, attempts: state.attempts }, null, 2);
     },
     lastExportAt: () => state.lastExportAt,
     importJson(text) {
-      state = parseProgress(text);
+      const json = parseJson(text);
+      // An export from before banks existed has no bank field; it fits any bank.
+      if (json && typeof json === "object" && "bank" in json && json.bank !== bankId) {
+        throw new Error(`This progress file is for bank ${JSON.stringify(json.bank)}, not ${JSON.stringify(bankId)}`);
+      }
+      state = toState(json);
       save();
     },
     reset() {
       state = emptyState();
-      storage.removeItem(PROGRESS_KEY);
+      storage.removeItem(key);
     },
   };
 }

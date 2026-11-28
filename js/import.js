@@ -57,7 +57,7 @@ function rewriteImages(q, id, copies) {
 /**
  * Plan adding an import file to the bank.
  * opts.imageExists(path): whether `images/<file>` exists beside the import file.
- * opts.bankImageExists(path): whether `images/<file>` exists in bank/ (optional;
+ * opts.bankImageExists(path): whether `images/<file>` exists in the bank folder (optional;
  *   when omitted, images already in the bank are not checked).
  * opts.today: the `addedAt` value, e.g. "2026-11-24".
  * Returns { errors, added, skipped, newBank, imageCopies }. On any error,
